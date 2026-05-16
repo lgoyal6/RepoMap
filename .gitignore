@@ -4,4 +4,4 @@ uploads
 dist
 .env
 .vscode
-webview-dist
+webview-dist/
