@@ -18,8 +18,12 @@ export class RepomapWebviewProvider {
   }
 
   public async show() {
+    console.log('🦍 RepomapWebviewProvider.show() called');
+    
     // Check if Bob is available
     const bobAvailable = await this.bobService.checkBobAvailable();
+    console.log('🦍 Bob available:', bobAvailable);
+    
     if (!bobAvailable) {
       const result = await vscode.window.showWarningMessage(
         'IBM Bob CLI is not installed or not in PATH. Repomap requires Bob for AI features.',
@@ -32,10 +36,12 @@ export class RepomapWebviewProvider {
     }
 
     if (this.panel) {
+      console.log('🦍 Panel already exists, revealing');
       this.panel.reveal(vscode.ViewColumn.One);
       return;
     }
 
+    console.log('🦍 Creating new webview panel');
     this.panel = vscode.window.createWebviewPanel(
       'repomap',
       'Repomap',
@@ -45,12 +51,14 @@ export class RepomapWebviewProvider {
         retainContextWhenHidden: true,
         localResourceRoots: [
           vscode.Uri.joinPath(this.extensionUri, 'dist'),
-          vscode.Uri.joinPath(this.extensionUri, '..', 'webview', 'dist')
+          vscode.Uri.joinPath(this.extensionUri, 'webview-dist')
         ]
       }
     );
 
+    console.log('🦍 Setting webview HTML');
     this.panel.webview.html = this.getWebviewContent(this.panel.webview);
+    console.log('🦍 Webview HTML set');
 
     // Handle messages from webview
     this.panel.webview.onDidReceiveMessage(
@@ -106,9 +114,11 @@ export class RepomapWebviewProvider {
   }
 
   private async loadWorkspace() {
+    console.log('🦍 Loading workspace...');
     try {
       const tree = await this.fileSystemService.buildTree();
       const workspaceName = this.fileSystemService.getWorkspaceName();
+      console.log('🦍 Workspace loaded:', workspaceName, 'Files:', tree.length);
       
       this.sendMessage({
         type: 'workspaceLoaded',
@@ -116,6 +126,7 @@ export class RepomapWebviewProvider {
         workspaceName
       });
     } catch (error: any) {
+      console.error('🦍 Error loading workspace:', error);
       this.sendMessage({
         type: 'error',
         message: `Failed to load workspace: ${error.message}`
@@ -205,10 +216,15 @@ export class RepomapWebviewProvider {
   }
 
   private getWebviewContent(webview: vscode.Webview): string {
-    // Path to the built webview assets
-    const webviewDistPath = vscode.Uri.joinPath(this.extensionUri, '..', 'webview', 'dist');
+    // Path to the built webview assets (copied into extension during build)
+    const webviewDistPath = vscode.Uri.joinPath(this.extensionUri, 'webview-dist');
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(webviewDistPath, 'assets', 'index.js'));
     const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(webviewDistPath, 'assets', 'index.css'));
+
+    console.log('🦍 Extension URI:', this.extensionUri.toString());
+    console.log('🦍 Webview dist path:', webviewDistPath.toString());
+    console.log('🦍 Script URI:', scriptUri.toString());
+    console.log('🦍 Style URI:', styleUri.toString());
 
     // Use a nonce for security
     const nonce = getNonce();

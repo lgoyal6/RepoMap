@@ -1,8 +1,21 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
-const API = 'http://localhost:3001/api';
+// VS Code API
+const vscode = acquireVsCodeApi();
 
-const EXT_COLORS = {
+interface FileNode {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  children?: FileNode[];
+}
+
+interface BobMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+const EXT_COLORS: Record<string, string> = {
   '.ts': '#3b82f6', '.tsx': '#06b6d4', '.js': '#f59e0b', '.jsx': '#f97316',
   '.py': '#10b981', '.go': '#00acd7', '.rs': '#f97316', '.md': '#8b5cf6',
   '.json': '#6b7280', '.yaml': '#6b7280', '.yml': '#6b7280', '.java': '#f44336',
@@ -10,86 +23,17 @@ const EXT_COLORS = {
   '.swift': '#fa7343', '.cpp': '#00599c', '.c': '#a8b9cc', '.h': '#a8b9cc',
 };
 
-function getColor(name) {
+function getColor(name: string): string {
   const ext = '.' + name.split('.').pop();
   return EXT_COLORS[ext] || '#6b7280';
 }
 
-// ===== HOME SCREEN =====
-function HomeScreen({ onRepoLoaded }) {
-  const [url, setUrl] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const fileRef = useRef(null);
-
-  const handleClone = async () => {
-    if (!url.trim()) return;
-    setError(''); setLoading(true);
-    try {
-      const res = await fetch(`${API}/repo/github`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim() })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      onRepoLoaded(data.tree, data.repoId, url.trim().split('/').pop().replace('.git', ''));
-    } catch (e) { setError(e.message); }
-    setLoading(false);
-  };
-
-  const handleUpload = async (file) => {
-    if (!file) return;
-    setError(''); setLoading(true);
-    try {
-      const form = new FormData();
-      form.append('file', file);
-      const res = await fetch(`${API}/repo/upload`, { method: 'POST', body: form });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      onRepoLoaded(data.tree, data.repoId, file.name.replace('.zip', ''));
-    } catch (e) { setError(e.message); }
-    setLoading(false);
-  };
-
-  const handleDrop = (e) => { e.preventDefault(); handleUpload(e.dataTransfer.files[0]); };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', animation: 'fadeIn 0.6s ease', padding: 20 }}>
-      <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }`}</style>
-      <h1 style={{ fontSize: 48, fontWeight: 700, color: '#fff', marginBottom: 8 }}>repomap</h1>
-      <p style={{ color: '#818cf8', marginBottom: 48, fontSize: 14 }}>powered by IBM Bob</p>
-
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, width: '100%', maxWidth: 500 }}>
-        <input
-          value={url} onChange={e => setUrl(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleClone()}
-          placeholder="https://github.com/user/repo"
-          style={{ flex: 1, padding: '12px 16px', background: '#0a0a1a', border: '1px solid #1f2937', borderRadius: 8, color: '#e5e7eb', fontFamily: 'inherit', fontSize: 14, outline: 'none' }}
-        />
-        <button onClick={handleClone} disabled={loading}
-          style={{ padding: '12px 24px', background: '#6366f1', border: 'none', borderRadius: 8, color: '#fff', fontFamily: 'inherit', fontSize: 14, cursor: 'pointer', fontWeight: 600, opacity: loading ? 0.5 : 1 }}>
-          {loading ? '...' : 'Clone'}
-        </button>
-      </div>
-
-      <p style={{ color: '#6b7280', marginBottom: 24, fontSize: 12 }}>— OR —</p>
-
-      <div
-        onClick={() => fileRef.current?.click()}
-        onDrop={handleDrop}
-        onDragOver={e => e.preventDefault()}
-        style={{ width: '100%', maxWidth: 500, padding: 40, border: '2px dashed #1f2937', borderRadius: 12, textAlign: 'center', cursor: 'pointer', color: '#6b7280', fontSize: 14 }}>
-        Drop a .zip file here or click to browse
-        <input ref={fileRef} type="file" accept=".zip" hidden onChange={e => handleUpload(e.target.files[0])} />
-      </div>
-
-      {error && <p style={{ color: '#ef4444', marginTop: 16, fontSize: 13 }}>{error}</p>}
-    </div>
-  );
-}
-
 // ===== FILE TREE SIDEBAR =====
-function FileTree({ tree, selectedFile, onSelect }) {
+function FileTree({ tree, selectedFile, onSelect }: {
+  tree: FileNode[];
+  selectedFile: string | null;
+  onSelect: (node: FileNode) => void;
+}) {
   return (
     <div style={{ width: 240, borderRight: '1px solid #1f2937', overflowY: 'auto', padding: '12px 0', flexShrink: 0, height: '100%' }}>
       {tree.map(node => <TreeNode key={node.path} node={node} depth={0} selectedFile={selectedFile} onSelect={onSelect} />)}
@@ -97,7 +41,12 @@ function FileTree({ tree, selectedFile, onSelect }) {
   );
 }
 
-function TreeNode({ node, depth, selectedFile, onSelect }) {
+function TreeNode({ node, depth, selectedFile, onSelect }: {
+  node: FileNode;
+  depth: number;
+  selectedFile: string | null;
+  onSelect: (node: FileNode) => void;
+}) {
   const [expanded, setExpanded] = useState(depth < 1);
   const isSelected = selectedFile === node.path;
 
@@ -122,18 +71,25 @@ function TreeNode({ node, depth, selectedFile, onSelect }) {
 }
 
 // ===== SVG GRAPH =====
-function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFiles, onContextMenu }) {
-  const svgRef = useRef(null);
+function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFiles, onContextMenu }: {
+  tree: FileNode[];
+  selectedFile: string | null;
+  onSelectNode: (node: FileNode) => void;
+  explanations: Record<string, string>;
+  modifiedFiles: Set<string>;
+  onContextMenu: (e: React.MouseEvent, node: FileNode) => void;
+}) {
+  const svgRef = useRef<SVGSVGElement>(null);
   const [pan, setPan] = useState({ x: 50, y: 50 });
   const [zoom, setZoom] = useState(0.8);
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  const nodes = [];
-  const edges = [];
+  const nodes: Array<FileNode & { id: number; x: number; y: number }> = [];
+  const edges: Array<{ from: number; to: number; fromX: number; fromY: number; toX: number; toY: number }> = [];
   let nodeId = 0;
 
-  function layout(items, parentId, x, y, availWidth) {
+  function layout(items: FileNode[], parentId: number | null, x: number, y: number, availWidth: number) {
     const spacing = Math.max(160, availWidth / (items.length || 1));
     let startX = x - (items.length - 1) * spacing / 2;
 
@@ -153,19 +109,19 @@ function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFil
 
   layout(tree.slice(0, 12), null, 600, 60, 1200);
 
-  const handleWheel = (e) => {
+  const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     setZoom(z => Math.min(2, Math.max(0.3, z - e.deltaY * 0.001)));
   };
 
-  const handleMouseDown = (e) => {
-    if (e.target === svgRef.current || e.target.tagName === 'line') {
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.target === svgRef.current || (e.target as SVGElement).tagName === 'line') {
       setDragging(true);
       dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
     }
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (dragging) setPan({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y });
   };
 
@@ -210,18 +166,25 @@ function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFil
 }
 
 // ===== CHAT PANEL =====
-function ChatPanel({ repoId, selectedFile, fileContent, onFileApplied }) {
-  const [messages, setMessages] = useState([]);
+function ChatPanel({ selectedFile, onFileApplied }: {
+  selectedFile: string | null;
+  onFileApplied: (path: string) => void;
+}) {
+  const [messages, setMessages] = useState<BobMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef(null);
-  const prevFile = useRef(null);
+  const [fileContent, setFileContent] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const prevFile = useRef<string | null>(null);
 
   useEffect(() => {
     if (selectedFile && selectedFile !== prevFile.current) {
       prevFile.current = selectedFile;
       const fileName = selectedFile.split('/').pop();
       setMessages([{ role: 'assistant', content: `I'm looking at **${fileName}**. What would you like to know or change?` }]);
+      
+      // Request file content
+      vscode.postMessage({ type: 'readFile', path: selectedFile });
     }
   }, [selectedFile]);
 
@@ -229,52 +192,54 @@ function ChatPanel({ repoId, selectedFile, fileContent, onFileApplied }) {
 
   const sendMessage = async () => {
     if (!input.trim() || !selectedFile || loading) return;
-    const userMsg = { role: 'user', content: input };
+    const userMsg: BobMessage = { role: 'user', content: input };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput('');
     setLoading(true);
 
-    try {
-      // Fetch current file content
-      const fileRes = await fetch(`${API}/repo/${repoId}/file?filePath=${encodeURIComponent(selectedFile)}`);
-      const fileData = await fileRes.json();
+    const apiMessages = newMessages.filter(m => m.role === 'user' || m.role === 'assistant');
 
-      const apiMessages = newMessages.filter(m => m.role === 'user' || m.role === 'assistant').map(m => ({ role: m.role, content: m.content }));
-
-      const res = await fetch(`${API}/bob`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: `You are an expert software engineer analyzing a file in a codebase. Here is the file content:\n\n${fileData.content}\n\nHelp the user understand or modify this file. If they ask you to make changes, provide the complete updated file content in a fenced code block.`,
-          messages: apiMessages
-        })
-      });
-
-      const data = await res.json();
-      const text = data.content?.[0]?.text || 'Sorry, I could not generate a response.';
-      setMessages(prev => [...prev, { role: 'assistant', content: text }]);
-    } catch (e) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${e.message}` }]);
-    }
-    setLoading(false);
+    vscode.postMessage({
+      type: 'askBob',
+      system: `You are an expert software engineer analyzing a file in a codebase. Here is the file content:\n\n${fileContent}\n\nHelp the user understand or modify this file. If they ask you to make changes, provide the complete updated file content in a fenced code block.`,
+      messages: apiMessages
+    });
   };
 
-  const applyCode = async (code) => {
-    try {
-      await fetch(`${API}/repo/${repoId}/file`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filePath: selectedFile, content: code })
-      });
-      onFileApplied(selectedFile);
-      return true;
-    } catch { return false; }
+  const applyCode = async (code: string) => {
+    if (!selectedFile) return false;
+    vscode.postMessage({
+      type: 'writeFile',
+      path: selectedFile,
+      content: code
+    });
+    onFileApplied(selectedFile);
+    return true;
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
+
+  // Listen for messages from extension
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      const message = event.data;
+      if (message.type === 'fileContent' && message.path === selectedFile) {
+        setFileContent(message.content);
+      } else if (message.type === 'bobResponse') {
+        const text = message.content?.[0]?.text || 'Sorry, I could not generate a response.';
+        setMessages(prev => [...prev, { role: 'assistant', content: text }]);
+        setLoading(false);
+      } else if (message.type === 'error') {
+        setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${message.message}` }]);
+        setLoading(false);
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [selectedFile]);
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -310,7 +275,10 @@ function ChatPanel({ repoId, selectedFile, fileContent, onFileApplied }) {
   );
 }
 
-function MessageBubble({ message, onApply }) {
+function MessageBubble({ message, onApply }: {
+  message: BobMessage;
+  onApply: (code: string) => Promise<boolean>;
+}) {
   const [applied, setApplied] = useState(false);
   const isUser = message.role === 'user';
 
@@ -345,12 +313,22 @@ function MessageBubble({ message, onApply }) {
 }
 
 // ===== CONTEXT MENU =====
-function ContextMenu({ x, y, node, onClose, onExplain, onChat, onViewContent, onRename }) {
+function ContextMenu({ x, y, node, onClose, onExplain, onChat, onViewContent, onRename }: {
+  x: number;
+  y: number;
+  node: FileNode;
+  onClose: () => void;
+  onExplain: () => void;
+  onChat: () => void;
+  onViewContent: () => void;
+  onRename: () => void;
+}) {
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const clickHandler = () => onClose();
     document.addEventListener('keydown', handler);
-    document.addEventListener('click', onClose);
-    return () => { document.removeEventListener('keydown', handler); document.removeEventListener('click', onClose); };
+    document.addEventListener('click', clickHandler);
+    return () => { document.removeEventListener('keydown', handler); document.removeEventListener('click', clickHandler); };
   }, [onClose]);
 
   const items = [
@@ -365,8 +343,8 @@ function ContextMenu({ x, y, node, onClose, onExplain, onChat, onViewContent, on
       {items.map(item => (
         <div key={item.label} onClick={(e) => { e.stopPropagation(); item.action(); onClose(); }}
           style={{ padding: '8px 12px', fontSize: 12, cursor: 'pointer', borderRadius: 4, color: '#e5e7eb' }}
-          onMouseEnter={e => e.target.style.background = '#312e81'}
-          onMouseLeave={e => e.target.style.background = 'transparent'}>
+          onMouseEnter={e => (e.target as HTMLDivElement).style.background = '#312e81'}
+          onMouseLeave={e => (e.target as HTMLDivElement).style.background = 'transparent'}>
           {item.label}
         </div>
       ))}
@@ -375,7 +353,11 @@ function ContextMenu({ x, y, node, onClose, onExplain, onChat, onViewContent, on
 }
 
 // ===== FILE MODAL =====
-function FileModal({ content, filePath, onClose }) {
+function FileModal({ content, filePath, onClose }: {
+  content: string;
+  filePath: string;
+  onClose: () => void;
+}) {
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
       <div onClick={e => e.stopPropagation()} style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: 12, padding: 24, maxWidth: '80vw', maxHeight: '80vh', overflow: 'auto', width: 700 }}>
@@ -387,16 +369,20 @@ function FileModal({ content, filePath, onClose }) {
 }
 
 // ===== RENAME INPUT =====
-function RenameInput({ node, repoId, onDone }) {
+function RenameInput({ node, onDone }: {
+  node: FileNode;
+  onDone: () => void;
+}) {
   const [value, setValue] = useState(node.name);
 
   const handleSubmit = async () => {
     const dir = node.path.includes('/') ? node.path.split('/').slice(0, -1).join('/') + '/' : '';
     const newPath = dir + value;
     if (newPath !== node.path) {
-      await fetch(`${API}/repo/${repoId}/rename`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ oldPath: node.path, newPath })
+      vscode.postMessage({
+        type: 'renameFile',
+        oldPath: node.path,
+        newPath
       });
     }
     onDone();
@@ -414,91 +400,146 @@ function RenameInput({ node, repoId, onDone }) {
 
 // ===== MAIN APP =====
 export default function App() {
-  const [tree, setTree] = useState(null);
-  const [repoId, setRepoId] = useState(null);
-  const [repoName, setRepoName] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [activeTab, setActiveTab] = useState('graph');
-  const [explanations, setExplanations] = useState({});
+  console.log('🦍 Repomap App component rendering');
+  
+  const [tree, setTree] = useState<FileNode[] | null>(null);
+  const [workspaceName, setWorkspaceName] = useState('');
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'graph' | 'chat'>('graph');
+  const [explanations, setExplanations] = useState<Record<string, string>>({});
   const [explanationLoading, setExplanationLoading] = useState(false);
-  const [modifiedFiles, setModifiedFiles] = useState(new Set());
-  const [contextMenu, setContextMenu] = useState(null);
-  const [fileModal, setFileModal] = useState(null);
-  const [renameNode, setRenameNode] = useState(null);
+  const [modifiedFiles, setModifiedFiles] = useState(new Set<string>());
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; node: FileNode } | null>(null);
+  const [fileModal, setFileModal] = useState<{ content: string; filePath: string } | null>(null);
+  const [renameNode, setRenameNode] = useState<FileNode | null>(null);
 
-  const handleRepoLoaded = (t, id, name) => {
-    setTree(t); setRepoId(id); setRepoName(name);
-    setSelectedFile(null); setExplanations({}); setModifiedFiles(new Set());
+  // Listen for messages from extension
+  useEffect(() => {
+    console.log('🦍 Setting up message listener');
+    const handler = (event: MessageEvent) => {
+      console.log('🦍 Received message from extension:', event.data);
+      const message = event.data;
+      
+      switch (message.type) {
+        case 'workspaceLoaded':
+          setTree(message.tree);
+          setWorkspaceName(message.workspaceName);
+          break;
+        case 'fileContent':
+          if (message.path === selectedFile && !explanations[message.path]) {
+            // This is for explanation
+            explainFileWithContent(message.path, message.content);
+          }
+          break;
+        case 'bobResponse':
+          if (explanationLoading) {
+            const text = message.content?.[0]?.text || 'Could not analyze file.';
+            if (selectedFile) {
+              setExplanations(prev => ({ ...prev, [selectedFile]: text }));
+            }
+            setExplanationLoading(false);
+          }
+          break;
+        case 'fileWritten':
+          if (message.success && message.path) {
+            setModifiedFiles(prev => new Set([...prev, message.path]));
+          }
+          break;
+        case 'fileRenamed':
+          if (message.success) {
+            // Reload workspace
+            vscode.postMessage({ type: 'loadWorkspace' });
+          }
+          break;
+        case 'error':
+          console.error('Extension error:', message.message);
+          setExplanationLoading(false);
+          break;
+      }
+    };
+    
+    window.addEventListener('message', handler);
+    console.log('🦍 Message listener attached');
+    return () => {
+      console.log('🦍 Message listener removed');
+      window.removeEventListener('message', handler);
+    };
+  }, [selectedFile, explanations, explanationLoading]);
+
+  // Request workspace on mount
+  useEffect(() => {
+    console.log('🦍 App mounted, requesting workspace load');
+    vscode.postMessage({ type: 'loadWorkspace' });
+  }, []);
+
+  const explainFileWithContent = (path: string, content: string) => {
+    vscode.postMessage({
+      type: 'askBob',
+      system: 'You are an expert software engineer. Give concise, clear explanations.',
+      messages: [{ role: 'user', content: `In 2 sentences max, what does this file do? File: ${path}\n\n${content}` }]
+    });
   };
 
-  const explainFile = async (node) => {
+  const explainFile = async (node: FileNode) => {
     if (node.type === 'directory') return;
     setSelectedFile(node.path);
     if (explanations[node.path]) return;
 
     setExplanationLoading(true);
-    try {
-      const fileRes = await fetch(`${API}/repo/${repoId}/file?filePath=${encodeURIComponent(node.path)}`);
-      const fileData = await fileRes.json();
-
-      const res = await fetch(`${API}/bob`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system: 'You are an expert software engineer. Give concise, clear explanations.',
-          messages: [{ role: 'user', content: `In 2 sentences max, what does this file do? File: ${node.path}\n\n${fileData.content}` }]
-        })
-      });
-
-      const data = await res.json();
-      const text = data.content?.[0]?.text || 'Could not analyze file.';
-      setExplanations(prev => ({ ...prev, [node.path]: text }));
-    } catch (e) {
-      setExplanations(prev => ({ ...prev, [node.path]: `Error: ${e.message}` }));
-    }
-    setExplanationLoading(false);
+    vscode.postMessage({ type: 'readFile', path: node.path });
   };
 
-  const handleNodeClick = (node) => {
+  const handleNodeClick = (node: FileNode) => {
     if (node.type === 'file') explainFile(node);
     else setSelectedFile(node.path);
   };
 
-  const handleContextMenu = (e, node) => {
+  const handleContextMenu = (e: React.MouseEvent, node: FileNode) => {
     e.preventDefault();
     setContextMenu({ x: e.clientX, y: e.clientY, node });
   };
 
-  const handleViewContent = async (node) => {
-    const res = await fetch(`${API}/repo/${repoId}/file?filePath=${encodeURIComponent(node.path)}`);
-    const data = await res.json();
-    setFileModal({ content: data.content, filePath: node.path });
+  const handleViewContent = async (node: FileNode) => {
+    vscode.postMessage({ type: 'readFile', path: node.path });
+    
+    // Listen for the response
+    const handler = (event: MessageEvent) => {
+      const message = event.data;
+      if (message.type === 'fileContent' && message.path === node.path) {
+        setFileModal({ content: message.content, filePath: node.path });
+        window.removeEventListener('message', handler);
+      }
+    };
+    window.addEventListener('message', handler);
   };
 
-  const handleRenameComplete = async () => {
+  const handleRenameComplete = () => {
     setRenameNode(null);
-    // Refresh tree
-    const res = await fetch(`${API}/repo/${repoId}/summary`);
-    const data = await res.json();
-    setTree(data.tree);
   };
 
-  const handleFileApplied = (path) => {
+  const handleFileApplied = (path: string) => {
     setModifiedFiles(prev => new Set([...prev, path]));
   };
 
-  const handleSidebarSelect = (node) => {
+  const handleSidebarSelect = (node: FileNode) => {
     if (node.type === 'file') explainFile(node);
   };
 
-  if (!tree) return <HomeScreen onRepoLoaded={handleRepoLoaded} />;
+  if (!tree) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column' }}>
+        <h2 style={{ color: '#818cf8', marginBottom: 16 }}>Loading workspace...</h2>
+        <p style={{ color: '#6b7280', fontSize: 13 }}>Analyzing your codebase</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       {/* Navbar */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 48, borderBottom: '1px solid #1f2937', background: '#0a0a1a', gap: 16, flexShrink: 0 }}>
         <span style={{ fontWeight: 700, color: '#fff', fontSize: 14 }}>repomap</span>
-        <span style={{ color: '#6b7280', fontSize: 12 }}>{repoName}</span>
+        <span style={{ color: '#6b7280', fontSize: 12 }}>{workspaceName}</span>
         <div style={{ flex: 1 }} />
         <button onClick={() => setActiveTab('graph')}
           style={{ padding: '6px 14px', background: activeTab === 'graph' ? '#312e81' : 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: activeTab === 'graph' ? '#818cf8' : '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
@@ -507,10 +548,6 @@ export default function App() {
         <button onClick={() => setActiveTab('chat')}
           style={{ padding: '6px 14px', background: activeTab === 'chat' ? '#312e81' : 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: activeTab === 'chat' ? '#818cf8' : '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
           Chat with Bob
-        </button>
-        <button onClick={() => { setTree(null); setRepoId(null); }}
-          style={{ padding: '6px 14px', background: 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
-          New repo
         </button>
       </div>
 
@@ -527,7 +564,7 @@ export default function App() {
               {/* Explanation card */}
               {selectedFile && explanations[selectedFile] && (
                 <div style={{ position: 'absolute', bottom: 20, left: 20, background: '#111827', border: '1px solid #1f2937', borderRadius: 12, padding: 16, maxWidth: 360, zIndex: 10 }}>
-                  <p style={{ fontSize: 12, color: getColor(selectedFile.split('/').pop()), marginBottom: 4, fontWeight: 600 }}>
+                  <p style={{ fontSize: 12, color: getColor(selectedFile.split('/').pop() || ''), marginBottom: 4, fontWeight: 600 }}>
                     {selectedFile.split('/').pop()}
                   </p>
                   <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 8 }}>{selectedFile}</p>
@@ -546,7 +583,7 @@ export default function App() {
               )}
             </>
           ) : (
-            <ChatPanel repoId={repoId} selectedFile={selectedFile} onFileApplied={handleFileApplied} />
+            <ChatPanel selectedFile={selectedFile} onFileApplied={handleFileApplied} />
           )}
         </div>
       </div>
@@ -565,7 +602,9 @@ export default function App() {
       {fileModal && <FileModal content={fileModal.content} filePath={fileModal.filePath} onClose={() => setFileModal(null)} />}
 
       {/* Rename Input */}
-      {renameNode && <RenameInput node={renameNode} repoId={repoId} onDone={handleRenameComplete} />}
+      {renameNode && <RenameInput node={renameNode} onDone={handleRenameComplete} />}
     </div>
   );
 }
+
+// Made with Bob
