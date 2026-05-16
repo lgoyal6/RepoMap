@@ -3,3 +3,5 @@ tmp_repos
 uploads
 dist
 .env
+.vscode
+webview-dist
