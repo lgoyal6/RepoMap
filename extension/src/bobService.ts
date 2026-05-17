@@ -8,7 +8,7 @@ import { BobRequest, BobResponse } from './types';
 const execAsync = promisify(exec);
 
 export class BobService {
-  async askBob(request: BobRequest): Promise<BobResponse> {
+  async askBob(request: BobRequest, timeoutMs: number = 300000): Promise<BobResponse> {
     try {
       // Build a single prompt from system + messages
       let prompt = '';
@@ -29,12 +29,20 @@ export class BobService {
         // On Windows, we need to use shell to execute bob (which is a PowerShell script)
         const isWindows = process.platform === 'win32';
         const bobProcess = spawn('bob', ['-o', 'json', '--chat-mode', 'ask', '--hide-intermediary-output'], {
-          timeout: 120000,
           shell: isWindows // Enable shell on Windows to execute .ps1 scripts
         });
 
         let stdout = '';
         let stderr = '';
+        let timeoutHandle: NodeJS.Timeout | null = null;
+        let isTimedOut = false;
+
+        // Manual timeout handling (more reliable than spawn's timeout option)
+        timeoutHandle = setTimeout(() => {
+          isTimedOut = true;
+          bobProcess.kill('SIGTERM');
+          reject(new Error(`Bob process timed out after ${timeoutMs}ms. Try reducing the number of files or prompt size.`));
+        }, timeoutMs);
 
         bobProcess.stdout.on('data', (data) => {
           stdout += data.toString();
@@ -45,12 +53,27 @@ export class BobService {
         });
 
         bobProcess.on('error', (error) => {
-          reject(new Error(`Failed to spawn Bob process: ${error.message}`));
+          if (timeoutHandle) clearTimeout(timeoutHandle);
+          if (!isTimedOut) {
+            reject(new Error(`Failed to spawn Bob process: ${error.message}`));
+          }
         });
 
         bobProcess.on('close', (code) => {
-          if (code !== 0) {
+          if (timeoutHandle) clearTimeout(timeoutHandle);
+          
+          if (isTimedOut) {
+            return; // Already rejected by timeout
+          }
+
+          if (code !== 0 && code !== null) {
             reject(new Error(`Bob CLI error: Process exited with code ${code}. stderr: ${stderr}`));
+            return;
+          }
+
+          // code === null means process was killed (possibly by timeout or system)
+          if (code === null) {
+            reject(new Error(`Bob process was terminated unexpectedly. This may indicate a timeout or system resource issue. stderr: ${stderr}`));
             return;
           }
 

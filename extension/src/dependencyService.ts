@@ -67,7 +67,7 @@ export class DependencyService {
   private async buildDependencyGraphWithBob(): Promise<DependencyGraph> {
     // Get all supported files
     const files = await this.getAllSupportedFiles();
-    const limitedFiles = files.slice(0, 50); // Limit for Bob analysis
+    const limitedFiles = files.slice(0, 30); // Reduced from 50 to 30 for better performance
 
     // Read file contents
     const fileContents: { path: string; content: string }[] = [];
@@ -81,8 +81,8 @@ export class DependencyService {
       }
     }
 
-    // Build prompt for Bob
-    const fileList = fileContents.map(f => `File: ${f.path}\n\`\`\`\n${f.content.slice(0, 2000)}\n\`\`\``).join('\n\n');
+    // Build prompt for Bob - reduced content size for faster processing
+    const fileList = fileContents.map(f => `File: ${f.path}\n\`\`\`\n${f.content.slice(0, 1000)}\n\`\`\``).join('\n\n');
     
     const prompt = `Analyze these code files and create a dependency graph. Return ONLY valid JSON in this exact format:
 {
@@ -109,26 +109,53 @@ Files to analyze:
 ${fileList}`;
 
     try {
+      // Use extended timeout for dependency analysis (5 minutes)
       const response = await this.bobService.askBob({
         system: 'You are a code analysis expert. Return only valid JSON.',
         messages: [{ role: 'user', content: prompt }]
-      });
+      }, 300000); // 5 minutes timeout
 
       const text = response.content[0]?.text || '{}';
       
-      // Extract JSON from response (Bob might add extra text)
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('No JSON found in Bob response');
+      console.log('Bob response length:', text.length);
+      console.log('Bob response preview:', text.substring(0, 500));
+      
+      // Try multiple JSON extraction strategies
+      let jsonText = '';
+      
+      // Strategy 1: Look for JSON code blocks
+      const codeBlockMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+      if (codeBlockMatch) {
+        jsonText = codeBlockMatch[1];
+        console.log('Found JSON in code block');
+      } else {
+        // Strategy 2: Look for raw JSON (greedy match to get the largest JSON object)
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          jsonText = jsonMatch[0];
+          console.log('Found raw JSON');
+        } else {
+          console.error('Full Bob response:', text);
+          throw new Error('No JSON found in Bob response. Bob may have returned plain text instead of JSON.');
+        }
       }
 
-      const graph: DependencyGraph = JSON.parse(jsonMatch[0]);
+      let graph: DependencyGraph;
+      try {
+        graph = JSON.parse(jsonText);
+      } catch (parseError: any) {
+        console.error('JSON parse error:', parseError.message);
+        console.error('Attempted to parse:', jsonText.substring(0, 500));
+        throw new Error(`Failed to parse JSON from Bob: ${parseError.message}`);
+      }
       
       // Validate structure
       if (!graph.nodes || !graph.edges) {
-        throw new Error('Invalid graph structure from Bob');
+        console.error('Invalid graph structure:', graph);
+        throw new Error('Invalid graph structure from Bob - missing nodes or edges');
       }
 
+      console.log(`Successfully parsed graph: ${graph.nodes.length} nodes, ${graph.edges.length} edges`);
       return graph;
     } catch (error) {
       console.error('Bob analysis failed, falling back to regex:', error);

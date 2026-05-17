@@ -16,6 +16,680 @@
       ]
     },
     {
+      "id": "extension/src",
+      "name": "src",
+      "type": "folder",
+      "filePath": "extension/src",
+      "children": [
+        {
+          "id": "extension/src/webviewProvider.ts",
+          "name": "webviewProvider.ts",
+          "type": "file",
+          "filePath": "extension/src/webviewProvider.ts",
+          "children": [
+            {
+              "id": "extension/src/webviewProvider.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 16
+            },
+            {
+              "id": "extension/src/webviewProvider.ts:show",
+              "name": "show",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 28
+            },
+            {
+              "id": "extension/src/webviewProvider.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 33
+            },
+            {
+              "id": "extension/src/webviewProvider.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 40
+            },
+            {
+              "id": "extension/src/webviewProvider.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 44
+            },
+            {
+              "id": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+              "name": "RepomapWebviewProvider",
+              "type": "function",
+              "filePath": "extension/src/webviewProvider.ts",
+              "line": 10
+            }
+          ]
+        },
+        {
+          "id": "extension/src/unifiedGraphService.ts",
+          "name": "unifiedGraphService.ts",
+          "type": "file",
+          "filePath": "extension/src/unifiedGraphService.ts",
+          "children": [
+            {
+              "id": "extension/src/unifiedGraphService.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/unifiedGraphService.ts",
+              "line": 15
+            },
+            {
+              "id": "extension/src/unifiedGraphService.ts:UnifiedGraphService",
+              "name": "UnifiedGraphService",
+              "type": "function",
+              "filePath": "extension/src/unifiedGraphService.ts",
+              "line": 12
+            }
+          ]
+        },
+        {
+          "id": "extension/src/types.ts",
+          "name": "types.ts",
+          "type": "file",
+          "filePath": "extension/src/types.ts",
+          "children": []
+        },
+        {
+          "id": "extension/src/refactoringService.ts",
+          "name": "refactoringService.ts",
+          "type": "file",
+          "filePath": "extension/src/refactoringService.ts",
+          "children": [
+            {
+              "id": "extension/src/refactoringService.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 13
+            },
+            {
+              "id": "extension/src/refactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 32
+            },
+            {
+              "id": "extension/src/refactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 55
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 103
+            },
+            {
+              "id": "extension/src/refactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 142
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 159
+            },
+            {
+              "id": "extension/src/refactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 197
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 198
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 203
+            },
+            {
+              "id": "extension/src/refactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 209
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 245
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 258
+            },
+            {
+              "id": "extension/src/refactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 278
+            },
+            {
+              "id": "extension/src/refactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 353
+            },
+            {
+              "id": "extension/src/refactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 360
+            },
+            {
+              "id": "extension/src/refactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 372
+            },
+            {
+              "id": "extension/src/refactoringService.ts:RefactoringService",
+              "name": "RefactoringService",
+              "type": "function",
+              "filePath": "extension/src/refactoringService.ts",
+              "line": 12
+            }
+          ]
+        },
+        {
+          "id": "extension/src/fileSystemService.ts",
+          "name": "fileSystemService.ts",
+          "type": "file",
+          "filePath": "extension/src/fileSystemService.ts",
+          "children": [
+            {
+              "id": "extension/src/fileSystemService.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 17
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 30
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 37
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 43
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 46
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 68
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 74
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 87
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 97
+            },
+            {
+              "id": "extension/src/fileSystemService.ts:FileSystemService",
+              "name": "FileSystemService",
+              "type": "function",
+              "filePath": "extension/src/fileSystemService.ts",
+              "line": 16
+            }
+          ]
+        },
+        {
+          "id": "extension/src/extension.ts",
+          "name": "extension.ts",
+          "type": "file",
+          "filePath": "extension/src/extension.ts",
+          "children": [
+            {
+              "id": "extension/src/extension.ts:activate",
+              "name": "activate",
+              "type": "function",
+              "filePath": "extension/src/extension.ts",
+              "line": 4
+            },
+            {
+              "id": "extension/src/extension.ts:deactivate",
+              "name": "deactivate",
+              "type": "function",
+              "filePath": "extension/src/extension.ts",
+              "line": 22
+            },
+            {
+              "id": "extension/src/extension.ts:activate",
+              "name": "activate",
+              "type": "function",
+              "filePath": "extension/src/extension.ts",
+              "line": 4
+            },
+            {
+              "id": "extension/src/extension.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/extension.ts",
+              "line": 9
+            },
+            {
+              "id": "extension/src/extension.ts:deactivate",
+              "name": "deactivate",
+              "type": "function",
+              "filePath": "extension/src/extension.ts",
+              "line": 22
+            }
+          ]
+        },
+        {
+          "id": "extension/src/dependencyService.ts",
+          "name": "dependencyService.ts",
+          "type": "file",
+          "filePath": "extension/src/dependencyService.ts",
+          "children": [
+            {
+              "id": "extension/src/dependencyService.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 17
+            },
+            {
+              "id": "extension/src/dependencyService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 33
+            },
+            {
+              "id": "extension/src/dependencyService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 46
+            },
+            {
+              "id": "extension/src/dependencyService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 52
+            },
+            {
+              "id": "extension/src/dependencyService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 54
+            },
+            {
+              "id": "extension/src/dependencyService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 73
+            },
+            {
+              "id": "extension/src/dependencyService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 79
+            },
+            {
+              "id": "extension/src/dependencyService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 121
+            },
+            {
+              "id": "extension/src/dependencyService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 128
+            },
+            {
+              "id": "extension/src/dependencyService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 134
+            },
+            {
+              "id": "extension/src/dependencyService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 152
+            },
+            {
+              "id": "extension/src/dependencyService.ts:DependencyService",
+              "name": "DependencyService",
+              "type": "function",
+              "filePath": "extension/src/dependencyService.ts",
+              "line": 13
+            }
+          ]
+        },
+        {
+          "id": "extension/src/bobService.ts",
+          "name": "bobService.ts",
+          "type": "file",
+          "filePath": "extension/src/bobService.ts",
+          "children": [
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 14
+            },
+            {
+              "id": "extension/src/bobService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 17
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 19
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 22
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 56
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 63
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 67
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 74
+            },
+            {
+              "id": "extension/src/bobService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 89
+            },
+            {
+              "id": "extension/src/bobService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 98
+            },
+            {
+              "id": "extension/src/bobService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 107
+            },
+            {
+              "id": "extension/src/bobService.ts:BobService",
+              "name": "BobService",
+              "type": "function",
+              "filePath": "extension/src/bobService.ts",
+              "line": 10
+            }
+          ]
+        },
+        {
+          "id": "extension/src/bobRefactoringService.ts",
+          "name": "bobRefactoringService.ts",
+          "type": "file",
+          "filePath": "extension/src/bobRefactoringService.ts",
+          "children": [
+            {
+              "id": "extension/src/bobRefactoringService.ts:scan",
+              "name": "scan",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 46
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 19
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:scan",
+              "name": "scan",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 46
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 47
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 75
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 108
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 110
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 119
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 125
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 138
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 167
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 169
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 181
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 187
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 200
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 283
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 296
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 374
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 387
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 419
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts:BobRefactoringService",
+              "name": "BobRefactoringService",
+              "type": "function",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "line": 17
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "webview/src",
       "name": "src",
       "type": "folder",
@@ -523,954 +1197,108 @@
       ]
     },
     {
-      "id": "extension/src",
-      "name": "src",
+      "id": "extension/src/webview",
+      "name": "webview",
       "type": "folder",
-      "filePath": "extension/src",
+      "filePath": "extension/src/webview",
       "children": [
         {
-          "id": "extension/src/refactoringService.ts",
-          "name": "refactoringService.ts",
+          "id": "extension/src/webview/messageHandlers.ts",
+          "name": "messageHandlers.ts",
           "type": "file",
-          "filePath": "extension/src/refactoringService.ts",
+          "filePath": "extension/src/webview/messageHandlers.ts",
           "children": [
             {
-              "id": "extension/src/refactoringService.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 13
-            },
-            {
-              "id": "extension/src/refactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 32
-            },
-            {
-              "id": "extension/src/refactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 55
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 103
-            },
-            {
-              "id": "extension/src/refactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 142
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 159
-            },
-            {
-              "id": "extension/src/refactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 197
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 198
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 203
-            },
-            {
-              "id": "extension/src/refactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 209
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 245
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 258
-            },
-            {
-              "id": "extension/src/refactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 278
-            },
-            {
-              "id": "extension/src/refactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 353
-            },
-            {
-              "id": "extension/src/refactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 360
-            },
-            {
-              "id": "extension/src/refactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 372
-            },
-            {
-              "id": "extension/src/refactoringService.ts:RefactoringService",
-              "name": "RefactoringService",
-              "type": "function",
-              "filePath": "extension/src/refactoringService.ts",
-              "line": 12
-            }
-          ]
-        },
-        {
-          "id": "extension/src/types.ts",
-          "name": "types.ts",
-          "type": "file",
-          "filePath": "extension/src/types.ts",
-          "children": []
-        },
-        {
-          "id": "extension/src/fileSystemService.ts",
-          "name": "fileSystemService.ts",
-          "type": "file",
-          "filePath": "extension/src/fileSystemService.ts",
-          "children": [
-            {
-              "id": "extension/src/fileSystemService.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 17
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 30
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 37
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 43
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 46
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 68
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 74
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 87
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 97
-            },
-            {
-              "id": "extension/src/fileSystemService.ts:FileSystemService",
-              "name": "FileSystemService",
-              "type": "function",
-              "filePath": "extension/src/fileSystemService.ts",
-              "line": 16
-            }
-          ]
-        },
-        {
-          "id": "extension/src/extension.ts",
-          "name": "extension.ts",
-          "type": "file",
-          "filePath": "extension/src/extension.ts",
-          "children": [
-            {
-              "id": "extension/src/extension.ts:activate",
-              "name": "activate",
-              "type": "function",
-              "filePath": "extension/src/extension.ts",
-              "line": 4
-            },
-            {
-              "id": "extension/src/extension.ts:deactivate",
-              "name": "deactivate",
-              "type": "function",
-              "filePath": "extension/src/extension.ts",
-              "line": 22
-            },
-            {
-              "id": "extension/src/extension.ts:activate",
-              "name": "activate",
-              "type": "function",
-              "filePath": "extension/src/extension.ts",
-              "line": 4
-            },
-            {
-              "id": "extension/src/extension.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/extension.ts",
-              "line": 9
-            },
-            {
-              "id": "extension/src/extension.ts:deactivate",
-              "name": "deactivate",
-              "type": "function",
-              "filePath": "extension/src/extension.ts",
-              "line": 22
-            }
-          ]
-        },
-        {
-          "id": "extension/src/dependencyService.ts",
-          "name": "dependencyService.ts",
-          "type": "file",
-          "filePath": "extension/src/dependencyService.ts",
-          "children": [
-            {
-              "id": "extension/src/dependencyService.ts:name",
-              "name": "name",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 395
-            },
-            {
-              "id": "extension/src/dependencyService.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 41
-            },
-            {
-              "id": "extension/src/dependencyService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 56
-            },
-            {
-              "id": "extension/src/dependencyService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 69
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 75
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 77
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 96
-            },
-            {
-              "id": "extension/src/dependencyService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 102
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 143
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 150
-            },
-            {
-              "id": "extension/src/dependencyService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 156
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 168
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 183
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 197
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 200
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 212
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 220
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 229
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 248
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 250
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 276
-            },
-            {
-              "id": "extension/src/dependencyService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 300
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 343
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 363
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 367
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 375
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 439
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 462
-            },
-            {
-              "id": "extension/src/dependencyService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 475
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 510
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 517
-            },
-            {
-              "id": "extension/src/dependencyService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 533
-            },
-            {
-              "id": "extension/src/dependencyService.ts:DependencyService",
-              "name": "DependencyService",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 37
-            },
-            {
-              "id": "extension/src/dependencyService.ts:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 429
-            },
-            {
-              "id": "extension/src/dependencyService.ts:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 452
-            },
-            {
-              "id": "extension/src/dependencyService.ts:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/src/dependencyService.ts",
-              "line": 488
-            }
-          ]
-        },
-        {
-          "id": "extension/src/bobRefactoringService.ts",
-          "name": "bobRefactoringService.ts",
-          "type": "file",
-          "filePath": "extension/src/bobRefactoringService.ts",
-          "children": [
-            {
-              "id": "extension/src/bobRefactoringService.ts:scan",
-              "name": "scan",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 46
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 19
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:scan",
-              "name": "scan",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 46
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 47
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 75
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 108
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 110
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 119
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 125
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 138
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 167
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 169
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 181
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 187
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 200
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 283
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 296
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 374
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 387
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 419
-            },
-            {
-              "id": "extension/src/bobRefactoringService.ts:BobRefactoringService",
-              "name": "BobRefactoringService",
-              "type": "function",
-              "filePath": "extension/src/bobRefactoringService.ts",
-              "line": 17
-            }
-          ]
-        },
-        {
-          "id": "extension/src/bobService.ts",
-          "name": "bobService.ts",
-          "type": "file",
-          "filePath": "extension/src/bobService.ts",
-          "children": [
-            {
-              "id": "extension/src/bobService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 14
-            },
-            {
-              "id": "extension/src/bobService.ts:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 17
-            },
-            {
-              "id": "extension/src/bobService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 19
-            },
-            {
-              "id": "extension/src/bobService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 22
-            },
-            {
-              "id": "extension/src/bobService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 51
-            },
-            {
-              "id": "extension/src/bobService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 66
-            },
-            {
-              "id": "extension/src/bobService.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 75
-            },
-            {
-              "id": "extension/src/bobService.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 84
-            },
-            {
-              "id": "extension/src/bobService.ts:BobService",
-              "name": "BobService",
-              "type": "function",
-              "filePath": "extension/src/bobService.ts",
-              "line": 10
-            }
-          ]
-        },
-        {
-          "id": "extension/src/unifiedGraphService.ts",
-          "name": "unifiedGraphService.ts",
-          "type": "file",
-          "filePath": "extension/src/unifiedGraphService.ts",
-          "children": [
-            {
-              "id": "extension/src/unifiedGraphService.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/unifiedGraphService.ts",
-              "line": 15
-            },
-            {
-              "id": "extension/src/unifiedGraphService.ts:UnifiedGraphService",
-              "name": "UnifiedGraphService",
-              "type": "function",
-              "filePath": "extension/src/unifiedGraphService.ts",
-              "line": 12
-            }
-          ]
-        },
-        {
-          "id": "extension/src/webviewProvider.ts",
-          "name": "webviewProvider.ts",
-          "type": "file",
-          "filePath": "extension/src/webviewProvider.ts",
-          "children": [
-            {
-              "id": "extension/src/webviewProvider.ts:getNonce",
-              "name": "getNonce",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 286
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 14
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:show",
-              "name": "show",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 26
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 31
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 38
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 42
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:handleMessage",
-              "name": "handleMessage",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 91
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:switch",
+              "id": "extension/src/webview/messageHandlers.ts:switch",
               "name": "switch",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 92
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 16
             },
             {
-              "id": "extension/src/webviewProvider.ts:catch",
+              "id": "extension/src/webview/messageHandlers.ts:catch",
               "name": "catch",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 46
+            },
+            {
+              "id": "extension/src/webview/messageHandlers.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 67
+            },
+            {
+              "id": "extension/src/webview/messageHandlers.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 89
+            },
+            {
+              "id": "extension/src/webview/messageHandlers.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 106
+            },
+            {
+              "id": "extension/src/webview/messageHandlers.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/webview/messageHandlers.ts",
               "line": 122
             },
             {
-              "id": "extension/src/webviewProvider.ts:loadWorkspace",
-              "name": "loadWorkspace",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 130
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:catch",
+              "id": "extension/src/webview/messageHandlers.ts:catch",
               "name": "catch",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 143
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 146
             },
             {
-              "id": "extension/src/webviewProvider.ts:loadDependencyGraph",
-              "name": "loadDependencyGraph",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 152
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:catch",
+              "id": "extension/src/webview/messageHandlers.ts:catch",
               "name": "catch",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 165
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 167
             },
             {
-              "id": "extension/src/webviewProvider.ts:readFile",
-              "name": "readFile",
+              "id": "extension/src/webview/messageHandlers.ts:MessageHandlers",
+              "name": "MessageHandlers",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 174
-            },
+              "filePath": "extension/src/webview/messageHandlers.ts",
+              "line": 7
+            }
+          ]
+        },
+        {
+          "id": "extension/src/webview/htmlGenerator.ts",
+          "name": "htmlGenerator.ts",
+          "type": "file",
+          "filePath": "extension/src/webview/htmlGenerator.ts",
+          "children": [
             {
-              "id": "extension/src/webviewProvider.ts:catch",
-              "name": "catch",
+              "id": "extension/src/webview/htmlGenerator.ts:constructor",
+              "name": "constructor",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 182
+              "filePath": "extension/src/webview/htmlGenerator.ts",
+              "line": 3
             },
             {
-              "id": "extension/src/webviewProvider.ts:writeFile",
-              "name": "writeFile",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 190
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 198
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:renameFile",
-              "name": "renameFile",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 211
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 222
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:askBob",
-              "name": "askBob",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 236
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 243
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:sendMessage",
-              "name": "sendMessage",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 251
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:getNonce",
-              "name": "getNonce",
-              "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 286
-            },
-            {
-              "id": "extension/src/webviewProvider.ts:for",
+              "id": "extension/src/webview/htmlGenerator.ts:for",
               "name": "for",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 288
+              "filePath": "extension/src/webview/htmlGenerator.ts",
+              "line": 41
             },
             {
-              "id": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
-              "name": "RepomapWebviewProvider",
+              "id": "extension/src/webview/htmlGenerator.ts:HtmlGenerator",
+              "name": "HtmlGenerator",
               "type": "function",
-              "filePath": "extension/src/webviewProvider.ts",
-              "line": 9
+              "filePath": "extension/src/webview/htmlGenerator.ts",
+              "line": 3
             }
           ]
         }
@@ -1483,299 +1311,11 @@
       "filePath": "extension/dist",
       "children": [
         {
-          "id": "extension/dist/bobRefactoringService.js",
-          "name": "bobRefactoringService.js",
-          "type": "file",
-          "filePath": "extension/dist/bobRefactoringService.js",
-          "children": [
-            {
-              "id": "extension/dist/bobRefactoringService.js:scan",
-              "name": "scan",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 65
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 2
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 6
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 9
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 13
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 15
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 18
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 19
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 20
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:function",
-              "name": "function",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 27
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:constructor",
-              "name": "constructor",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 41
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:isDirectory",
-              "name": "isDirectory",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 49
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:getFilesInDirectory",
-              "name": "getFilesInDirectory",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 61
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:scan",
-              "name": "scan",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 65
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 66
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:refactorRename",
-              "name": "refactorRename",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 88
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 91
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:refactorFolderRename",
-              "name": "refactorFolderRename",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 101
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 118
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 120
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 123
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 128
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 141
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:refactorFileRename",
-              "name": "refactorFileRename",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 153
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 166
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 168
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 171
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 176
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 189
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:refactorFileForFolderRename",
-              "name": "refactorFileForFolderRename",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 201
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 257
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 268
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:refactorFileWithBob",
-              "name": "refactorFileWithBob",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 276
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 329
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 340
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:quickCheck",
-              "name": "quickCheck",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 348
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:getAllRelevantFiles",
-              "name": "getAllRelevantFiles",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 364
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 369
-            },
-            {
-              "id": "extension/dist/bobRefactoringService.js:BobRefactoringService",
-              "name": "BobRefactoringService",
-              "type": "function",
-              "filePath": "extension/dist/bobRefactoringService.js",
-              "line": 41
-            }
-          ]
-        },
-        {
           "id": "extension/dist/webviewProvider.js",
           "name": "webviewProvider.js",
           "type": "file",
           "filePath": "extension/dist/webviewProvider.js",
           "children": [
-            {
-              "id": "extension/dist/webviewProvider.js:getNonce",
-              "name": "getNonce",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 273
-            },
             {
               "id": "extension/dist/webviewProvider.js:function",
               "name": "function",
@@ -1844,21 +1384,14 @@
               "name": "constructor",
               "type": "function",
               "filePath": "extension/dist/webviewProvider.js",
-              "line": 42
+              "line": 44
             },
             {
               "id": "extension/dist/webviewProvider.js:show",
               "name": "show",
               "type": "function",
               "filePath": "extension/dist/webviewProvider.js",
-              "line": 50
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 55
+              "line": 52
             },
             {
               "id": "extension/dist/webviewProvider.js:if",
@@ -1872,147 +1405,21 @@
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/webviewProvider.js",
-              "line": 61
+              "line": 59
             },
             {
-              "id": "extension/dist/webviewProvider.js:handleMessage",
-              "name": "handleMessage",
+              "id": "extension/dist/webviewProvider.js:if",
+              "name": "if",
               "type": "function",
               "filePath": "extension/dist/webviewProvider.js",
-              "line": 89
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:switch",
-              "name": "switch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 91
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 115
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:loadWorkspace",
-              "name": "loadWorkspace",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 122
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 135
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:loadDependencyGraph",
-              "name": "loadDependencyGraph",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 143
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 156
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:readFile",
-              "name": "readFile",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 164
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 173
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:writeFile",
-              "name": "writeFile",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 180
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 189
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:renameFile",
-              "name": "renameFile",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 201
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 213
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:askBob",
-              "name": "askBob",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 226
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 234
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:sendMessage",
-              "name": "sendMessage",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 241
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:getWebviewContent",
-              "name": "getWebviewContent",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 244
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:getNonce",
-              "name": "getNonce",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 273
-            },
-            {
-              "id": "extension/dist/webviewProvider.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/webviewProvider.js",
-              "line": 275
+              "line": 63
             },
             {
               "id": "extension/dist/webviewProvider.js:RepomapWebviewProvider",
               "name": "RepomapWebviewProvider",
               "type": "function",
               "filePath": "extension/dist/webviewProvider.js",
-              "line": 42
+              "line": 44
             }
           ]
         },
@@ -2657,13 +2064,6 @@
           "filePath": "extension/dist/dependencyService.js",
           "children": [
             {
-              "id": "extension/dist/dependencyService.js:name",
-              "name": "name",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 361
-            },
-            {
               "id": "extension/dist/dependencyService.js:function",
               "name": "function",
               "type": "function",
@@ -2731,322 +2131,126 @@
               "name": "constructor",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 41
+              "line": 42
             },
             {
               "id": "extension/dist/dependencyService.js:loadCachedGraph",
               "name": "loadCachedGraph",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 48
+              "line": 49
             },
             {
               "id": "extension/dist/dependencyService.js:catch",
               "name": "catch",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 55
+              "line": 56
             },
             {
               "id": "extension/dist/dependencyService.js:saveCachedGraph",
               "name": "saveCachedGraph",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 60
+              "line": 61
             },
             {
               "id": "extension/dist/dependencyService.js:catch",
               "name": "catch",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 68
+              "line": 69
             },
             {
               "id": "extension/dist/dependencyService.js:buildDependencyGraph",
               "name": "buildDependencyGraph",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 72
+              "line": 73
             },
             {
               "id": "extension/dist/dependencyService.js:if",
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 74
+              "line": 75
             },
             {
               "id": "extension/dist/dependencyService.js:if",
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 76
+              "line": 77
             },
             {
               "id": "extension/dist/dependencyService.js:buildDependencyGraphWithBob",
               "name": "buildDependencyGraphWithBob",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 86
+              "line": 87
             },
             {
               "id": "extension/dist/dependencyService.js:for",
               "name": "for",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 92
+              "line": 93
             },
             {
               "id": "extension/dist/dependencyService.js:catch",
               "name": "catch",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 98
+              "line": 99
             },
             {
               "id": "extension/dist/dependencyService.js:if",
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 135
+              "line": 137
             },
             {
               "id": "extension/dist/dependencyService.js:if",
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 140
+              "line": 142
             },
             {
               "id": "extension/dist/dependencyService.js:catch",
               "name": "catch",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 145
+              "line": 147
             },
             {
               "id": "extension/dist/dependencyService.js:buildDependencyGraphWithRegex",
               "name": "buildDependencyGraphWithRegex",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 150
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 156
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 169
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 181
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 183
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 194
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 201
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 210
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 228
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 230
+              "line": 152
             },
             {
               "id": "extension/dist/dependencyService.js:getAllSupportedFiles",
               "name": "getAllSupportedFiles",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 247
+              "line": 157
             },
             {
               "id": "extension/dist/dependencyService.js:for",
               "name": "for",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 252
-            },
-            {
-              "id": "extension/dist/dependencyService.js:parseFile",
-              "name": "parseFile",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 257
-            },
-            {
-              "id": "extension/dist/dependencyService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 270
-            },
-            {
-              "id": "extension/dist/dependencyService.js:readFileContent",
-              "name": "readFileContent",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 275
-            },
-            {
-              "id": "extension/dist/dependencyService.js:extractImports",
-              "name": "extractImports",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 278
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 310
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 330
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 334
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 344
-            },
-            {
-              "id": "extension/dist/dependencyService.js:extractFunctions",
-              "name": "extractFunctions",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 356
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 403
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 426
-            },
-            {
-              "id": "extension/dist/dependencyService.js:if",
-              "name": "if",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 440
-            },
-            {
-              "id": "extension/dist/dependencyService.js:resolveImportPath",
-              "name": "resolveImportPath",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 464
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 471
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 477
-            },
-            {
-              "id": "extension/dist/dependencyService.js:for",
-              "name": "for",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 491
+              "line": 162
             },
             {
               "id": "extension/dist/dependencyService.js:DependencyService",
               "name": "DependencyService",
               "type": "function",
               "filePath": "extension/dist/dependencyService.js",
-              "line": 41
-            },
-            {
-              "id": "extension/dist/dependencyService.js:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 392
-            },
-            {
-              "id": "extension/dist/dependencyService.js:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 415
-            },
-            {
-              "id": "extension/dist/dependencyService.js:Name",
-              "name": "Name",
-              "type": "function",
-              "filePath": "extension/dist/dependencyService.js",
-              "line": 452
+              "line": 42
             }
           ]
         },
@@ -3096,35 +2300,56 @@
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/bobService.js",
-              "line": 42
-            },
-            {
-              "id": "extension/dist/bobService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobService.js",
-              "line": 55
-            },
-            {
-              "id": "extension/dist/bobService.js:catch",
-              "name": "catch",
-              "type": "function",
-              "filePath": "extension/dist/bobService.js",
-              "line": 64
-            },
-            {
-              "id": "extension/dist/bobService.js:checkBobAvailable",
-              "name": "checkBobAvailable",
-              "type": "function",
-              "filePath": "extension/dist/bobService.js",
-              "line": 68
+              "line": 48
             },
             {
               "id": "extension/dist/bobService.js:if",
               "name": "if",
               "type": "function",
               "filePath": "extension/dist/bobService.js",
-              "line": 73
+              "line": 55
+            },
+            {
+              "id": "extension/dist/bobService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 58
+            },
+            {
+              "id": "extension/dist/bobService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 63
+            },
+            {
+              "id": "extension/dist/bobService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 76
+            },
+            {
+              "id": "extension/dist/bobService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 85
+            },
+            {
+              "id": "extension/dist/bobService.js:checkBobAvailable",
+              "name": "checkBobAvailable",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 89
+            },
+            {
+              "id": "extension/dist/bobService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobService.js",
+              "line": 94
             },
             {
               "id": "extension/dist/bobService.js:BobService",
@@ -3132,6 +2357,730 @@
               "type": "function",
               "filePath": "extension/dist/bobService.js",
               "line": 7
+            }
+          ]
+        },
+        {
+          "id": "extension/dist/bobRefactoringService.js",
+          "name": "bobRefactoringService.js",
+          "type": "file",
+          "filePath": "extension/dist/bobRefactoringService.js",
+          "children": [
+            {
+              "id": "extension/dist/bobRefactoringService.js:scan",
+              "name": "scan",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 65
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 2
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 6
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 9
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 13
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 15
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 18
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 19
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 20
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 27
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 41
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:isDirectory",
+              "name": "isDirectory",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 49
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:getFilesInDirectory",
+              "name": "getFilesInDirectory",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 61
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:scan",
+              "name": "scan",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 65
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 66
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:refactorRename",
+              "name": "refactorRename",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 88
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 91
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:refactorFolderRename",
+              "name": "refactorFolderRename",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 101
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 118
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 120
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 123
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 128
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 141
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:refactorFileRename",
+              "name": "refactorFileRename",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 153
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 166
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 168
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 171
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 176
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 189
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:refactorFileForFolderRename",
+              "name": "refactorFileForFolderRename",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 201
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 257
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 268
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:refactorFileWithBob",
+              "name": "refactorFileWithBob",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 276
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 329
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 340
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:quickCheck",
+              "name": "quickCheck",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 348
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:getAllRelevantFiles",
+              "name": "getAllRelevantFiles",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 364
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 369
+            },
+            {
+              "id": "extension/dist/bobRefactoringService.js:BobRefactoringService",
+              "name": "BobRefactoringService",
+              "type": "function",
+              "filePath": "extension/dist/bobRefactoringService.js",
+              "line": 41
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "webview/src/utils",
+      "name": "utils",
+      "type": "folder",
+      "filePath": "webview/src/utils",
+      "children": [
+        {
+          "id": "webview/src/utils/graphLayout.ts",
+          "name": "graphLayout.ts",
+          "type": "file",
+          "filePath": "webview/src/utils/graphLayout.ts",
+          "children": [
+            {
+              "id": "webview/src/utils/graphLayout.ts:normalizeGraphPath",
+              "name": "normalizeGraphPath",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 41
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:isPathHidden",
+              "name": "isPathHidden",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 45
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:filterTreeByDisabledPaths",
+              "name": "filterTreeByDisabledPaths",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 49
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:getNodeWidth",
+              "name": "getNodeWidth",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 60
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:getSubtreeHeight",
+              "name": "getSubtreeHeight",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 66
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:buildGraphLayout",
+              "name": "buildGraphLayout",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 80
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:processNode",
+              "name": "processNode",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 94
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 51
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 121
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 124
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 144
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 164
+            },
+            {
+              "id": "webview/src/utils/graphLayout.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/utils/graphLayout.ts",
+              "line": 174
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "webview/src/types",
+      "name": "types",
+      "type": "folder",
+      "filePath": "webview/src/types",
+      "children": [
+        {
+          "id": "webview/src/types/index.ts",
+          "name": "index.ts",
+          "type": "file",
+          "filePath": "webview/src/types/index.ts",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "extension/dist/webview",
+      "name": "webview",
+      "type": "folder",
+      "filePath": "extension/dist/webview",
+      "children": [
+        {
+          "id": "extension/dist/webview/messageHandlers.js",
+          "name": "messageHandlers.js",
+          "type": "file",
+          "filePath": "extension/dist/webview/messageHandlers.js",
+          "children": [
+            {
+              "id": "extension/dist/webview/messageHandlers.js:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 4
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleMessage",
+              "name": "handleMessage",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 10
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:switch",
+              "name": "switch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 12
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 36
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleLoadWorkspace",
+              "name": "handleLoadWorkspace",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 43
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 56
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleLoadDependencyGraph",
+              "name": "handleLoadDependencyGraph",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 64
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 77
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleReadFile",
+              "name": "handleReadFile",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 85
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 94
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleWriteFile",
+              "name": "handleWriteFile",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 101
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 110
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleRenameFile",
+              "name": "handleRenameFile",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 122
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 134
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:handleAskBob",
+              "name": "handleAskBob",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 147
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 155
+            },
+            {
+              "id": "extension/dist/webview/messageHandlers.js:MessageHandlers",
+              "name": "MessageHandlers",
+              "type": "function",
+              "filePath": "extension/dist/webview/messageHandlers.js",
+              "line": 4
+            }
+          ]
+        },
+        {
+          "id": "extension/dist/webview/htmlGenerator.js",
+          "name": "htmlGenerator.js",
+          "type": "file",
+          "filePath": "extension/dist/webview/htmlGenerator.js",
+          "children": [
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 2
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 6
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 9
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 13
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 15
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 18
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 19
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 20
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 27
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 38
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:generateHtml",
+              "name": "generateHtml",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 42
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:getNonce",
+              "name": "getNonce",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 68
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 71
+            },
+            {
+              "id": "extension/dist/webview/htmlGenerator.js:HtmlGenerator",
+              "name": "HtmlGenerator",
+              "type": "function",
+              "filePath": "extension/dist/webview/htmlGenerator.js",
+              "line": 38
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "webview/src/components",
+      "name": "components",
+      "type": "folder",
+      "filePath": "webview/src/components",
+      "children": [
+        {
+          "id": "webview/src/components/FileTree.tsx",
+          "name": "FileTree.tsx",
+          "type": "file",
+          "filePath": "webview/src/components/FileTree.tsx",
+          "children": [
+            {
+              "id": "webview/src/components/FileTree.tsx:handleClick",
+              "name": "handleClick",
+              "type": "function",
+              "filePath": "webview/src/components/FileTree.tsx",
+              "line": 49
+            },
+            {
+              "id": "webview/src/components/FileTree.tsx:handleRightClick",
+              "name": "handleRightClick",
+              "type": "function",
+              "filePath": "webview/src/components/FileTree.tsx",
+              "line": 57
+            },
+            {
+              "id": "webview/src/components/FileTree.tsx:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/components/FileTree.tsx",
+              "line": 49
+            },
+            {
+              "id": "webview/src/components/FileTree.tsx:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/components/FileTree.tsx",
+              "line": 58
+            }
+          ]
+        },
+        {
+          "id": "webview/src/components/ChatPanel.tsx",
+          "name": "ChatPanel.tsx",
+          "type": "file",
+          "filePath": "webview/src/components/ChatPanel.tsx",
+          "children": [
+            {
+              "id": "webview/src/components/ChatPanel.tsx:handleSend",
+              "name": "handleSend",
+              "type": "function",
+              "filePath": "webview/src/components/ChatPanel.tsx",
+              "line": 33
+            },
+            {
+              "id": "webview/src/components/ChatPanel.tsx:handleBobResponse",
+              "name": "handleBobResponse",
+              "type": "function",
+              "filePath": "webview/src/components/ChatPanel.tsx",
+              "line": 53
+            },
+            {
+              "id": "webview/src/components/ChatPanel.tsx:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/components/ChatPanel.tsx",
+              "line": 20
+            },
+            {
+              "id": "webview/src/components/ChatPanel.tsx:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "webview/src/components/ChatPanel.tsx",
+              "line": 105
             }
           ]
         }
@@ -12871,6 +12820,791 @@
               "type": "function",
               "filePath": "extension/webview-dist/assets/index.js",
               "line": 44
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extension/src/dependency",
+      "name": "dependency",
+      "type": "folder",
+      "filePath": "extension/src/dependency",
+      "children": [
+        {
+          "id": "extension/src/dependency/graphBuilder.ts",
+          "name": "graphBuilder.ts",
+          "type": "file",
+          "filePath": "extension/src/dependency/graphBuilder.ts",
+          "children": [
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 10
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 22
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 38
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 53
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 55
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 67
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 75
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 84
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 103
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 105
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 134
+            },
+            {
+              "id": "extension/src/dependency/graphBuilder.ts:GraphBuilder",
+              "name": "GraphBuilder",
+              "type": "function",
+              "filePath": "extension/src/dependency/graphBuilder.ts",
+              "line": 7
+            }
+          ]
+        },
+        {
+          "id": "extension/src/dependency/pathResolver.ts",
+          "name": "pathResolver.ts",
+          "type": "file",
+          "filePath": "extension/src/dependency/pathResolver.ts",
+          "children": [
+            {
+              "id": "extension/src/dependency/pathResolver.ts:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/src/dependency/pathResolver.ts",
+              "line": 4
+            },
+            {
+              "id": "extension/src/dependency/pathResolver.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/pathResolver.ts",
+              "line": 14
+            },
+            {
+              "id": "extension/src/dependency/pathResolver.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/pathResolver.ts",
+              "line": 21
+            },
+            {
+              "id": "extension/src/dependency/pathResolver.ts:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/src/dependency/pathResolver.ts",
+              "line": 37
+            },
+            {
+              "id": "extension/src/dependency/pathResolver.ts:PathResolver",
+              "name": "PathResolver",
+              "type": "function",
+              "filePath": "extension/src/dependency/pathResolver.ts",
+              "line": 4
+            }
+          ]
+        },
+        {
+          "id": "extension/src/dependency/codeParser.ts",
+          "name": "codeParser.ts",
+          "type": "file",
+          "filePath": "extension/src/dependency/codeParser.ts",
+          "children": [
+            {
+              "id": "extension/src/dependency/codeParser.ts:name",
+              "name": "name",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 167
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 30
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 41
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 43
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 45
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 120
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 153
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 155
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 157
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:CodeParser",
+              "name": "CodeParser",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 20
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 201
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 230
+            },
+            {
+              "id": "extension/src/dependency/codeParser.ts:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/src/dependency/codeParser.ts",
+              "line": 278
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extension/dist/dependency",
+      "name": "dependency",
+      "type": "folder",
+      "filePath": "extension/dist/dependency",
+      "children": [
+        {
+          "id": "extension/dist/dependency/codeParser.js",
+          "name": "codeParser.js",
+          "type": "file",
+          "filePath": "extension/dist/dependency/codeParser.js",
+          "children": [
+            {
+              "id": "extension/dist/dependency/codeParser.js:name",
+              "name": "name",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 169
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 2
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 6
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 9
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 13
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 15
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 18
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 19
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 20
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 27
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:parseFile",
+              "name": "parseFile",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 39
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:catch",
+              "name": "catch",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 47
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractImports",
+              "name": "extractImports",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 52
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 58
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 61
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 64
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractJavaScriptImports",
+              "name": "extractJavaScriptImports",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 68
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractPythonImports",
+              "name": "extractPythonImports",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 99
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractGoImports",
+              "name": "extractGoImports",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 121
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 127
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractJavaImports",
+              "name": "extractJavaImports",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 137
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractFunctions",
+              "name": "extractFunctions",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 150
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 156
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 159
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 162
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractJavaScriptFunctions",
+              "name": "extractJavaScriptFunctions",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 166
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractPythonFunctions",
+              "name": "extractPythonFunctions",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 211
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractGoFunctions",
+              "name": "extractGoFunctions",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 236
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:extractJavaFunctions",
+              "name": "extractJavaFunctions",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 252
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:CodeParser",
+              "name": "CodeParser",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 39
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 200
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 225
+            },
+            {
+              "id": "extension/dist/dependency/codeParser.js:Name",
+              "name": "Name",
+              "type": "function",
+              "filePath": "extension/dist/dependency/codeParser.js",
+              "line": 266
+            }
+          ]
+        },
+        {
+          "id": "extension/dist/dependency/graphBuilder.js",
+          "name": "graphBuilder.js",
+          "type": "file",
+          "filePath": "extension/dist/dependency/graphBuilder.js",
+          "children": [
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 2
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 6
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 9
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 13
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 15
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 18
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 19
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 20
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 27
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 41
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:buildGraph",
+              "name": "buildGraph",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 47
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 52
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 66
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 79
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 81
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 92
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 99
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 108
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 126
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 128
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:parseFile",
+              "name": "parseFile",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 148
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:if",
+              "name": "if",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 153
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:readFileContent",
+              "name": "readFileContent",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 158
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:clearCache",
+              "name": "clearCache",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 161
+            },
+            {
+              "id": "extension/dist/dependency/graphBuilder.js:GraphBuilder",
+              "name": "GraphBuilder",
+              "type": "function",
+              "filePath": "extension/dist/dependency/graphBuilder.js",
+              "line": 41
+            }
+          ]
+        },
+        {
+          "id": "extension/dist/dependency/pathResolver.js",
+          "name": "pathResolver.js",
+          "type": "file",
+          "filePath": "extension/dist/dependency/pathResolver.js",
+          "children": [
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 2
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 6
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 9
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 13
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 15
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 18
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 19
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 20
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:function",
+              "name": "function",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 27
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:constructor",
+              "name": "constructor",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 39
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:resolveImportPath",
+              "name": "resolveImportPath",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 42
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 49
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 55
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:for",
+              "name": "for",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 69
+            },
+            {
+              "id": "extension/dist/dependency/pathResolver.js:PathResolver",
+              "name": "PathResolver",
+              "type": "function",
+              "filePath": "extension/dist/dependency/pathResolver.js",
+              "line": 39
             }
           ]
         }
@@ -22618,51 +23352,6 @@
   ],
   "edges": [
     {
-      "from": "webview/src/main.tsx",
-      "to": "webview/src/App.tsx",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/fileSystemService.ts",
-      "to": "extension/src/types.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/extension.ts",
-      "to": "extension/src/webviewProvider.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/dependencyService.ts",
-      "to": "extension/src/bobService.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/bobRefactoringService.ts",
-      "to": "extension/src/bobService.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/bobService.ts",
-      "to": "extension/src/types.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/unifiedGraphService.ts",
-      "to": "extension/src/types.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/unifiedGraphService.ts",
-      "to": "extension/src/fileSystemService.ts",
-      "type": "imports"
-    },
-    {
-      "from": "extension/src/unifiedGraphService.ts",
-      "to": "extension/src/dependencyService.ts",
-      "type": "imports"
-    },
-    {
       "from": "extension/src/webviewProvider.ts",
       "to": "extension/src/fileSystemService.ts",
       "type": "imports"
@@ -22684,12 +23373,37 @@
     },
     {
       "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/webview/messageHandlers.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/webview/htmlGenerator.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
       "to": "extension/src/types.ts",
       "type": "imports"
     },
     {
-      "from": "extension/dist/bobRefactoringService.js",
-      "to": "extension/dist/bobService.js",
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/unifiedGraphService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/types.ts",
       "type": "imports"
     },
     {
@@ -22713,6 +23427,21 @@
       "type": "imports"
     },
     {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/messageHandlers.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/htmlGenerator.js",
+      "type": "imports"
+    },
+    {
+      "from": "webview/src/main.tsx",
+      "to": "webview/src/App.tsx",
+      "type": "imports"
+    },
+    {
       "from": "extension/dist/unifiedGraphService.js",
       "to": "extension/dist/fileSystemService.js",
       "type": "imports"
@@ -22723,6 +23452,56 @@
       "type": "imports"
     },
     {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/dependencyService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/fileSystemService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/extension.ts",
+      "to": "extension/src/webviewProvider.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/graphBuilder.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobRefactoringService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
       "from": "extension/dist/extension.js",
       "to": "extension/dist/webviewProvider.js",
       "type": "imports"
@@ -22730,6 +23509,41 @@
     {
       "from": "extension/dist/dependencyService.js",
       "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/graphBuilder.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/codeParser.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/pathResolver.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/bobRefactoringService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/codeParser.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/pathResolver.js",
       "type": "imports"
     }
   ]
