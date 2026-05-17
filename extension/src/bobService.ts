@@ -4,6 +4,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
 import { BobRequest, BobResponse } from './types';
+import * as vscode from 'vscode';
 
 const execAsync = promisify(exec);
 
@@ -32,6 +33,7 @@ export class BobService {
         // Remove --hide-intermediary-output as it may cause output truncation
         // Use --chat-mode ask for direct response
         const bobProcess = spawn('bob', ['--chat-mode', 'ask'], {
+          cwd: vscode.workspace.workspaceFolders?.[0].uri.fsPath,
           shell: isWindows, // Enable shell on Windows to execute .ps1 scripts
           stdio: ['pipe', 'pipe', 'pipe'] // Explicitly set stdio
         });
@@ -58,6 +60,7 @@ export class BobService {
           const chunk = data.toString();
           stderr += chunk;
           console.log(`Bob stderr chunk (${chunk.length} bytes)`);
+          console.warn(`Bob stderr: ${chunk}`);
         });
 
         bobProcess.on('error', (error) => {

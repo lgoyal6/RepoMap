@@ -39,20 +39,6 @@
           ]
         },
         {
-          "id": ".bob/notes",
-          "name": "notes",
-          "type": "folder",
-          "filePath": ".bob/notes",
-          "children": [
-            {
-              "id": ".bob/notes/pending-notes.txt",
-              "name": "pending-notes.txt",
-              "type": "file",
-              "filePath": ".bob/notes/pending-notes.txt"
-            }
-          ]
-        },
-        {
           "id": ".bob/dependency-graph.json",
           "name": "dependency-graph.json",
           "type": "file",
@@ -453,10 +439,22 @@
       "filePath": "DEBUGGING_GUIDE.md"
     },
     {
+      "id": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md",
+      "name": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md",
+      "type": "file",
+      "filePath": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md"
+    },
+    {
       "id": "DEPENDENCY_IMPROVEMENTS.md",
       "name": "DEPENDENCY_IMPROVEMENTS.md",
       "type": "file",
       "filePath": "DEPENDENCY_IMPROVEMENTS.md"
+    },
+    {
+      "id": "IMPLEMENTATION_SUMMARY.md",
+      "name": "IMPLEMENTATION_SUMMARY.md",
+      "type": "file",
+      "filePath": "IMPLEMENTATION_SUMMARY.md"
     },
     {
       "id": "Makefile",
@@ -495,5 +493,251 @@
       "filePath": "setup-extension.sh"
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "from": "test-files/test-parser.js",
+      "to": "extension/dist/dependency/codeParser.js",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/styles.css",
+      "to": "test-files/base.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/styles.css",
+      "to": "test-files/colors.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/index.html",
+      "to": "test-files/styles.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/index.html",
+      "to": "test-files/main.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobRefactoringService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/extension.ts",
+      "to": "extension/src/webviewProvider.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/graphBuilder.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/bobAnalysisService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/graphCombinerService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/dependencyService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "webview/src/main.tsx",
+      "to": "webview/src/App.tsx",
+      "type": "imports"
+    },
+    {
+      "from": "webview/src/main.tsx",
+      "to": "webview/src/index.css",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/fileSystemService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/codeParser.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/pathResolver.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/bobAnalysisService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/dependency/bobAnalysisService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/unifiedGraphService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/test-integration.js",
+      "to": "extension/dist/dependency/graphBuilder.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/extension.js",
+      "to": "extension/dist/webviewProvider.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/graphBuilder.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/bobAnalysisService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/graphCombinerService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/dependencyService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/unifiedGraphService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/messageHandlers.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/htmlGenerator.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/unifiedGraphService.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/unifiedGraphService.js",
+      "to": "extension/dist/dependencyService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/codeParser.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/pathResolver.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphCombinerService.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/bobAnalysisService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/bobRefactoringService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    }
+  ]
 }

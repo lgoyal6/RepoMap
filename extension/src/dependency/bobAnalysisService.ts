@@ -76,23 +76,18 @@ export class BobAnalysisService {
     }
 
     console.log(`Analyzing ${files.length} files for function definitions...`);
-    const functions: FunctionDefinition[] = [];
-
-    // Process files in batches to avoid overwhelming Bob
-    const batchSize = 10;
-    for (let i = 0; i < files.length; i += batchSize) {
-      const batch = files.slice(i, i + batchSize);
-      const batchFunctions = await this.extractFunctionsFromBatch(batch);
-      functions.push(...batchFunctions);
-      
-      console.log(`Processed ${Math.min(i + batchSize, files.length)}/${files.length} files`);
-    }
+    
+    // Process all files at once
+    const functions = await this.extractFunctionsFromBatch(files);
+    console.log(`Processed all ${files.length} files`);
 
     await this.saveToCache(cacheFile, functions);
     return functions;
   }
 
   private async extractFunctionsFromBatch(files: string[]): Promise<FunctionDefinition[]> {
+    console.log(`[BobAnalysis] Processing batch of ${files.length} files for function extraction`);
+    
     const fileContents = await Promise.all(
       files.map(async (filePath) => {
         try {
@@ -101,13 +96,14 @@ export class BobAnalysisService {
           const ext = path.extname(filePath);
           return { path: relativePath, content, ext };
         } catch (error) {
-          console.error(`Error reading ${filePath}:`, error);
+          console.error(`[BobAnalysis] Error reading ${filePath}:`, error);
           return null;
         }
       })
     );
 
     const validFiles = fileContents.filter(f => f !== null);
+    console.log(`[BobAnalysis] Successfully read ${validFiles.length} files`);
     if (validFiles.length === 0) return [];
 
     const fileList = validFiles.map(f => 
@@ -140,52 +136,101 @@ ${fileList}
 OUTPUT (JSON array only):`;
 
     try {
+      console.log(`[BobAnalysis] Sending request to Bob...`);
       const response = await this.bobService.askBob({
         system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
         messages: [{ role: 'user', content: prompt }]
-      }, 120000); // 2 minute timeout
+      }, 600000); // 10 minute timeout for all files
 
       const text = response.content[0]?.text || '[]';
+      console.log(`[BobAnalysis] Raw Bob response length: ${text.length} characters`);
+      console.log(`[BobAnalysis] Raw Bob response (first 500 chars):\n${text.substring(0, 500)}`);
+      console.log(`[BobAnalysis] Raw Bob response (last 500 chars):\n${text.substring(Math.max(0, text.length - 500))}`);
       
-      // Try to extract JSON array
+      // Try to extract JSON from ---output--- tags or clean response
       let jsonText = text.trim();
+      console.log(`[BobAnalysis] After trim, length: ${jsonText.length}`);
+      
+      // Check for ---output--- tags first
+      const outputMatch = jsonText.match(/---output---\s*([\s\S]*?)\s*(?:---output---|$)/i);
+      if (outputMatch) {
+        jsonText = outputMatch[1].trim();
+        console.log(`[BobAnalysis] ✓ Extracted content from ---output--- tags, length: ${jsonText.length}`);
+      }
       
       // Remove markdown code blocks if present
       jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      console.log(`[BobAnalysis] After removing markdown blocks, length: ${jsonText.length}`);
+      console.log(`[BobAnalysis] Cleaned text (first 300 chars):\n${jsonText.substring(0, 300)}`);
       
-      // Find the JSON array
+      // Find the JSON array - use more robust regex
       const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
-        console.warn('No JSON array found in response');
+        console.error(`[BobAnalysis] ❌ No JSON array found in response`);
+        console.error(`[BobAnalysis] Full cleaned text:\n${jsonText}`);
         return [];
       }
       
-      const parsed = JSON.parse(jsonMatch[0]);
+      console.log(`[BobAnalysis] ✓ Found JSON array, length: ${jsonMatch[0].length}`);
+      console.log(`[BobAnalysis] JSON to parse (first 500 chars):\n${jsonMatch[0].substring(0, 500)}`);
+      
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonMatch[0]);
+        console.log(`[BobAnalysis] ✓ Successfully parsed JSON`);
+        console.log(`[BobAnalysis] Parsed data type: ${Array.isArray(parsed) ? 'Array' : typeof parsed}`);
+        console.log(`[BobAnalysis] Array length: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
+      } catch (parseError: any) {
+        console.error(`[BobAnalysis] ❌ JSON parse error: ${parseError.message}`);
+        console.error(`[BobAnalysis] JSON that failed to parse:\n${jsonMatch[0]}`);
+        const errorPosMatch = parseError.message.match(/position (\d+)/);
+        const errorPos = errorPosMatch ? parseInt(errorPosMatch[1], 10) : -1;
+        console.error(`[BobAnalysis] Error at position: ${errorPos !== -1 ? errorPos : 'unknown'}`);
+        
+        if (errorPos !== -1) {
+          const start = Math.max(0, errorPos - 50);
+          const end = Math.min(jsonMatch[0].length, errorPos + 50);
+          const context = jsonMatch[0].substring(start, end);
+          const pointer = ' '.repeat(Math.min(50, errorPos - start)) + '^';
+          console.error(`[BobAnalysis] Context around error:\n${context}\n${pointer}`);
+        }
+        
+        throw parseError;
+      }
       
       // Validate structure
       if (!Array.isArray(parsed)) {
-        console.warn('Response is not an array');
+        console.warn(`[BobAnalysis] ⚠️ Response is not an array, type: ${typeof parsed}`);
         return [];
       }
       
+      console.log(`[BobAnalysis] Validating ${parsed.length} function definitions...`);
+      
       // Validate each object has required fields
-      const validated = parsed.filter(item => {
-        if (typeof item !== 'object' || !item) return false;
-        if (typeof item.name !== 'string') return false;
-        if (typeof item.filePath !== 'string') return false;
-        if (typeof item.line !== 'number') return false;
-        if (typeof item.language !== 'string') return false;
-        if (typeof item.exported !== 'boolean') return false;
-        return true;
+      const validated = parsed.filter((item, index) => {
+        const isValid =
+          typeof item === 'object' && item &&
+          typeof item.name === 'string' &&
+          typeof item.filePath === 'string' &&
+          typeof item.line === 'number' &&
+          typeof item.language === 'string' &&
+          typeof item.exported === 'boolean';
+        
+        if (!isValid) {
+          console.warn(`[BobAnalysis] ⚠️ Invalid item at index ${index}:`, JSON.stringify(item));
+        }
+        
+        return isValid;
       });
       
+      console.log(`[BobAnalysis] ✓ Validated ${validated.length}/${parsed.length} function definitions`);
       if (validated.length !== parsed.length) {
-        console.warn(`Filtered out ${parsed.length - validated.length} invalid function definitions`);
+        console.warn(`[BobAnalysis] ⚠️ Filtered out ${parsed.length - validated.length} invalid items`);
       }
       
       return validated;
     } catch (error) {
-      console.error('Error extracting functions from batch:', error);
+      console.error('[BobAnalysis] ❌ Error extracting functions from batch:', error);
       return [];
     }
   }
@@ -205,22 +250,18 @@ OUTPUT (JSON array only):`;
     }
 
     console.log(`Analyzing ${files.length} files for imports...`);
-    const imports: FileImport[] = [];
-
-    const batchSize = 10;
-    for (let i = 0; i < files.length; i += batchSize) {
-      const batch = files.slice(i, i + batchSize);
-      const batchImports = await this.extractImportsFromBatch(batch);
-      imports.push(...batchImports);
-      
-      console.log(`Processed ${Math.min(i + batchSize, files.length)}/${files.length} files`);
-    }
+    
+    // Process all files at once
+    const imports = await this.extractImportsFromBatch(files);
+    console.log(`Processed all ${files.length} files`);
 
     await this.saveToCache(cacheFile, imports);
     return imports;
   }
 
   private async extractImportsFromBatch(files: string[]): Promise<FileImport[]> {
+    console.log(`[BobAnalysis-Imports] Processing batch of ${files.length} files for import extraction`);
+    
     const fileContents = await Promise.all(
       files.map(async (filePath) => {
         try {
@@ -228,12 +269,14 @@ OUTPUT (JSON array only):`;
           const relativePath = path.relative(this.workspaceRoot, filePath).replace(/\\/g, '/');
           return { path: relativePath, content };
         } catch (error) {
+          console.error(`[BobAnalysis-Imports] Error reading ${filePath}:`, error);
           return null;
         }
       })
     );
 
     const validFiles = fileContents.filter(f => f !== null);
+    console.log(`[BobAnalysis-Imports] Successfully read ${validFiles.length} files`);
     if (validFiles.length === 0) return [];
 
     const fileList = validFiles.map(f => 
@@ -272,46 +315,87 @@ ${fileList}
 OUTPUT (JSON array only):`;
 
     try {
+      console.log(`[BobAnalysis-Imports] Sending request to Bob...`);
       const response = await this.bobService.askBob({
         system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
         messages: [{ role: 'user', content: prompt }]
-      }, 120000);
+      }, 120000); // 2 minute timeout for all files
 
       const text = response.content[0]?.text || '[]';
+      console.log(`[BobAnalysis-Imports] Raw Bob response length: ${text.length} characters`);
+      console.log(`[BobAnalysis-Imports] Raw Bob response (first 500 chars):\n${text.substring(0, 500)}`);
+      console.log(`[BobAnalysis-Imports] Raw Bob response (last 500 chars):\n${text.substring(Math.max(0, text.length - 500))}`);
       
-      // Clean up response
+      // Try to extract JSON from ---output--- tags or clean response
       let jsonText = text.trim();
-      jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      console.log(`[BobAnalysis-Imports] After trim, length: ${jsonText.length}`);
       
+      // Check for ---output--- tags first
+      const outputMatch = jsonText.match(/---output---\s*([\s\S]*?)\s*(?:---output---|$)/i);
+      if (outputMatch) {
+        jsonText = outputMatch[1].trim();
+        console.log(`[BobAnalysis-Imports] ✓ Extracted content from ---output--- tags, length: ${jsonText.length}`);
+      }
+      
+      // Remove markdown code blocks if present
+      jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      console.log(`[BobAnalysis-Imports] After removing markdown blocks, length: ${jsonText.length}`);
+      console.log(`[BobAnalysis-Imports] Cleaned text (first 300 chars):\n${jsonText.substring(0, 300)}`);
+      
+      // Find the JSON array
       const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
-        console.warn('No JSON array found in response');
+        console.error(`[BobAnalysis-Imports] ❌ No JSON array found in response`);
+        console.error(`[BobAnalysis-Imports] Full cleaned text:\n${jsonText}`);
         return [];
       }
       
-      const parsed = JSON.parse(jsonMatch[0]);
+      console.log(`[BobAnalysis-Imports] ✓ Found JSON array, length: ${jsonMatch[0].length}`);
+      console.log(`[BobAnalysis-Imports] JSON to parse (first 500 chars):\n${jsonMatch[0].substring(0, 500)}`);
+      
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonMatch[0]);
+        console.log(`[BobAnalysis-Imports] ✓ Successfully parsed JSON`);
+        console.log(`[BobAnalysis-Imports] Parsed data type: ${Array.isArray(parsed) ? 'Array' : typeof parsed}`);
+        console.log(`[BobAnalysis-Imports] Array length: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
+      } catch (parseError: any) {
+        console.error(`[BobAnalysis-Imports] ❌ JSON parse error: ${parseError.message}`);
+        console.error(`[BobAnalysis-Imports] Error at position: ${parseError.message.match(/position (\d+)/)?.[1] || 'unknown'}`);
+        console.error(`[BobAnalysis-Imports] JSON that failed to parse:\n${jsonMatch[0]}`);
+        throw parseError;
+      }
       
       if (!Array.isArray(parsed)) {
-        console.warn('Response is not an array');
+        console.warn(`[BobAnalysis-Imports] ⚠️ Response is not an array, type: ${typeof parsed}`);
         return [];
       }
       
+      console.log(`[BobAnalysis-Imports] Validating ${parsed.length} file import entries...`);
+      
       // Validate structure
-      const validated = parsed.filter(item => {
-        if (typeof item !== 'object' || !item) return false;
-        if (typeof item.sourceFile !== 'string') return false;
-        if (!Array.isArray(item.importedFiles)) return false;
-        if (!item.importedFiles.every((f: any) => typeof f === 'string')) return false;
-        return true;
+      const validated = parsed.filter((item, index) => {
+        const isValid =
+          typeof item === 'object' && item &&
+          typeof item.sourceFile === 'string' &&
+          Array.isArray(item.importedFiles) &&
+          item.importedFiles.every((f: any) => typeof f === 'string');
+        
+        if (!isValid) {
+          console.warn(`[BobAnalysis-Imports] ⚠️ Invalid item at index ${index}:`, JSON.stringify(item));
+        }
+        
+        return isValid;
       });
       
+      console.log(`[BobAnalysis-Imports] ✓ Validated ${validated.length}/${parsed.length} file import entries`);
       if (validated.length !== parsed.length) {
-        console.warn(`Filtered out ${parsed.length - validated.length} invalid file imports`);
+        console.warn(`[BobAnalysis-Imports] ⚠️ Filtered out ${parsed.length - validated.length} invalid items`);
       }
       
       return validated;
     } catch (error) {
-      console.error('Error extracting imports from batch:', error);
+      console.error('[BobAnalysis-Imports] ❌ Error extracting imports from batch:', error);
       return [];
     }
   }
@@ -355,6 +439,8 @@ OUTPUT (JSON array only):`;
     functions: FunctionDefinition[],
     files: string[]
   ): Promise<FunctionUsage[]> {
+    console.log(`[BobAnalysis-Usage] Processing batch of ${functions.length} functions across ${files.length} files`);
+    
     // Read all files
     const fileContents = await Promise.all(
       files.map(async (filePath) => {
@@ -363,13 +449,16 @@ OUTPUT (JSON array only):`;
           const relativePath = path.relative(this.workspaceRoot, filePath).replace(/\\/g, '/');
           return { path: relativePath, content };
         } catch (error) {
+          console.error(`[BobAnalysis-Usage] Error reading ${filePath}:`, error);
           return null;
         }
       })
     );
 
     const validFiles = fileContents.filter(f => f !== null);
+    console.log(`[BobAnalysis-Usage] Successfully read ${validFiles.length} files`);
     const functionNames = functions.map(f => f.name).join(', ');
+    console.log(`[BobAnalysis-Usage] Looking for usage of functions: ${functionNames.substring(0, 200)}${functionNames.length > 200 ? '...' : ''}`);
     
     const fileList = validFiles.slice(0, 30).map(f => 
       `File: ${f!.path}\n${f!.content.split('\n').slice(0, 50).join('\n')}`
@@ -402,56 +491,115 @@ ${fileList}
 OUTPUT (JSON array only):`;
 
     try {
+      console.log(`[BobAnalysis-Usage] Sending request to Bob...`);
       const response = await this.bobService.askBob({
         system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
         messages: [{ role: 'user', content: prompt }]
-      }, 120000);
+      }, 600000); // 10 minute timeout for all files
 
       const text = response.content[0]?.text || '[]';
+      console.log(`[BobAnalysis-Usage] Raw Bob response length: ${text.length} characters`);
+      console.log(`[BobAnalysis-Usage] Raw Bob response (first 500 chars):\n${text.substring(0, 500)}`);
+      console.log(`[BobAnalysis-Usage] Raw Bob response (last 500 chars):\n${text.substring(Math.max(0, text.length - 500))}`);
       
-      // Clean up response
+      // Try to extract JSON from ---output--- tags or clean response
       let jsonText = text.trim();
-      jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      console.log(`[BobAnalysis-Usage] After trim, length: ${jsonText.length}`);
       
+      // Check for ---output--- tags first
+      const outputMatch = jsonText.match(/---output---\s*([\s\S]*?)\s*(?:---output---|$)/i);
+      if (outputMatch) {
+        jsonText = outputMatch[1].trim();
+        console.log(`[BobAnalysis-Usage] ✓ Extracted content from ---output--- tags, length: ${jsonText.length}`);
+      }
+      
+      // Remove markdown code blocks if present
+      jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+      console.log(`[BobAnalysis-Usage] After removing markdown blocks, length: ${jsonText.length}`);
+      console.log(`[BobAnalysis-Usage] Cleaned text (first 300 chars):\n${jsonText.substring(0, 300)}`);
+      
+      // Find the JSON array
       const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
-        console.warn('No JSON array found in response');
+        console.error(`[BobAnalysis-Usage] ❌ No JSON array found in response`);
+        console.error(`[BobAnalysis-Usage] Full cleaned text:\n${jsonText}`);
         return [];
       }
       
-      const parsed = JSON.parse(jsonMatch[0]);
+      console.log(`[BobAnalysis-Usage] ✓ Found JSON array, length: ${jsonMatch[0].length}`);
+      console.log(`[BobAnalysis-Usage] JSON to parse (first 500 chars):\n${jsonMatch[0].substring(0, 500)}`);
+      
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonMatch[0]);
+        console.log(`[BobAnalysis-Usage] ✓ Successfully parsed JSON`);
+        console.log(`[BobAnalysis-Usage] Parsed data type: ${Array.isArray(parsed) ? 'Array' : typeof parsed}`);
+        console.log(`[BobAnalysis-Usage] Array length: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
+      } catch (parseError: any) {
+        console.error(`[BobAnalysis-Usage] ❌ JSON parse error: ${parseError.message}`);
+        console.error(`[BobAnalysis-Usage] Error at position: ${parseError.message.match(/position (\d+)/)?.[1] || 'unknown'}`);
+        console.error(`[BobAnalysis-Usage] JSON that failed to parse:\n${jsonMatch[0]}`);
+        throw parseError;
+      }
       
       if (!Array.isArray(parsed)) {
-        console.warn('Response is not an array');
+        console.warn(`[BobAnalysis-Usage] ⚠️ Response is not an array, type: ${typeof parsed}`);
         return [];
       }
       
+      console.log(`[BobAnalysis-Usage] Validating ${parsed.length} function usage entries...`);
+      
       // Validate structure
-      const validated = parsed.filter(item => {
-        if (typeof item !== 'object' || !item) return false;
-        if (typeof item.functionName !== 'string') return false;
-        if (typeof item.definedIn !== 'string') return false;
-        if (!Array.isArray(item.usedInFiles)) return false;
+      const validated = parsed.filter((item, index) => {
+        if (typeof item !== 'object' || !item) {
+          console.warn(`[BobAnalysis-Usage] ⚠️ Invalid item at index ${index}: not an object`);
+          return false;
+        }
+        if (typeof item.functionName !== 'string') {
+          console.warn(`[BobAnalysis-Usage] ⚠️ Invalid item at index ${index}: missing functionName`);
+          return false;
+        }
+        if (typeof item.definedIn !== 'string') {
+          console.warn(`[BobAnalysis-Usage] ⚠️ Invalid item at index ${index}: missing definedIn`);
+          return false;
+        }
+        if (!Array.isArray(item.usedInFiles)) {
+          console.warn(`[BobAnalysis-Usage] ⚠️ Invalid item at index ${index}: usedInFiles not an array`);
+          return false;
+        }
         
         // Validate each usedInFiles entry
-        const validUsage = item.usedInFiles.every((usage: any) => {
-          if (typeof usage !== 'object' || !usage) return false;
-          if (typeof usage.filePath !== 'string') return false;
-          if (!Array.isArray(usage.calledBy)) return false;
-          if (!usage.calledBy.every((f: any) => typeof f === 'string')) return false;
+        const validUsage = item.usedInFiles.every((usage: any, usageIndex: number) => {
+          if (typeof usage !== 'object' || !usage) {
+            console.warn(`[BobAnalysis-Usage] ⚠️ Invalid usage at index ${index}.${usageIndex}: not an object`);
+            return false;
+          }
+          if (typeof usage.filePath !== 'string') {
+            console.warn(`[BobAnalysis-Usage] ⚠️ Invalid usage at index ${index}.${usageIndex}: missing filePath`);
+            return false;
+          }
+          if (!Array.isArray(usage.calledBy)) {
+            console.warn(`[BobAnalysis-Usage] ⚠️ Invalid usage at index ${index}.${usageIndex}: calledBy not an array`);
+            return false;
+          }
+          if (!usage.calledBy.every((f: any) => typeof f === 'string')) {
+            console.warn(`[BobAnalysis-Usage] ⚠️ Invalid usage at index ${index}.${usageIndex}: calledBy contains non-string`);
+            return false;
+          }
           return true;
         });
         
         return validUsage;
       });
       
+      console.log(`[BobAnalysis-Usage] ✓ Validated ${validated.length}/${parsed.length} function usage entries`);
       if (validated.length !== parsed.length) {
-        console.warn(`Filtered out ${parsed.length - validated.length} invalid function usage entries`);
+        console.warn(`[BobAnalysis-Usage] ⚠️ Filtered out ${parsed.length - validated.length} invalid items`);
       }
       
       return validated;
     } catch (error) {
-      console.error('Error extracting function usage:', error);
+      console.error('[BobAnalysis-Usage] ❌ Error extracting function usage:', error);
       return [];
     }
   }

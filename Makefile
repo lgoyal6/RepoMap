@@ -2,7 +2,7 @@
 .PHONY: all
 all: run
 
-CLEAN_DIRS = extension\node_modules webview\node_modules extension\dist extension\webview-dist webview\dist
+CLEAN_DIRS = extension/node_modules webview/node_modules extension/dist extension/webview-dist webview/dist
 
 # Simple run: Install dependencies, build, and package
 .PHONY: run
@@ -19,8 +19,8 @@ run:
 .PHONY: full-run
 full-run:
 	@echo "Cleaning directories..."
-	rmdir /s /q $(CLEAN_DIRS)
-	del extension\repomap-vscode-1.0.0.vsix
+	rm -rf $(CLEAN_DIRS)
+	rm -f extension/repomap-vscode-1.0.0.vsix
 	@echo "Starting full run..."
 	cd extension && npm install
 	cd webview && npm install
@@ -32,5 +32,5 @@ full-run:
 .PHONY: clean
 clean:
 	@echo "Cleaning directories..."
-	rmdir /s /q $(CLEAN_DIRS)
-	del extension\repomap-vscode-1.0.0.vsix
+	rm -rf $(CLEAN_DIRS)
+	rm -f extension/repomap-vscode-1.0.0.vsix

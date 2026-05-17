@@ -28,28 +28,46 @@ export class GraphCombinerService {
     fileImports: FileImport[],
     functionUsage: FunctionUsage[]
   ): Promise<FinalGraph> {
-    console.log('Building final dependency graph...');
+    console.log('[GraphCombiner] ========================================');
+    console.log('[GraphCombiner] Building final dependency graph...');
+    console.log(`[GraphCombiner] Input data:`);
+    console.log(`[GraphCombiner]   - Functions: ${functions.length}`);
+    console.log(`[GraphCombiner]   - File imports: ${fileImports.length}`);
+    console.log(`[GraphCombiner]   - Function usage: ${functionUsage.length}`);
 
     // Get file system structure
+    console.log('[GraphCombiner] Step 1: Building file tree...');
     const fileTree = await this.fileSystemService.buildTree();
+    console.log(`[GraphCombiner] ✓ File tree built: ${fileTree.length} root nodes`);
     
     // Build nodes from file tree + functions
+    console.log('[GraphCombiner] Step 2: Building nodes from file tree + functions...');
     const nodes = this.buildNodes(fileTree, functions);
+    console.log(`[GraphCombiner] ✓ Built ${nodes.length} nodes`);
     
     // Build edges from imports + function calls
+    console.log('[GraphCombiner] Step 3: Building edges from imports + function calls...');
     const edges = this.buildEdges(fileImports, functionUsage);
+    console.log(`[GraphCombiner] ✓ Built ${edges.length} edges`);
+    console.log(`[GraphCombiner]   - Import edges: ${edges.filter(e => e.type === 'imports').length}`);
+    console.log(`[GraphCombiner]   - Call edges: ${edges.filter(e => e.type === 'calls').length}`);
 
     const finalGraph = { nodes, edges };
     
     // Save to cache
+    console.log('[GraphCombiner] Step 4: Saving to cache...');
     const cachePath = path.join(this.cacheDir, 'final-graph.json');
     await fs.promises.writeFile(cachePath, JSON.stringify(finalGraph, null, 2), 'utf-8');
-    console.log('Saved final graph to cache');
+    console.log(`[GraphCombiner] ✓ Saved final graph to ${cachePath}`);
+    console.log('[GraphCombiner] ========================================');
 
     return finalGraph;
   }
 
   private buildNodes(fileTree: any[], functions: FunctionDefinition[]): DependencyNode[] {
+    console.log(`[GraphCombiner] buildNodes: Processing ${fileTree.length} file tree nodes`);
+    console.log(`[GraphCombiner] buildNodes: Grouping ${functions.length} functions by file...`);
+    
     const nodes: DependencyNode[] = [];
     const functionsByFile = new Map<string, FunctionDefinition[]>();
 
@@ -61,6 +79,8 @@ export class GraphCombinerService {
       }
       functionsByFile.get(normalized)!.push(func);
     }
+    
+    console.log(`[GraphCombiner] buildNodes: Grouped into ${functionsByFile.size} files with functions`);
 
     // Recursively process file tree
     const processNode = (node: any, depth: number = 0): DependencyNode | null => {
@@ -117,14 +137,21 @@ export class GraphCombinerService {
       }
     }
 
+    console.log(`[GraphCombiner] buildNodes: Created ${nodes.length} total nodes`);
     return nodes;
   }
 
   private buildEdges(fileImports: FileImport[], functionUsage: FunctionUsage[]): DependencyEdge[] {
+    console.log(`[GraphCombiner] buildEdges: Processing ${fileImports.length} file imports`);
+    console.log(`[GraphCombiner] buildEdges: Processing ${functionUsage.length} function usage entries`);
+    
     const edges: DependencyEdge[] = [];
     const pathResolver = new PathResolver(this.workspaceRoot);
 
     // Add file import edges
+    let resolvedImports = 0;
+    let unresolvedImports = 0;
+    
     for (const fileImport of fileImports) {
       const sourceNormalized = fileImport.sourceFile.replace(/\\/g, '/');
       
@@ -134,6 +161,7 @@ export class GraphCombinerService {
         const resolved = pathResolver.resolveImportPath(sourcePath, importedFile);
         
         if (resolved) {
+          resolvedImports++;
           const targetNormalized = path.relative(this.workspaceRoot, resolved).replace(/\\/g, '/');
           
           edges.push({
@@ -141,11 +169,17 @@ export class GraphCombinerService {
             to: targetNormalized,
             type: 'imports'
           });
+        } else {
+          unresolvedImports++;
+          console.warn(`[GraphCombiner] ⚠️ Could not resolve import: ${importedFile} from ${sourceNormalized}`);
         }
       }
     }
+    
+    console.log(`[GraphCombiner] buildEdges: Resolved ${resolvedImports} imports, ${unresolvedImports} unresolved`);
 
     // Add function call edges
+    let callEdges = 0;
     for (const usage of functionUsage) {
       const definedInNormalized = usage.definedIn.replace(/\\/g, '/');
       
@@ -153,6 +187,7 @@ export class GraphCombinerService {
         const usedInNormalized = usageLocation.filePath.replace(/\\/g, '/');
         
         for (const callerFunction of usageLocation.calledBy) {
+          callEdges++;
           // Edge from caller function to called function
           edges.push({
             from: `${usedInNormalized}:${callerFunction}`,
@@ -162,6 +197,9 @@ export class GraphCombinerService {
         }
       }
     }
+    
+    console.log(`[GraphCombiner] buildEdges: Created ${callEdges} function call edges`);
+    console.log(`[GraphCombiner] buildEdges: Total edges: ${edges.length}`);
 
     return edges;
   }
