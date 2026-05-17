@@ -6,8 +6,9 @@ const vscode = acquireVsCodeApi();
 interface FileNode {
   name: string;
   path: string;
-  type: 'file' | 'directory';
+  type: 'file' | 'directory' | 'function';
   children?: FileNode[];
+  line?: number; // For function nodes
 }
 
 interface BobMessage {
@@ -29,7 +30,10 @@ const EXT_COLORS: Record<string, string> = {
   '.swift': '#fa7343', '.cpp': '#00599c', '.c': '#a8b9cc', '.h': '#a8b9cc',
 };
 
-function getColor(name: string): string {
+function getColor(name: string, type?: string): string {
+  if (type === 'function') {
+    return '#a78bfa'; // Purple for functions
+  }
   const ext = '.' + name.split('.').pop();
   return EXT_COLORS[ext] || '#6b7280';
 }
@@ -76,8 +80,8 @@ function TreeNode({ node, depth, selectedFile, disabledPaths, onSelect, onToggle
   const isDisabled = isPathHidden(node.path, disabledPaths);
   const isDirectlyDisabled = disabledPaths.has(node.path);
   const isDisabledByAncestor = isDisabled && !isDirectlyDisabled;
-  const rowColor = isDisabled ? '#4b5563' : node.type === 'directory' ? '#cbd5e1' : '#d1d5db';
-  const accentColor = node.type === 'directory' ? '#818cf8' : getColor(node.name);
+  const rowColor = isDisabled ? '#4b5563' : node.type === 'directory' ? '#cbd5e1' : node.type === 'function' ? '#c4b5fd' : '#d1d5db';
+  const accentColor = node.type === 'directory' ? '#818cf8' : getColor(node.name, node.type);
 
   if (node.type === 'directory') {
     return (
@@ -145,15 +149,42 @@ function TreeNode({ node, depth, selectedFile, disabledPaths, onSelect, onToggle
         </span>
       </div>
       {/* Render function children */}
-      {hasChildren && fileExpanded && node.children?.map(funcNode => (
-        <div
-          key={funcNode.path}
-          style={{ padding: '5px 8px', paddingLeft: 56 + depth * 16, cursor: 'default', fontSize: 11, color: '#a78bfa', background: isSelected && selectedFile === funcNode.path ? 'rgba(167,139,250,0.15)' : 'transparent', display: 'flex', alignItems: 'center', gap: 7, opacity: isDisabled ? 0.5 : 1 }}>
-          <span onClick={() => onSelect(funcNode)} style={{ flex: 1, minWidth: 0, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            <span style={{ color: '#8b5cf6' }}>⚙</span> {funcNode.name}
-          </span>
-        </div>
-      ))}
+      {hasChildren && fileExpanded && node.children?.map(funcNode => {
+        const funcIsSelected = selectedFile === funcNode.path;
+        const funcIsDisabled = isPathHidden(funcNode.path, disabledPaths);
+        const funcIsDirectlyDisabled = disabledPaths.has(funcNode.path);
+        const funcIsDisabledByAncestor = funcIsDisabled && !funcIsDirectlyDisabled;
+        
+        return (
+          <div
+            key={funcNode.path}
+            style={{
+              padding: '5px 8px',
+              paddingLeft: 56 + depth * 16,
+              cursor: 'default',
+              fontSize: 11,
+              color: funcIsDisabled ? '#6b7280' : '#c4b5fd',
+              background: funcIsSelected ? 'rgba(167,139,250,0.15)' : 'transparent',
+              borderLeft: funcIsSelected ? '2px solid #a78bfa' : '2px solid transparent',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 7,
+              opacity: funcIsDisabled ? 0.5 : 1
+            }}>
+            <input
+              type="checkbox"
+              checked={!funcIsDisabled}
+              disabled={funcIsDisabledByAncestor}
+              onChange={() => onToggleDisabled(funcNode)}
+              title={funcIsDisabledByAncestor ? 'Hidden by parent' : funcIsDirectlyDisabled ? 'Show in graph' : 'Hide from graph'}
+              style={{ cursor: funcIsDisabledByAncestor ? 'not-allowed' : 'pointer' }}
+            />
+            <span onClick={() => onSelect(funcNode)} style={{ flex: 1, minWidth: 0, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span style={{ color: '#a78bfa' }}>⚡</span> {funcNode.name}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -193,23 +224,35 @@ function filterTreeByDisabledPaths(tree: FileNode[], disabledPaths: Set<string>)
 
 function getNodeWidth(name: string, type: FileNode['type']) {
   const contentWidth = name.length * 8 + 42;
-  return type === 'directory'
-    ? Math.min(300, Math.max(172, contentWidth))
-    : Math.min(270, Math.max(140, contentWidth));
+  if (type === 'directory') return Math.min(300, Math.max(172, contentWidth));
+  if (type === 'function') return Math.min(240, Math.max(120, contentWidth * 0.85));
+  return Math.min(270, Math.max(140, contentWidth));
 }
 
 function getSubtreeHeight(node: FileNode): number {
-  if (node.type === 'file' || !node.children?.length) return 44;
+  if (node.type === 'function') return 34;
+  if (node.type === 'file' && !node.children?.length) return 42;
+  if (!node.children?.length) return 50;
 
   const folders = node.children.filter(child => child.type === 'directory');
   const files = node.children.filter(child => child.type === 'file');
+  const functions = node.children.filter(child => child.type === 'function');
+  
+  const folderGap = 104;
+  const fileRowGap = 58;
+  
   const folderHeight = folders.length
-    ? folders.map(getSubtreeHeight).reduce((sum, height) => sum + height, 0) + Math.max(0, folders.length - 1) * 104
+    ? folders.map(getSubtreeHeight).reduce((sum, height) => sum + height, 0) + Math.max(0, folders.length - 1) * folderGap
     : 0;
-  const fileHeight = files.length ? files.length * 42 + Math.max(0, files.length - 1) * 8 : 0;
-  const childGroupGap = folders.length && files.length ? 96 : 0;
+  const fileHeight = files.length
+    ? files.map(getSubtreeHeight).reduce((sum, height) => sum + height, 0) + Math.max(0, files.length - 1) * fileRowGap
+    : 0;
+  const functionHeight = functions.length ? (functions.length - 1) * 50 + 34 : 0;
+  
+  const childGroupGap = folders.length && (files.length || functions.length) ? 96 : 0;
+  const fileFunctionGap = files.length && functions.length ? 24 : 0;
 
-  return Math.max(78, folderHeight + childGroupGap + fileHeight);
+  return Math.max(78, folderHeight + childGroupGap + fileHeight + fileFunctionGap + functionHeight);
 }
 
 function buildGraphLayout(tree: FileNode[]) {
@@ -217,7 +260,7 @@ function buildGraphLayout(tree: FileNode[]) {
   const structureEdges: GraphEdge[] = [];
   const pathToNode = new Map<string, GraphNode>();
   const descendantsByPath = new Map<string, Set<string>>();
-  const levelGap = 300;
+  const levelGap = 400;
   const fileRowGap = 58;
   const folderGap = 104;
 
@@ -240,25 +283,35 @@ function buildGraphLayout(tree: FileNode[]) {
       x,
       y,
       width: getNodeWidth(node.name, node.type),
-      height: node.type === 'directory' ? 50 : 42
+      height: node.type === 'directory' ? 50 : node.type === 'function' ? 34 : 42
     };
 
     nodes.push(graphNode);
-    pathToNode.set(normalizeGraphPath(node.path), graphNode);
+    
+    // For function nodes, store with full path including function name
+    // For files/directories, normalize the path
+    const mapKey = node.type === 'function'
+      ? node.path.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '')
+      : normalizeGraphPath(node.path);
+    pathToNode.set(mapKey, graphNode);
     return graphNode;
   };
 
   const placeChildren = (parent: GraphNode, children: FileNode[]) => {
     const folders = children.filter(child => child.type === 'directory');
     const files = children.filter(child => child.type === 'file');
+    const functions = children.filter(child => child.type === 'function');
     const childX = parent.x + levelGap;
 
     const folderBlockHeight = folders.length
       ? folders.map(getSubtreeHeight).reduce((sum, height) => sum + height, 0) + Math.max(0, folders.length - 1) * folderGap
       : 0;
-    const fileBlockHeight = files.length ? (files.length - 1) * fileRowGap + 34 : 0;
-    const groupGap = folders.length && files.length ? 96 : 0;
-    const totalHeight = folderBlockHeight + groupGap + fileBlockHeight;
+    const fileBlockHeight = files.length ? files.map(getSubtreeHeight).reduce((sum, height) => sum + height, 0) + Math.max(0, files.length - 1) * fileRowGap : 0;
+    const functionBlockHeight = functions.length ? (functions.length - 1) * 50 + 34 : 0;
+    
+    const groupGap = folders.length && (files.length || functions.length) ? 96 : 0;
+    const fileFunctionGap = files.length && functions.length ? 24 : 0;
+    const totalHeight = folderBlockHeight + groupGap + fileBlockHeight + fileFunctionGap + functionBlockHeight;
     let y = parent.y - totalHeight / 2;
 
     if (folders.length) {
@@ -277,10 +330,25 @@ function buildGraphLayout(tree: FileNode[]) {
 
     if (files.length) {
       const fileX = folders.length ? parent.x + levelGap * 0.72 : childX;
-      const startY = y + 17;
+      const heights = files.map(getSubtreeHeight);
 
       files.forEach((file, index) => {
-        const child = addNode(file, fileX, startY + index * fileRowGap);
+        const child = addNode(file, fileX, y + heights[index] / 2);
+        structureEdges.push({ from: parent, to: child });
+        if (file.children?.length) placeChildren(child, file.children);
+        y += heights[index] + fileRowGap;
+      });
+      
+      y -= fileRowGap;
+      y += fileFunctionGap;
+    }
+
+    if (functions.length) {
+      const functionX = parent.type === 'file' ? parent.x + levelGap * 0.5 : childX;
+      const startY = y + 17;
+
+      functions.forEach((func, index) => {
+        const child = addNode(func, functionX, startY + index * 50);
         structureEdges.push({ from: parent, to: child });
       });
     }
@@ -320,7 +388,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.6);
   const [dragging, setDragging] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
@@ -352,14 +420,26 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
   // Get connected nodes for hover effect
   // Show WHO USES the hovered node (reverse dependencies)
   const getConnectedNodes = (nodePath: string): Set<string> => {
-    const normalizedNodePath = normalizeGraphPath(nodePath);
+    const normalizedNodePath = nodePath.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '');
     const connected = new Set<string>([normalizedNodePath]);
-    descendantsByPath.get(normalizedNodePath)?.forEach(path => connected.add(path));
+    
+    // Add descendants (children in the tree structure)
+    const fileOnlyPath = normalizedNodePath.includes(':') ? normalizedNodePath.split(':')[0] : normalizedNodePath;
+    descendantsByPath.get(fileOnlyPath)?.forEach(path => connected.add(path));
+    
+    // Add dependency connections
     dependencyEdges.forEach(edge => {
-      const fromPath = normalizeGraphPath(edge.from);
-      const toPath = normalizeGraphPath(edge.to);
+      const fromPath = edge.from.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '');
+      const toPath = edge.to.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '');
+      
       // Show arrows FROM this node TO nodes that use/call it
-      if (toPath === normalizedNodePath) connected.add(fromPath);
+      if (toPath === normalizedNodePath) {
+        connected.add(fromPath);
+      }
+      // Also show arrows TO this node FROM nodes it uses/calls
+      if (fromPath === normalizedNodePath) {
+        connected.add(toPath);
+      }
     });
     return connected;
   };
@@ -371,7 +451,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
     const svgPoint = getSvgPoint(e.clientX, e.clientY);
 
     setZoom(currentZoom => {
-      const nextZoom = Math.min(4, Math.max(0.08, currentZoom * Math.exp(-e.deltaY * 0.0015)));
+      const nextZoom = Math.min(12, Math.max(0.1, currentZoom * Math.exp(-e.deltaY * 0.002)));
       const graphPoint = {
         x: (svgPoint.x - pan.x) / currentZoom,
         y: (svgPoint.y - pan.y) / currentZoom
@@ -439,14 +519,17 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
 
   // Render dependency edges
   const renderDependencyEdge = (edge: DependencyEdge, i: number, allEdges: DependencyEdge[]) => {
-    const fromPath = normalizeGraphPath(edge.from);
-    const toPath = normalizeGraphPath(edge.to);
+    // Normalize paths for lookup
+    const fromPath = edge.from.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '');
+    const toPath = edge.to.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '');
+    
+    // Look up nodes directly - paths should match what's in the map
     const fromNode = pathToNode.get(fromPath);
     const toNode = pathToNode.get(toPath);
     
-    if (!fromNode || !toNode || fromNode.path === toNode.path) return null;
+    if (!fromNode || !toNode) return null;
 
-    const hoveredPath = hoveredNode ? normalizeGraphPath(hoveredNode) : null;
+    const hoveredPath = hoveredNode ? hoveredNode.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, '') : null;
     const isConnectedToHover = Boolean(hoveredPath && (fromPath === hoveredPath || toPath === hoveredPath));
     if (!isConnectedToHover) return null;
 
@@ -542,9 +625,10 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
           {/* Dependency edges */}
           {hoveredNode && dependencyEdges.map((edge, i) => renderDependencyEdge(edge, i, dependencyEdges))}
           
-          {/* File/folder nodes - render last so they appear on top */}
+          {/* File/folder/function nodes - render last so they appear on top */}
           {nodes.map(n => {
             const isDir = n.type === 'directory';
+            const isFunc = n.type === 'function';
             const isSelected = selectedFile === n.path;
             const hasExplanation = explanations[n.path];
             const isModified = modifiedFiles.has(n.path);
@@ -553,8 +637,8 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
             const isDimmed = hoveredNode && !isConnected && hoveredNode !== n.path;
             const w = n.width;
             const h = n.height;
-            const labelColor = isDir ? '#eef2ff' : '#f9fafb';
-            const fillColor = isDir ? '#312e81' : '#172033';
+            const labelColor = isDir ? '#dbeafe' : isFunc ? '#e9d5ff' : '#f3f4f6';
+            const fillColor = isDir ? '#1e3a8a' : isFunc ? '#6b21a8' : '#1e293b';
             const opacity = isDimmed ? 0.3 : 1;
             const strokeColor = isSelected
               ? '#6366f1'
@@ -566,30 +650,34 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
                     ? '#10b981'
                     : hasExplanation
                       ? '#6366f180'
-                      : '#1f2937';
+                      : isFunc
+                        ? '#a78bfa'
+                        : '#1f2937';
 
             return (
               <g key={n.path}
                 onClick={() => {
-                  if (n.type === 'directory') centerNode(n);
+                  // Center and zoom in on clicked node
+                  centerNode(n);
+                  setZoom(currentZoom => Math.min(12, Math.max(2, currentZoom * 2)));
                   onSelectNode(n);
                 }}
                 onContextMenu={(e) => onContextMenu(e, n)}
                 onMouseEnter={() => setHoveredNode(n.path)}
                 onMouseLeave={() => setHoveredNode(null)}
                 style={{ cursor: 'pointer' }}>
-                <rect x={n.x - w/2} y={n.y - h/2} width={w} height={h} rx={8}
+                <rect x={n.x - w/2} y={n.y - h/2} width={w} height={h} rx={isFunc ? 6 : 8}
                   fill={fillColor}
                   stroke={strokeColor}
                   strokeWidth={isSelected ? 2.5 : isHovered || (hoveredNode && isConnected) ? 2.5 : 1}
                   opacity={opacity}
                   style={hasExplanation && !isSelected ? { animation: 'pulse 2s infinite' } : {}} />
-                <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize={12}
+                <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize={isFunc ? 11 : 12}
                   fill={labelColor}
                   fontFamily="JetBrains Mono"
-                  fontWeight={isDir ? 700 : 600}
+                  fontWeight={isDir ? 700 : isFunc ? 500 : 600}
                   opacity={opacity}>
-                  {n.name.length > 28 ? n.name.slice(0, 26) + '..' : n.name}
+                  {isFunc && '⚡ '}{n.name.length > 28 ? n.name.slice(0, 26) + '..' : n.name}
                 </text>
               </g>
             );
@@ -1029,13 +1117,44 @@ export default function App() {
               {/* Explanation card */}
               {selectedFile && explanations[selectedFile] && (
                 <div style={{ position: 'absolute', bottom: 20, left: 20, background: '#111827', border: '1px solid #1f2937', borderRadius: 12, padding: 16, maxWidth: 360, zIndex: 10 }}>
-                  <p style={{ fontSize: 12, color: getColor(selectedFile.split('/').pop() || ''), marginBottom: 4, fontWeight: 600 }}>
-                    {selectedFile.split('/').pop()}
-                  </p>
-                  <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 8 }}>{selectedFile}</p>
-                  <p style={{ fontSize: 12, color: '#e5e7eb', lineHeight: 1.5 }}>{explanations[selectedFile]}</p>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 12, color: getColor(selectedFile.split('/').pop() || ''), marginBottom: 4, fontWeight: 600 }}>
+                        {selectedFile.split('/').pop()}
+                      </p>
+                      <p style={{ fontSize: 11, color: '#6b7280' }}>{selectedFile}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setExplanations(prev => {
+                          const next = { ...prev };
+                          delete next[selectedFile];
+                          return next;
+                        });
+                        setSelectedFile(null);
+                      }}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#6b7280',
+                        cursor: 'pointer',
+                        fontSize: 18,
+                        padding: 0,
+                        width: 24,
+                        height: 24,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 4
+                      }}
+                      title="Close"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <p style={{ fontSize: 12, color: '#e5e7eb', lineHeight: 1.5, marginBottom: 10 }}>{explanations[selectedFile]}</p>
                   <button onClick={() => { setActiveTab('chat'); }}
-                    style={{ marginTop: 10, padding: '6px 12px', background: '#312e81', border: 'none', borderRadius: 6, color: '#818cf8', fontSize: 11, fontFamily: 'inherit', cursor: 'pointer' }}>
+                    style={{ padding: '6px 12px', background: '#312e81', border: 'none', borderRadius: 6, color: '#818cf8', fontSize: 11, fontFamily: 'inherit', cursor: 'pointer' }}>
                     Talk with Bob about this file
                   </button>
                 </div>

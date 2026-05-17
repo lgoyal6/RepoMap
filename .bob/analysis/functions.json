@@ -1,1 +1,401 @@
-[]
+[
+  {
+    "name": "init",
+    "filePath": "test-files/main.js",
+    "line": 1,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "setupEventListeners",
+    "filePath": "test-files/main.js",
+    "line": 6,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "loadData",
+    "filePath": "test-files/main.js",
+    "line": 11,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "processData",
+    "filePath": "test-files/main.js",
+    "line": 16,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "handleClick",
+    "filePath": "test-files/main.js",
+    "line": 20,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "testParser",
+    "filePath": "test-files/test-parser.js",
+    "line": 4,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "testIntegration",
+    "filePath": "test-files/test-integration.js",
+    "line": 4,
+    "language": "javascript",
+    "exported": false
+  },
+  {
+    "name": "defineConfig",
+    "filePath": "webview/vite.config.ts",
+    "line": 3,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "FileSystemService",
+    "filePath": "extension/src/fileSystemService.ts",
+    "line": 14,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "shouldInclude",
+    "filePath": "extension/src/fileSystemService.ts",
+    "line": 22,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "buildTree",
+    "filePath": "extension/src/fileSystemService.ts",
+    "line": 27,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "BobRefactoringService",
+    "filePath": "extension/src/bobRefactoringService.ts",
+    "line": 16,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "isDirectory",
+    "filePath": "extension/src/bobRefactoringService.ts",
+    "line": 28,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "getFilesInDirectory",
+    "filePath": "extension/src/bobRefactoringService.ts",
+    "line": 38,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "BobService",
+    "filePath": "extension/src/bobService.ts",
+    "line": 8,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "askBob",
+    "filePath": "extension/src/bobService.ts",
+    "line": 9,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "RefactoringService",
+    "filePath": "extension/src/refactoringService.ts",
+    "line": 9,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "findFileReferences",
+    "filePath": "extension/src/refactoringService.ts",
+    "line": 18,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "RepomapWebviewProvider",
+    "filePath": "extension/src/webviewProvider.ts",
+    "line": 10,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "show",
+    "filePath": "extension/src/webviewProvider.ts",
+    "line": 25,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "UnifiedGraphService",
+    "filePath": "extension/src/unifiedGraphService.ts",
+    "line": 12,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "buildUnifiedGraph",
+    "filePath": "extension/src/unifiedGraphService.ts",
+    "line": 22,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "enrichTreeWithFunctions",
+    "filePath": "extension/src/unifiedGraphService.ts",
+    "line": 35,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "PathResolver",
+    "filePath": "extension/src/dependency/pathResolver.ts",
+    "line": 4,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "resolveImportPath",
+    "filePath": "extension/src/dependency/pathResolver.ts",
+    "line": 7,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "BobAnalysisService",
+    "filePath": "extension/src/dependency/bobAnalysisService.ts",
+    "line": 32,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "ensureCacheDir",
+    "filePath": "extension/src/dependency/bobAnalysisService.ts",
+    "line": 42,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "saveToCache",
+    "filePath": "extension/src/dependency/bobAnalysisService.ts",
+    "line": 48,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "GraphCombinerService",
+    "filePath": "extension/src/dependency/graphCombinerService.ts",
+    "line": 13,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "buildFinalGraph",
+    "filePath": "extension/src/dependency/graphCombinerService.ts",
+    "line": 25,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "GraphBuilder",
+    "filePath": "extension/src/dependency/graphBuilder.ts",
+    "line": 8,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "buildGraph",
+    "filePath": "extension/src/dependency/graphBuilder.ts",
+    "line": 16,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "CodeParser",
+    "filePath": "extension/src/dependency/codeParser.ts",
+    "line": 24,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "parseFile",
+    "filePath": "extension/src/dependency/codeParser.ts",
+    "line": 25,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "extractImports",
+    "filePath": "extension/src/dependency/codeParser.ts",
+    "line": 38,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "extractFunctions",
+    "filePath": "extension/src/dependency/codeParser.ts",
+    "line": 50,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "extractFunctionCalls",
+    "filePath": "extension/src/dependency/codeParser.ts",
+    "line": 60,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "acquireVsCodeApi",
+    "filePath": "webview/src/vscode.d.ts",
+    "line": 9,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "normalizeGraphPath",
+    "filePath": "webview/src/utils/graphLayout.ts",
+    "line": 32,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "isPathHidden",
+    "filePath": "webview/src/utils/graphLayout.ts",
+    "line": 36,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "filterTreeByDisabledPaths",
+    "filePath": "webview/src/utils/graphLayout.ts",
+    "line": 40,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "ChatPanel",
+    "filePath": "webview/src/components/ChatPanel.tsx",
+    "line": 12,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "FileTree",
+    "filePath": "webview/src/components/FileTree.tsx",
+    "line": 11,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "TreeNode",
+    "filePath": "webview/src/components/FileTree.tsx",
+    "line": 33,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "App",
+    "filePath": "webview/src/App.tsx",
+    "line": 23,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "getColor",
+    "filePath": "webview/src/App.tsx",
+    "line": 30,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "FileTree",
+    "filePath": "webview/src/App.tsx",
+    "line": 38,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "activate",
+    "filePath": "extension/src/extension.ts",
+    "line": 4,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "deactivate",
+    "filePath": "extension/src/extension.ts",
+    "line": 18,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "DependencyService",
+    "filePath": "extension/src/dependencyService.ts",
+    "line": 14,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "loadCachedGraph",
+    "filePath": "extension/src/dependencyService.ts",
+    "line": 32,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "saveCachedGraph",
+    "filePath": "extension/src/dependencyService.ts",
+    "line": 43,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "MessageHandlers",
+    "filePath": "extension/src/webview/messageHandlers.ts",
+    "line": 6,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "handleMessage",
+    "filePath": "extension/src/webview/messageHandlers.ts",
+    "line": 14,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "HtmlGenerator",
+    "filePath": "extension/src/webview/htmlGenerator.ts",
+    "line": 4,
+    "language": "typescript",
+    "exported": true
+  },
+  {
+    "name": "generateHtml",
+    "filePath": "extension/src/webview/htmlGenerator.ts",
+    "line": 10,
+    "language": "typescript",
+    "exported": false
+  },
+  {
+    "name": "getNonce",
+    "filePath": "extension/src/webview/htmlGenerator.ts",
+    "line": 35,
+    "language": "typescript",
+    "exported": false
+  }
+]

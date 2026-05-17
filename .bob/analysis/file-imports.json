@@ -4,13 +4,6 @@
     "importedFiles": []
   },
   {
-    "sourceFile": "webview/vite.config.ts",
-    "importedFiles": [
-      "vite",
-      "@vitejs/plugin-react"
-    ]
-  },
-  {
     "sourceFile": "test-files/main.js",
     "importedFiles": []
   },
@@ -42,28 +35,25 @@
     ]
   },
   {
-    "sourceFile": "webview/dist/assets/index.css",
-    "importedFiles": []
-  },
-  {
-    "sourceFile": "webview/src/components/ChatPanel.tsx",
+    "sourceFile": "test-files/test-integration.js",
     "importedFiles": [
-      "react"
+      "path",
+      "../extension/dist/dependency/graphBuilder"
     ]
   },
   {
-    "sourceFile": "webview/src/components/FileTree.tsx",
+    "sourceFile": "webview/vite.config.ts",
     "importedFiles": [
-      "react"
+      "vite",
+      "@vitejs/plugin-react"
     ]
   },
   {
-    "sourceFile": "webview/dist/assets/index.js",
-    "importedFiles": []
-  },
-  {
-    "sourceFile": "webview/src/utils/graphLayout.ts",
-    "importedFiles": []
+    "sourceFile": "extension/src/fileSystemService.ts",
+    "importedFiles": [
+      "vscode",
+      "path"
+    ]
   },
   {
     "sourceFile": "extension/src/bobRefactoringService.ts",
@@ -91,66 +81,10 @@
     ]
   },
   {
-    "sourceFile": "extension/src/extension.ts",
-    "importedFiles": [
-      "vscode",
-      "./webviewProvider"
-    ]
-  },
-  {
-    "sourceFile": "extension/src/dependencyService.ts",
-    "importedFiles": [
-      "vscode",
-      "path",
-      "fs",
-      "./bobService",
-      "./dependency/graphBuilder",
-      "./dependency/bobAnalysisService",
-      "./dependency/graphCombinerService",
-      "./types"
-    ]
-  },
-  {
-    "sourceFile": "extension/src/unifiedGraphService.ts",
-    "importedFiles": [
-      "vscode",
-      "path",
-      "./types",
-      "./fileSystemService",
-      "./dependencyService"
-    ]
-  },
-  {
-    "sourceFile": "webview/src/main.tsx",
-    "importedFiles": [
-      "react",
-      "react-dom/client",
-      "./App.tsx",
-      "./index.css"
-    ]
-  },
-  {
-    "sourceFile": "webview/src/App.tsx",
-    "importedFiles": [
-      "react"
-    ]
-  },
-  {
-    "sourceFile": "extension/src/fileSystemService.ts",
-    "importedFiles": [
-      "vscode",
-      "path",
-      "./types"
-    ]
-  },
-  {
-    "sourceFile": "extension/src/dependency/graphBuilder.ts",
+    "sourceFile": "extension/src/dependency/pathResolver.ts",
     "importedFiles": [
       "path",
-      "fs",
-      "./codeParser",
-      "./pathResolver",
-      "../types"
+      "fs"
     ]
   },
   {
@@ -173,12 +107,12 @@
     ]
   },
   {
-    "sourceFile": "extension/src/webview/messageHandlers.ts",
+    "sourceFile": "extension/src/dependency/graphBuilder.ts",
     "importedFiles": [
-      "vscode",
-      "../fileSystemService",
-      "../bobService",
-      "../unifiedGraphService",
+      "path",
+      "fs",
+      "./codeParser",
+      "./pathResolver",
       "../types"
     ]
   },
@@ -190,29 +124,149 @@
     ]
   },
   {
+    "sourceFile": "webview/src/vscode.d.ts",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/src/index.css",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/src/utils/graphLayout.ts",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/src/components/ChatPanel.tsx",
+    "importedFiles": [
+      "react"
+    ]
+  },
+  {
+    "sourceFile": "webview/src/types/index.ts",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/src/components/FileTree.tsx",
+    "importedFiles": [
+      "react"
+    ]
+  },
+  {
+    "sourceFile": "webview/src/main.tsx",
+    "importedFiles": [
+      "react",
+      "react-dom/client",
+      "./App.tsx",
+      "./index.css"
+    ]
+  },
+  {
+    "sourceFile": "webview/src/App.tsx",
+    "importedFiles": [
+      "react"
+    ]
+  },
+  {
+    "sourceFile": "extension/src/extension.ts",
+    "importedFiles": [
+      "vscode",
+      "./webviewProvider"
+    ]
+  },
+  {
+    "sourceFile": "extension/src/dependencyService.ts",
+    "importedFiles": [
+      "vscode",
+      "path",
+      "fs",
+      "./bobService",
+      "./dependency/graphBuilder",
+      "./dependency/bobAnalysisService",
+      "./dependency/graphCombinerService",
+      "./types"
+    ]
+  },
+  {
+    "sourceFile": "extension/src/refactoringService.ts",
+    "importedFiles": [
+      "vscode",
+      "path",
+      "fs"
+    ]
+  },
+  {
+    "sourceFile": "extension/src/webviewProvider.ts",
+    "importedFiles": [
+      "vscode",
+      "./fileSystemService",
+      "./bobService",
+      "./dependencyService",
+      "./unifiedGraphService",
+      "./webview/messageHandlers",
+      "./webview/htmlGenerator",
+      "./types"
+    ]
+  },
+  {
+    "sourceFile": "extension/src/unifiedGraphService.ts",
+    "importedFiles": [
+      "vscode",
+      "path",
+      "./types",
+      "./fileSystemService",
+      "./dependencyService"
+    ]
+  },
+  {
     "sourceFile": "extension/src/webview/htmlGenerator.ts",
     "importedFiles": [
       "vscode"
     ]
   },
   {
-    "sourceFile": "extension/src/dependency/pathResolver.ts",
+    "sourceFile": "extension/src/webview/messageHandlers.ts",
     "importedFiles": [
-      "path",
-      "fs"
+      "vscode",
+      "../fileSystemService",
+      "../bobService",
+      "../unifiedGraphService",
+      "../types"
+    ]
+  },
+  {
+    "sourceFile": "extension/webview-dist/assets/index.css",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "extension/webview-dist/assets/index.js",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "extension/webview-dist/index.html",
+    "importedFiles": [
+      "./assets/index.js",
+      "./assets/index.css"
+    ]
+  },
+  {
+    "sourceFile": "webview/dist/assets/index.css",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/dist/assets/index.js",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "webview/dist/index.html",
+    "importedFiles": [
+      "./assets/index.js",
+      "./assets/index.css"
     ]
   },
   {
     "sourceFile": "webview/index.html",
     "importedFiles": [
       "/src/main.tsx"
-    ]
-  },
-  {
-    "sourceFile": "test-files/test-integration.js",
-    "importedFiles": [
-      "path",
-      "../extension/dist/dependency/graphBuilder"
     ]
   },
   {
@@ -271,6 +325,36 @@
     ]
   },
   {
+    "sourceFile": "extension/dist/fileSystemService.js",
+    "importedFiles": [
+      "vscode",
+      "path"
+    ]
+  },
+  {
+    "sourceFile": "extension/dist/webview/htmlGenerator.js",
+    "importedFiles": [
+      "vscode"
+    ]
+  },
+  {
+    "sourceFile": "extension/dist/webview/messageHandlers.js",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "extension/dist/types.js",
+    "importedFiles": []
+  },
+  {
+    "sourceFile": "extension/dist/bobRefactoringService.js",
+    "importedFiles": [
+      "vscode",
+      "path",
+      "fs",
+      "./bobService"
+    ]
+  },
+  {
     "sourceFile": "extension/dist/dependency/graphBuilder.js",
     "importedFiles": [
       "path",
@@ -307,36 +391,6 @@
       "path",
       "fs",
       "../bobService"
-    ]
-  },
-  {
-    "sourceFile": "extension/dist/fileSystemService.js",
-    "importedFiles": [
-      "vscode",
-      "path"
-    ]
-  },
-  {
-    "sourceFile": "extension/dist/webview/htmlGenerator.js",
-    "importedFiles": [
-      "vscode"
-    ]
-  },
-  {
-    "sourceFile": "extension/dist/webview/messageHandlers.js",
-    "importedFiles": []
-  },
-  {
-    "sourceFile": "extension/dist/types.js",
-    "importedFiles": []
-  },
-  {
-    "sourceFile": "extension/dist/bobRefactoringService.js",
-    "importedFiles": [
-      "vscode",
-      "path",
-      "fs",
-      "./bobService"
     ]
   }
 ]

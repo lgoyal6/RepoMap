@@ -93,8 +93,8 @@ export class BobAnalysisService {
         try {
           const content = await fs.promises.readFile(filePath, 'utf-8');
           const relativePath = path.relative(this.workspaceRoot, filePath).replace(/\\/g, '/');
-          const ext = path.extname(filePath);
-          return { path: relativePath, content, ext };
+          // const ext = path.extname(filePath);
+          return { path: relativePath, content };
         } catch (error) {
           console.error(`[BobAnalysis] Error reading ${filePath}:`, error);
           return null;
@@ -103,11 +103,11 @@ export class BobAnalysisService {
     );
 
     const validFiles = fileContents.filter(f => f !== null);
-    console.log(`[BobAnalysis] Successfully read ${validFiles.length} files`);
+    console.log(`[BobAnalysis-Imports] Successfully read ${validFiles.length} files`);
     if (validFiles.length === 0) return [];
 
     const fileList = validFiles.map(f => 
-      `File: ${f!.path}\n${f!.content.split('\n').slice(0, 100).join('\n')}`
+      `File: ${f!.path}\n${f!.content.split('\n').slice(0, 50).join('\n')}`
     ).join('\n\n---\n\n');
 
     const prompt = `Extract ALL function/method/class definitions from these code files.
@@ -136,43 +136,70 @@ ${fileList}
 OUTPUT (JSON array only):`;
 
     try {
-      console.log(`[BobAnalysis] Sending request to Bob...`);
-      const response = await this.bobService.askBob({
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] FUNCTION EXTRACTION - Sending request to Bob...`);
+      console.log(`[BobAnalysis] Number of files in batch: ${validFiles.length}`);
+      console.log(`[BobAnalysis] Prompt length: ${prompt.length} characters`);
+      console.log(`[BobAnalysis] ========================================`);
+      let response;
+      try{
+        response = await this.bobService.askBob({
         system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
         messages: [{ role: 'user', content: prompt }]
-      }, 600000); // 10 minute timeout for all files
+      }, 120000); // 2 minute timeout for all files
+      }
+      catch(e){
+        console.log(`[Sid Analysis] Error: ${e}`);
+        response = await this.bobService.askBob({
+        system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
+        messages: [{ role: 'user', content: prompt }]
+      }, 120000); // 2 minute timeout for all files
+      }
 
       const text = response.content[0]?.text || '[]';
-      console.log(`[BobAnalysis] Raw Bob response length: ${text.length} characters`);
-      console.log(`[BobAnalysis] Raw Bob response (first 500 chars):\n${text.substring(0, 500)}`);
-      console.log(`[BobAnalysis] Raw Bob response (last 500 chars):\n${text.substring(Math.max(0, text.length - 500))}`);
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] FUNCTION EXTRACTION - Bob Response Received`);
+      console.log(`[BobAnalysis] Response length: ${text.length} characters`);
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] FULL RAW RESPONSE:`);
+      console.log(text);
+      console.log(`[BobAnalysis] ========================================`);
       
       // Try to extract JSON from ---output--- tags or clean response
       let jsonText = text.trim();
       console.log(`[BobAnalysis] After trim, length: ${jsonText.length}`);
       
       // Check for ---output--- tags first
-      const outputMatch = jsonText.match(/---output---\s*([\s\S]*?)\s*(?:---output---|$)/i);
+      const outputMatch = jsonText.match(/```json\s*([\s\S]*?)```/);
       if (outputMatch) {
         jsonText = outputMatch[1].trim();
-        console.log(`[BobAnalysis] ✓ Extracted content from ---output--- tags, length: ${jsonText.length}`);
+        console.log(`[BobAnalysis] ✓ Extracted content from ---output--- tags`);
+        console.log(`[BobAnalysis] Extracted length: ${jsonText.length}`);
       }
       
       // Remove markdown code blocks if present
       jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
       console.log(`[BobAnalysis] After removing markdown blocks, length: ${jsonText.length}`);
-      console.log(`[BobAnalysis] Cleaned text (first 300 chars):\n${jsonText.substring(0, 300)}`);
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] CLEANED TEXT FOR PARSING:`);
+      console.log(jsonText);
+      console.log(`[BobAnalysis] ========================================`);
       
       // Find the JSON array - use more robust regex
       const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
-        console.error(`[BobAnalysis] ❌ No JSON array found in response`);
-        console.error(`[BobAnalysis] Full cleaned text:\n${jsonText}`);
+        console.error(`[BobAnalysis] ========================================`);
+        console.error(`[BobAnalysis] ❌ ERROR: No JSON array found in response`);
+        console.error(`[BobAnalysis] This means Bob did not return a JSON array`);
+        console.error(`[BobAnalysis] ========================================`);
         return [];
       }
       
       console.log(`[BobAnalysis] ✓ Found JSON array, length: ${jsonMatch[0].length}`);
-      console.log(`[BobAnalysis] JSON to parse (first 500 chars):\n${jsonMatch[0].substring(0, 500)}`);
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] JSON ARRAY TO PARSE:`);
+      console.log(jsonMatch[0]);
+      console.log(`[BobAnalysis] ========================================`);
       
       let parsed;
       try {
@@ -181,19 +208,27 @@ OUTPUT (JSON array only):`;
         console.log(`[BobAnalysis] Parsed data type: ${Array.isArray(parsed) ? 'Array' : typeof parsed}`);
         console.log(`[BobAnalysis] Array length: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
       } catch (parseError: any) {
-        console.error(`[BobAnalysis] ❌ JSON parse error: ${parseError.message}`);
-        console.error(`[BobAnalysis] JSON that failed to parse:\n${jsonMatch[0]}`);
+        console.error(`[BobAnalysis] ========================================`);
+        console.error(`[BobAnalysis] ❌ JSON PARSE ERROR`);
+        console.error(`[BobAnalysis] Error message: ${parseError.message}`);
+        console.error(`[BobAnalysis] ========================================`);
+        console.error(`[BobAnalysis] JSON THAT FAILED TO PARSE:`);
+        console.error(jsonMatch[0]);
+        console.error(`[BobAnalysis] ========================================`);
+        
         const errorPosMatch = parseError.message.match(/position (\d+)/);
         const errorPos = errorPosMatch ? parseInt(errorPosMatch[1], 10) : -1;
-        console.error(`[BobAnalysis] Error at position: ${errorPos !== -1 ? errorPos : 'unknown'}`);
         
         if (errorPos !== -1) {
-          const start = Math.max(0, errorPos - 50);
-          const end = Math.min(jsonMatch[0].length, errorPos + 50);
+          const start = Math.max(0, errorPos - 100);
+          const end = Math.min(jsonMatch[0].length, errorPos + 100);
           const context = jsonMatch[0].substring(start, end);
-          const pointer = ' '.repeat(Math.min(50, errorPos - start)) + '^';
-          console.error(`[BobAnalysis] Context around error:\n${context}\n${pointer}`);
+          const pointer = ' '.repeat(Math.min(100, errorPos - start)) + '^';
+          console.error(`[BobAnalysis] Context around error (position ${errorPos}):`);
+          console.error(context);
+          console.error(pointer);
         }
+        console.error(`[BobAnalysis] ========================================`);
         
         throw parseError;
       }
@@ -223,14 +258,23 @@ OUTPUT (JSON array only):`;
         return isValid;
       });
       
-      console.log(`[BobAnalysis] ✓ Validated ${validated.length}/${parsed.length} function definitions`);
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] VALIDATION COMPLETE`);
+      console.log(`[BobAnalysis] Valid functions: ${validated.length}/${parsed.length}`);
       if (validated.length !== parsed.length) {
         console.warn(`[BobAnalysis] ⚠️ Filtered out ${parsed.length - validated.length} invalid items`);
       }
+      console.log(`[BobAnalysis] ========================================`);
+      console.log(`[BobAnalysis] FINAL FUNCTION LIST:`);
+      console.log(JSON.stringify(validated, null, 2));
+      console.log(`[BobAnalysis] ========================================`);
       
       return validated;
     } catch (error) {
-      console.error('[BobAnalysis] ❌ Error extracting functions from batch:', error);
+      console.error('[BobAnalysis] ========================================');
+      console.error('[BobAnalysis] ❌ FATAL ERROR extracting functions from batch');
+      console.error('[BobAnalysis] Error:', error);
+      console.error('[BobAnalysis] ========================================');
       return [];
     }
   }
@@ -313,7 +357,11 @@ Files to analyze:
 ${fileList}
 
 OUTPUT (JSON array only):`;
-
+console.log(`[BobAnalysis] ========================================`);
+console.log(`[BobAnalysis]PHASE 2 - Sending request to Bob...`);
+console.log(`[BobAnalysis] Number of files in batch: ${fileList.length}`);
+console.log(`[BobAnalysis] Prompt length: ${prompt.length} characters`);
+console.log(`[BobAnalysis] ========================================`);
     try {
       console.log(`[BobAnalysis-Imports] Sending request to Bob...`);
       const response = await this.bobService.askBob({
@@ -491,16 +539,26 @@ ${fileList}
 OUTPUT (JSON array only):`;
 
     try {
-      console.log(`[BobAnalysis-Usage] Sending request to Bob...`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      console.log(`[BobAnalysis-Usage] FUNCTION USAGE - Sending request to Bob...`);
+      console.log(`[BobAnalysis-Usage] Number of functions: ${functions.length}`);
+      console.log(`[BobAnalysis-Usage] Number of files to search: ${validFiles.length}`);
+      console.log(`[BobAnalysis-Usage] Prompt length: ${prompt.length} characters`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      
       const response = await this.bobService.askBob({
         system: 'You are a JSON-only code analyzer. Output ONLY valid JSON arrays with no markdown, no explanations, no code blocks.',
         messages: [{ role: 'user', content: prompt }]
       }, 600000); // 10 minute timeout for all files
 
       const text = response.content[0]?.text || '[]';
-      console.log(`[BobAnalysis-Usage] Raw Bob response length: ${text.length} characters`);
-      console.log(`[BobAnalysis-Usage] Raw Bob response (first 500 chars):\n${text.substring(0, 500)}`);
-      console.log(`[BobAnalysis-Usage] Raw Bob response (last 500 chars):\n${text.substring(Math.max(0, text.length - 500))}`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      console.log(`[BobAnalysis-Usage] FUNCTION USAGE - Bob Response Received`);
+      console.log(`[BobAnalysis-Usage] Response length: ${text.length} characters`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      console.log(`[BobAnalysis-Usage] FULL RAW RESPONSE:`);
+      console.log(text);
+      console.log(`[BobAnalysis-Usage] ========================================`);
       
       // Try to extract JSON from ---output--- tags or clean response
       let jsonText = text.trim();
@@ -510,24 +568,33 @@ OUTPUT (JSON array only):`;
       const outputMatch = jsonText.match(/---output---\s*([\s\S]*?)\s*(?:---output---|$)/i);
       if (outputMatch) {
         jsonText = outputMatch[1].trim();
-        console.log(`[BobAnalysis-Usage] ✓ Extracted content from ---output--- tags, length: ${jsonText.length}`);
+        console.log(`[BobAnalysis-Usage] ✓ Extracted content from ---output--- tags`);
+        console.log(`[BobAnalysis-Usage] Extracted length: ${jsonText.length}`);
       }
       
       // Remove markdown code blocks if present
       jsonText = jsonText.replace(/```json\s*/g, '').replace(/```\s*/g, '');
       console.log(`[BobAnalysis-Usage] After removing markdown blocks, length: ${jsonText.length}`);
-      console.log(`[BobAnalysis-Usage] Cleaned text (first 300 chars):\n${jsonText.substring(0, 300)}`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      console.log(`[BobAnalysis-Usage] CLEANED TEXT FOR PARSING:`);
+      console.log(jsonText);
+      console.log(`[BobAnalysis-Usage] ========================================`);
       
       // Find the JSON array
       const jsonMatch = jsonText.match(/\[[\s\S]*\]/);
       if (!jsonMatch) {
-        console.error(`[BobAnalysis-Usage] ❌ No JSON array found in response`);
-        console.error(`[BobAnalysis-Usage] Full cleaned text:\n${jsonText}`);
+        console.error(`[BobAnalysis-Usage] ========================================`);
+        console.error(`[BobAnalysis-Usage] ❌ ERROR: No JSON array found in response`);
+        console.error(`[BobAnalysis-Usage] This means Bob did not return a JSON array`);
+        console.error(`[BobAnalysis-Usage] ========================================`);
         return [];
       }
       
       console.log(`[BobAnalysis-Usage] ✓ Found JSON array, length: ${jsonMatch[0].length}`);
-      console.log(`[BobAnalysis-Usage] JSON to parse (first 500 chars):\n${jsonMatch[0].substring(0, 500)}`);
+      console.log(`[BobAnalysis-Usage] ========================================`);
+      console.log(`[BobAnalysis-Usage] JSON ARRAY TO PARSE:`);
+      console.log(jsonMatch[0]);
+      console.log(`[BobAnalysis-Usage] ========================================`);
       
       let parsed;
       try {
@@ -536,9 +603,13 @@ OUTPUT (JSON array only):`;
         console.log(`[BobAnalysis-Usage] Parsed data type: ${Array.isArray(parsed) ? 'Array' : typeof parsed}`);
         console.log(`[BobAnalysis-Usage] Array length: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
       } catch (parseError: any) {
-        console.error(`[BobAnalysis-Usage] ❌ JSON parse error: ${parseError.message}`);
-        console.error(`[BobAnalysis-Usage] Error at position: ${parseError.message.match(/position (\d+)/)?.[1] || 'unknown'}`);
-        console.error(`[BobAnalysis-Usage] JSON that failed to parse:\n${jsonMatch[0]}`);
+        console.error(`[BobAnalysis-Usage] ========================================`);
+        console.error(`[BobAnalysis-Usage] ❌ JSON PARSE ERROR`);
+        console.error(`[BobAnalysis-Usage] Error message: ${parseError.message}`);
+        console.error(`[BobAnalysis-Usage] ========================================`);
+        console.error(`[BobAnalysis-Usage] JSON THAT FAILED TO PARSE:`);
+        console.error(jsonMatch[0]);
+        console.error(`[BobAnalysis-Usage] ========================================`);
         throw parseError;
       }
       

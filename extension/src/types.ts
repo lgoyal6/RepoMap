@@ -1,8 +1,9 @@
 export interface FileNode {
   name: string;
   path: string;
-  type: 'file' | 'directory';
+  type: 'file' | 'directory' | 'function';
   children?: FileNode[];
+  line?: number; // For function nodes
 }
 
 export interface BobMessage {

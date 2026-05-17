@@ -41,18 +41,19 @@ export class UnifiedGraphService {
     // Create a map of file paths to their function children
     const functionMap = new Map<string, DependencyNode[]>();
     
-    for (const depNode of dependencyNodes) {
-      if (depNode.type === 'file' && depNode.children && depNode.children.length > 0) {
-        functionMap.set(depNode.filePath, depNode.children);
-      } else if (depNode.type === 'folder' && depNode.children) {
-        // Handle files within folders
-        for (const childNode of depNode.children) {
-          if (childNode.type === 'file' && childNode.children && childNode.children.length > 0) {
-            functionMap.set(childNode.filePath, childNode.children);
-          }
+    // Recursively extract all files with functions from dependency nodes
+    const extractFunctions = (nodes: DependencyNode[]) => {
+      for (const node of nodes) {
+        if (node.type === 'file' && node.children && node.children.length > 0) {
+          functionMap.set(node.filePath, node.children);
+        } else if (node.type === 'folder' && node.children) {
+          // Recursively process nested folders
+          extractFunctions(node.children);
         }
       }
-    }
+    };
+    
+    extractFunctions(dependencyNodes);
 
     // Recursively add function children to matching files in the tree
     return this.addFunctionsToTree(fileTree, functionMap);
@@ -75,8 +76,8 @@ export class UnifiedGraphService {
             children: functions.map(funcNode => ({
               name: funcNode.name,
               path: funcNode.id, // Use full ID (file:function)
-              type: 'file' as const, // Functions represented as file type
-              children: []
+              type: 'function' as const,
+              line: funcNode.line
             }))
           };
         }
