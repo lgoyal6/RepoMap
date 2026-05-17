@@ -28,8 +28,12 @@ export class BobService {
       return new Promise((resolve, reject) => {
         // On Windows, we need to use shell to execute bob (which is a PowerShell script)
         const isWindows = process.platform === 'win32';
-        const bobProcess = spawn('bob', ['-o', 'json', '--chat-mode', 'ask', '--hide-intermediary-output'], {
-          shell: isWindows // Enable shell on Windows to execute .ps1 scripts
+        
+        // Remove --hide-intermediary-output as it may cause output truncation
+        // Use --chat-mode ask for direct response
+        const bobProcess = spawn('bob', ['--chat-mode', 'ask'], {
+          shell: isWindows, // Enable shell on Windows to execute .ps1 scripts
+          stdio: ['pipe', 'pipe', 'pipe'] // Explicitly set stdio
         });
 
         let stdout = '';
@@ -45,11 +49,15 @@ export class BobService {
         }, timeoutMs);
 
         bobProcess.stdout.on('data', (data) => {
-          stdout += data.toString();
+          const chunk = data.toString();
+          stdout += chunk;
+          console.log(`Bob stdout chunk (${chunk.length} bytes)`);
         });
 
         bobProcess.stderr.on('data', (data) => {
-          stderr += data.toString();
+          const chunk = data.toString();
+          stderr += chunk;
+          console.log(`Bob stderr chunk (${chunk.length} bytes)`);
         });
 
         bobProcess.on('error', (error) => {
@@ -78,10 +86,26 @@ export class BobService {
           }
 
           try {
-            // Bob outputs the response text first, then JSON stats
-            // Extract the text before the JSON block
-            const jsonStart = stdout.indexOf('\n{');
-            const textResponse = jsonStart !== -1 ? stdout.slice(0, jsonStart).trim() : stdout.trim();
+            console.log(`Bob total stdout length: ${stdout.length} bytes`);
+            console.log(`Bob stdout first 500 chars:`, stdout.substring(0, 500));
+            console.log(`Bob stdout last 500 chars:`, stdout.substring(Math.max(0, stdout.length - 500)));
+            
+            // Bob may output JSON stats at the end after the actual response
+            // Look for the last occurrence of a JSON stats block (starts with newline + {)
+            // But we want to keep the actual response content
+            
+            let textResponse = stdout.trim();
+            
+            // Try to find and remove JSON stats block at the end
+            // Stats typically look like: \n{"model": "...", "usage": {...}}
+            const statsPattern = /\n\{["\s]*(?:model|usage|finish_reason)["\s]*:/;
+            const statsMatch = stdout.match(statsPattern);
+            
+            if (statsMatch && statsMatch.index !== undefined) {
+              // Found stats block, extract everything before it
+              textResponse = stdout.slice(0, statsMatch.index).trim();
+              console.log(`Removed stats block, response length: ${textResponse.length}`);
+            }
 
             resolve({
               content: [{ type: 'text', text: textResponse }]

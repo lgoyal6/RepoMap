@@ -117,20 +117,43 @@ function TreeNode({ node, depth, selectedFile, disabledPaths, onSelect, onToggle
     );
   }
 
+  // File node - check if it has function children
+  const hasChildren = node.children && node.children.length > 0;
+  const [fileExpanded, setFileExpanded] = useState(false);
+
   return (
-    <div
-      style={{ padding: '5px 8px', paddingLeft: 28 + depth * 16, cursor: 'default', fontSize: 12, color: rowColor, background: isSelected ? 'rgba(99,102,241,0.15)' : 'transparent', borderLeft: isSelected ? '2px solid #6366f1' : '2px solid transparent', display: 'flex', alignItems: 'center', gap: 7, opacity: isDisabled ? 0.5 : 1 }}>
-      <input
-        type="checkbox"
-        checked={!isDisabled}
-        disabled={isDisabledByAncestor}
-        onChange={() => onToggleDisabled(node)}
-        title={isDisabledByAncestor ? 'Hidden by a parent folder' : isDirectlyDisabled ? 'Show in graph' : 'Hide from graph'}
-        style={{ cursor: isDisabledByAncestor ? 'not-allowed' : 'pointer' }}
-      />
-      <span onClick={() => onSelect(node)} style={{ flex: 1, minWidth: 0, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        <span style={{ color: accentColor }}>--</span> {node.name}
-      </span>
+    <div>
+      <div
+        style={{ padding: '5px 8px', paddingLeft: 28 + depth * 16, cursor: 'default', fontSize: 12, color: rowColor, background: isSelected ? 'rgba(99,102,241,0.15)' : 'transparent', borderLeft: isSelected ? '2px solid #6366f1' : '2px solid transparent', display: 'flex', alignItems: 'center', gap: 7, opacity: isDisabled ? 0.5 : 1 }}>
+        {hasChildren && (
+          <button
+            onClick={() => setFileExpanded(!fileExpanded)}
+            style={{ width: 14, height: 14, border: 'none', background: 'transparent', color: '#9ca3af', cursor: 'pointer', fontSize: 9, padding: 0, marginLeft: -18 }}>
+            {fileExpanded ? 'v' : '>'}
+          </button>
+        )}
+        <input
+          type="checkbox"
+          checked={!isDisabled}
+          disabled={isDisabledByAncestor}
+          onChange={() => onToggleDisabled(node)}
+          title={isDisabledByAncestor ? 'Hidden by a parent folder' : isDirectlyDisabled ? 'Show in graph' : 'Hide from graph'}
+          style={{ cursor: isDisabledByAncestor ? 'not-allowed' : 'pointer' }}
+        />
+        <span onClick={() => onSelect(node)} style={{ flex: 1, minWidth: 0, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <span style={{ color: accentColor }}>--</span> {node.name}
+        </span>
+      </div>
+      {/* Render function children */}
+      {hasChildren && fileExpanded && node.children?.map(funcNode => (
+        <div
+          key={funcNode.path}
+          style={{ padding: '5px 8px', paddingLeft: 56 + depth * 16, cursor: 'default', fontSize: 11, color: '#a78bfa', background: isSelected && selectedFile === funcNode.path ? 'rgba(167,139,250,0.15)' : 'transparent', display: 'flex', alignItems: 'center', gap: 7, opacity: isDisabled ? 0.5 : 1 }}>
+          <span onClick={() => onSelect(funcNode)} style={{ flex: 1, minWidth: 0, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ color: '#8b5cf6' }}>⚙</span> {funcNode.name}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -327,6 +350,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
   }, [viewBox.height, viewBox.width, viewBox.x, viewBox.y, zoom]);
 
   // Get connected nodes for hover effect
+  // Show WHO USES the hovered node (reverse dependencies)
   const getConnectedNodes = (nodePath: string): Set<string> => {
     const normalizedNodePath = normalizeGraphPath(nodePath);
     const connected = new Set<string>([normalizedNodePath]);
@@ -334,7 +358,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
     dependencyEdges.forEach(edge => {
       const fromPath = normalizeGraphPath(edge.from);
       const toPath = normalizeGraphPath(edge.to);
-      if (fromPath === normalizedNodePath) connected.add(toPath);
+      // Show arrows FROM this node TO nodes that use/call it
       if (toPath === normalizedNodePath) connected.add(fromPath);
     });
     return connected;
@@ -414,7 +438,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
   };
 
   // Render dependency edges
-  const renderDependencyEdge = (edge: DependencyEdge, i: number) => {
+  const renderDependencyEdge = (edge: DependencyEdge, i: number, allEdges: DependencyEdge[]) => {
     const fromPath = normalizeGraphPath(edge.from);
     const toPath = normalizeGraphPath(edge.to);
     const fromNode = pathToNode.get(fromPath);
@@ -431,11 +455,30 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
     const start = getNodeAnchor(fromNode, toNode);
     const end = getNodeAnchor(toNode, fromNode);
 
+    // Calculate offset for overlapping edges (when nodes are vertically aligned)
+    const isVerticallyAligned = Math.abs(fromNode.x - toNode.x) < 50;
+    let horizontalOffset = 0;
+    
+    if (isVerticallyAligned) {
+      // Count how many edges share similar vertical alignment
+      const similarEdges = allEdges.filter((e, idx) => {
+        if (idx >= i) return false; // Only count previous edges
+        const ePath = normalizeGraphPath(e.from);
+        const eToPath = normalizeGraphPath(e.to);
+        const eFromNode = pathToNode.get(ePath);
+        const eToNode = pathToNode.get(eToPath);
+        if (!eFromNode || !eToNode) return false;
+        return Math.abs(eFromNode.x - eToNode.x) < 50 &&
+               Math.abs(eFromNode.y - fromNode.y) < 100;
+      });
+      horizontalOffset = similarEdges.length * 25; // Offset each edge by 25 units
+    }
+
     // Curved path for dependencies
     const dx = end.x - start.x;
     const lift = Math.max(70, Math.min(180, Math.abs(end.y - start.y) * 0.35));
-    const controlOne = { x: start.x + dx * 0.45, y: start.y - lift };
-    const controlTwo = { x: start.x + dx * 0.55, y: end.y - lift };
+    const controlOne = { x: start.x + dx * 0.45 + horizontalOffset, y: start.y - lift };
+    const controlTwo = { x: start.x + dx * 0.55 + horizontalOffset, y: end.y - lift };
     const arrowBase = controlTwo;
     const arrowPoints = getArrowPoints(end, arrowBase);
     const path = `M ${start.x} ${start.y} C ${controlOne.x} ${controlOne.y}, ${controlTwo.x} ${controlTwo.y}, ${end.x} ${end.y}`;
@@ -497,7 +540,7 @@ function CombinedGraphView({ tree, dependencyEdges, selectedFile, onSelectNode, 
           })}
 
           {/* Dependency edges */}
-          {hoveredNode && dependencyEdges.map((edge, i) => renderDependencyEdge(edge, i))}
+          {hoveredNode && dependencyEdges.map((edge, i) => renderDependencyEdge(edge, i, dependencyEdges))}
           
           {/* File/folder nodes - render last so they appear on top */}
           {nodes.map(n => {

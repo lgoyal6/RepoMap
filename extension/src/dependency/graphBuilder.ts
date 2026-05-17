@@ -64,7 +64,7 @@ export class GraphBuilder {
       }
     }
 
-    // Build function call edges
+    // Build function call edges (cross-file)
     for (const filePath of files) {
       const fileData = this.cache.get(filePath);
       if (!fileData) continue;
@@ -96,6 +96,15 @@ export class GraphBuilder {
             });
           }
         }
+      }
+
+      // Build intra-file function call edges (function to function within same file)
+      for (const call of fileData.functionCalls) {
+        edges.push({
+          from: `${relativePath}:${call.callerFunction}`,
+          to: `${relativePath}:${call.calledFunction}`,
+          type: 'calls'
+        });
       }
     }
 

@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { BobService } from './bobService';
 import { GraphBuilder } from './dependency/graphBuilder';
+import { BobAnalysisService } from './dependency/bobAnalysisService';
+import { GraphCombinerService } from './dependency/graphCombinerService';
 import { DependencyNode, DependencyEdge } from './types';
 
 export interface DependencyGraph {
@@ -14,6 +16,8 @@ export class DependencyService {
   private workspaceRoot: string;
   private bobService: BobService;
   private graphBuilder: GraphBuilder;
+  private bobAnalysisService: BobAnalysisService;
+  private graphCombinerService: GraphCombinerService;
   private cacheFilePath: string;
 
   constructor() {
@@ -21,6 +25,8 @@ export class DependencyService {
     this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
     this.bobService = new BobService();
     this.graphBuilder = new GraphBuilder(this.workspaceRoot);
+    this.bobAnalysisService = new BobAnalysisService(this.workspaceRoot);
+    this.graphCombinerService = new GraphCombinerService(this.workspaceRoot);
     this.cacheFilePath = path.join(this.workspaceRoot, '.bob', 'dependency-graph.json');
   }
 
@@ -58,10 +64,42 @@ export class DependencyService {
       }
     }
 
-    console.log('Building dependency graph with Bob...');
-    const graph = await this.buildDependencyGraphWithBob();
+    console.log('Building dependency graph with phased Bob analysis...');
+    const graph = await this.buildDependencyGraphPhased(forceRefresh);
     await this.saveCachedGraph(graph);
     return graph;
+  }
+
+  /**
+   * New phased approach: Extract functions, imports, and usage separately
+   */
+  private async buildDependencyGraphPhased(forceRefresh: boolean = false): Promise<DependencyGraph> {
+    try {
+      // Get all supported files
+      const files = await this.getAllSupportedFiles();
+      const limitedFiles = files.slice(0, 100); // Limit for performance
+
+      console.log(`Phase 1: Extracting function definitions from ${limitedFiles.length} files...`);
+      const functions = await this.bobAnalysisService.extractFunctionDefinitions(limitedFiles, forceRefresh);
+      console.log(`Found ${functions.length} functions`);
+
+      console.log(`Phase 2: Extracting file imports...`);
+      const fileImports = await this.bobAnalysisService.extractFileImports(limitedFiles, forceRefresh);
+      console.log(`Found ${fileImports.length} file import relationships`);
+
+      console.log(`Phase 3: Extracting function usage...`);
+      const functionUsage = await this.bobAnalysisService.extractFunctionUsage(functions, limitedFiles, forceRefresh);
+      console.log(`Found ${functionUsage.length} function usage patterns`);
+
+      console.log(`Phase 4: Combining into final graph...`);
+      const finalGraph = await this.graphCombinerService.buildFinalGraph(functions, fileImports, functionUsage);
+      console.log(`Final graph: ${finalGraph.nodes.length} nodes, ${finalGraph.edges.length} edges`);
+
+      return finalGraph;
+    } catch (error) {
+      console.error('Phased analysis failed, falling back to regex:', error);
+      return this.buildDependencyGraphWithRegex();
+    }
   }
 
   private async buildDependencyGraphWithBob(): Promise<DependencyGraph> {
@@ -81,31 +119,44 @@ export class DependencyService {
       }
     }
 
-    // Build prompt for Bob - reduced content size for faster processing
-    const fileList = fileContents.map(f => `File: ${f.path}\n\`\`\`\n${f.content.slice(0, 1000)}\n\`\`\``).join('\n\n');
+    // Build a simpler, more focused prompt for Bob
+    const fileList = fileContents.map(f => {
+      const lines = f.content.split('\n').slice(0, 30); // First 30 lines only
+      return `${f.path}:\n${lines.join('\n')}`;
+    }).join('\n\n---\n\n');
     
-    const prompt = `Analyze these code files and create a dependency graph. Return ONLY valid JSON in this exact format:
+    const prompt = `Create a dependency graph JSON for these ${fileContents.length} files (including HTML, CSS, and code files).
+
+Required JSON format:
 {
   "nodes": [
-    {"id": "path/to/file.ts", "name": "file.ts", "type": "file", "filePath": "path/to/file.ts", "children": [
-      {"id": "path/to/file.ts:functionName", "name": "functionName", "type": "function", "filePath": "path/to/file.ts", "line": 10}
-    ]}
+    {
+      "id": "file.ts",
+      "name": "file.ts",
+      "type": "file",
+      "filePath": "file.ts",
+      "children": [
+        {"id": "file.ts:functionName", "name": "functionName", "type": "function", "filePath": "file.ts", "line": 10}
+      ]
+    }
   ],
   "edges": [
-    {"from": "path/to/file1.ts", "to": "path/to/file2.ts", "type": "imports"},
-    {"from": "path/to/file1.ts", "to": "path/to/file2.ts:functionName", "type": "calls"}
+    {"from": "file1.ts", "to": "file2.ts", "type": "imports"},
+    {"from": "file.ts:funcA", "to": "file.ts:funcB", "type": "calls"}
   ]
 }
 
 Rules:
-- Each file is a node with type "file"
-- Functions/classes are child nodes with type "function"
-- "imports" edges show file imports
-- "calls" edges show function calls
-- Use relative paths as IDs
-- Return ONLY the JSON, no explanation
+1. Create one node per file with type "file"
+2. For code files (JS/TS/Python/etc), extract functions/classes and add them as children with type "function"
+3. For HTML files, extract CSS (<link>) and JS (<script src>) imports
+4. For CSS files, extract @import statements
+5. Add "imports" edges between files that import each other
+6. Add "calls" edges between functions that call each other (format: "file:function")
+7. Function IDs should be "filePath:functionName"
+8. Return ONLY the JSON object, nothing else
 
-Files to analyze:
+Files:
 ${fileList}`;
 
     try {
@@ -118,26 +169,38 @@ ${fileList}`;
       const text = response.content[0]?.text || '{}';
       
       console.log('Bob response length:', text.length);
-      console.log('Bob response preview:', text.substring(0, 500));
+      console.log('Bob response preview:', text.substring(0, 200));
+      
+      // Handle empty or very short responses
+      if (text.length < 10) {
+        console.error('Bob returned empty or very short response:', text);
+        throw new Error('Bob returned empty response. The prompt may be too complex or Bob may be unavailable.');
+      }
       
       // Try multiple JSON extraction strategies
       let jsonText = '';
       
-      // Strategy 1: Look for JSON code blocks
+      // Strategy 1: Look for JSON code blocks (with proper closing)
       const codeBlockMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-      if (codeBlockMatch) {
+      if (codeBlockMatch && codeBlockMatch[1]) {
         jsonText = codeBlockMatch[1];
         console.log('Found JSON in code block');
       } else {
         // Strategy 2: Look for raw JSON (greedy match to get the largest JSON object)
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          jsonText = jsonMatch[0];
+        const jsonMatch = text.match(/(\{[\s\S]*\})/);
+        if (jsonMatch && jsonMatch[1]) {
+          jsonText = jsonMatch[1];
           console.log('Found raw JSON');
         } else {
           console.error('Full Bob response:', text);
-          throw new Error('No JSON found in Bob response. Bob may have returned plain text instead of JSON.');
+          throw new Error('No JSON found in Bob response. Bob may have returned incomplete or plain text.');
         }
+      }
+      
+      // Validate we actually got JSON content
+      if (!jsonText || jsonText.length < 10) {
+        console.error('Extracted JSON is too short:', jsonText);
+        throw new Error('Extracted JSON is empty or incomplete');
       }
 
       let graph: DependencyGraph;
@@ -171,7 +234,7 @@ ${fileList}`;
   }
 
   private async getAllSupportedFiles(): Promise<string[]> {
-    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs'];
+    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs', '.html', '.htm', '.css'];
     const files: string[] = [];
 
     const pattern = `**/*{${extensions.join(',')}}`;

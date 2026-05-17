@@ -12,9 +12,16 @@ export interface FileImport {
   importedSymbols: string[];
 }
 
+export interface FunctionCall {
+  callerFunction: string;
+  calledFunction: string;
+  calledFile?: string; // If calling a function from another file
+}
+
 export interface ParsedFile {
   imports: FileImport[];
   functions: FunctionDef[];
+  functionCalls: FunctionCall[];
 }
 
 export class CodeParser {
@@ -25,8 +32,9 @@ export class CodeParser {
 
       const imports = this.extractImports(content, ext);
       const functions = this.extractFunctions(content, ext);
+      const functionCalls = this.extractFunctionCalls(content, ext, functions);
 
-      return { imports, functions };
+      return { imports, functions, functionCalls };
     } catch (error) {
       console.error(`Error parsing ${filePath}:`, error);
       return null;
@@ -44,6 +52,10 @@ export class CodeParser {
       imports.push(...this.extractGoImports(content));
     } else if (ext === '.java') {
       imports.push(...this.extractJavaImports(content));
+    } else if (['.html', '.htm'].includes(ext)) {
+      imports.push(...this.extractHtmlImports(content));
+    } else if (ext === '.css') {
+      imports.push(...this.extractCssImports(content));
     }
 
     return imports;
@@ -163,50 +175,67 @@ export class CodeParser {
 
   private extractJavaScriptFunctions(content: string): FunctionDef[] {
     const functions: FunctionDef[] = [];
+    const seenFunctions = new Set<string>(); // Track to avoid duplicates
 
     // Function declarations: function name(
     const funcRegex = /(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(/g;
     let match;
     while ((match = funcRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      functions.push({
-        name: match[1],
-        line,
-        exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-      });
+      const key = `${match[1]}:${line}`;
+      if (!seenFunctions.has(key)) {
+        seenFunctions.add(key);
+        functions.push({
+          name: match[1],
+          line,
+          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
+        });
+      }
     }
 
     // Arrow functions: const name = (
     const arrowRegex = /(?:export\s+)?const\s+(\w+)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>/g;
     while ((match = arrowRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      functions.push({
-        name: match[1],
-        line,
-        exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-      });
+      const key = `${match[1]}:${line}`;
+      if (!seenFunctions.has(key)) {
+        seenFunctions.add(key);
+        functions.push({
+          name: match[1],
+          line,
+          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
+        });
+      }
     }
 
-    // Class methods: methodName(
-    const methodRegex = /(?:public|private|protected)?\s*(?:async\s+)?(\w+)\s*\([^)]*\)\s*{/g;
+    // Class methods: Only match if there's an explicit access modifier
+    const methodRegex = /(?:public|private|protected)\s+(?:async\s+)?(\w+)\s*\([^)]*\)\s*{/g;
     while ((match = methodRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      functions.push({
-        name: match[1],
-        line,
-        exported: false
-      });
+      const key = `${match[1]}:${line}`;
+      if (!seenFunctions.has(key)) {
+        seenFunctions.add(key);
+        functions.push({
+          name: match[1],
+          line,
+          exported: false
+        });
+      }
     }
 
     // Classes: class Name
     const classRegex = /(?:export\s+)?class\s+(\w+)/g;
     while ((match = classRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      functions.push({
-        name: match[1],
-        line,
-        exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-      });
+      const key = `${match[1]}:${line}`;
+      if (!seenFunctions.has(key)) {
+        seenFunctions.add(key);
+        functions.push({
+          name: match[1],
+          line,
+          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
+        });
+      }
     }
 
     return functions;
@@ -287,6 +316,176 @@ export class CodeParser {
     }
 
     return functions;
+  }
+
+  private extractHtmlImports(content: string): FileImport[] {
+    const imports: FileImport[] = [];
+
+    // Extract CSS links: <link rel="stylesheet" href="...">
+    const cssLinkRegex = /<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+)["'][^>]*>/gi;
+    let match;
+    while ((match = cssLinkRegex.exec(content)) !== null) {
+      imports.push({
+        importedFile: match[1],
+        importedSymbols: []
+      });
+    }
+
+    // Also check href first: <link href="..." rel="stylesheet">
+    const cssLinkRegex2 = /<link[^>]+href=["']([^"']+)["'][^>]+rel=["']stylesheet["'][^>]*>/gi;
+    while ((match = cssLinkRegex2.exec(content)) !== null) {
+      imports.push({
+        importedFile: match[1],
+        importedSymbols: []
+      });
+    }
+
+    // Extract JS scripts: <script src="...">
+    const scriptRegex = /<script[^>]+src=["']([^"']+)["'][^>]*>/gi;
+    while ((match = scriptRegex.exec(content)) !== null) {
+      imports.push({
+        importedFile: match[1],
+        importedSymbols: []
+      });
+    }
+
+    return imports;
+  }
+
+  private extractCssImports(content: string): FileImport[] {
+    const imports: FileImport[] = [];
+
+    // Extract @import statements: @import url("...") or @import "..."
+    const importRegex = /@import\s+(?:url\()?["']([^"']+)["']\)?/gi;
+    let match;
+    while ((match = importRegex.exec(content)) !== null) {
+      imports.push({
+        importedFile: match[1],
+        importedSymbols: []
+      });
+    }
+
+    return imports;
+  }
+
+  extractFunctionCalls(content: string, ext: string, functions: FunctionDef[]): FunctionCall[] {
+    const calls: FunctionCall[] = [];
+
+    if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
+      calls.push(...this.extractJavaScriptFunctionCalls(content, functions));
+    } else if (ext === '.py') {
+      calls.push(...this.extractPythonFunctionCalls(content, functions));
+    } else if (ext === '.go') {
+      calls.push(...this.extractGoFunctionCalls(content, functions));
+    } else if (ext === '.java') {
+      calls.push(...this.extractJavaFunctionCalls(content, functions));
+    }
+
+    return calls;
+  }
+
+  private extractJavaScriptFunctionCalls(content: string, functions: FunctionDef[]): FunctionCall[] {
+    const calls: FunctionCall[] = [];
+    const lines = content.split('\n');
+
+    // For each function, find what it calls
+    for (const func of functions) {
+      // Get the function body (from function line to next function or end)
+      const nextFunc = functions.find(f => f.line > func.line);
+      const endLine = nextFunc ? nextFunc.line - 1 : lines.length;
+      const functionBody = lines.slice(func.line - 1, endLine).join('\n');
+
+      // Find all function calls in this function's body
+      for (const otherFunc of functions) {
+        if (otherFunc.name === func.name) continue;
+
+        // Look for function calls: functionName(
+        const callRegex = new RegExp(`\\b${otherFunc.name}\\s*\\(`, 'g');
+        if (callRegex.test(functionBody)) {
+          calls.push({
+            callerFunction: func.name,
+            calledFunction: otherFunc.name
+          });
+        }
+      }
+    }
+
+    return calls;
+  }
+
+  private extractPythonFunctionCalls(content: string, functions: FunctionDef[]): FunctionCall[] {
+    const calls: FunctionCall[] = [];
+    const lines = content.split('\n');
+
+    for (const func of functions) {
+      const nextFunc = functions.find(f => f.line > func.line);
+      const endLine = nextFunc ? nextFunc.line - 1 : lines.length;
+      const functionBody = lines.slice(func.line - 1, endLine).join('\n');
+
+      for (const otherFunc of functions) {
+        if (otherFunc.name === func.name) continue;
+
+        const callRegex = new RegExp(`\\b${otherFunc.name}\\s*\\(`, 'g');
+        if (callRegex.test(functionBody)) {
+          calls.push({
+            callerFunction: func.name,
+            calledFunction: otherFunc.name
+          });
+        }
+      }
+    }
+
+    return calls;
+  }
+
+  private extractGoFunctionCalls(content: string, functions: FunctionDef[]): FunctionCall[] {
+    const calls: FunctionCall[] = [];
+    const lines = content.split('\n');
+
+    for (const func of functions) {
+      const nextFunc = functions.find(f => f.line > func.line);
+      const endLine = nextFunc ? nextFunc.line - 1 : lines.length;
+      const functionBody = lines.slice(func.line - 1, endLine).join('\n');
+
+      for (const otherFunc of functions) {
+        if (otherFunc.name === func.name) continue;
+
+        const callRegex = new RegExp(`\\b${otherFunc.name}\\s*\\(`, 'g');
+        if (callRegex.test(functionBody)) {
+          calls.push({
+            callerFunction: func.name,
+            calledFunction: otherFunc.name
+          });
+        }
+      }
+    }
+
+    return calls;
+  }
+
+  private extractJavaFunctionCalls(content: string, functions: FunctionDef[]): FunctionCall[] {
+    const calls: FunctionCall[] = [];
+    const lines = content.split('\n');
+
+    for (const func of functions) {
+      const nextFunc = functions.find(f => f.line > func.line);
+      const endLine = nextFunc ? nextFunc.line - 1 : lines.length;
+      const functionBody = lines.slice(func.line - 1, endLine).join('\n');
+
+      for (const otherFunc of functions) {
+        if (otherFunc.name === func.name) continue;
+
+        const callRegex = new RegExp(`\\b${otherFunc.name}\\s*\\(`, 'g');
+        if (callRegex.test(functionBody)) {
+          calls.push({
+            callerFunction: func.name,
+            calledFunction: otherFunc.name
+          });
+        }
+      }
+    }
+
+    return calls;
   }
 }
 
