@@ -43,6 +43,7 @@ export interface DependencyGraph {
 export type WebviewMessage =
   | { type: 'loadWorkspace' }
   | { type: 'loadDependencyGraph' }
+  | { type: 'refreshDependencyGraph' }
   | { type: 'readFile'; path: string }
   | { type: 'writeFile'; path: string; content: string }
   | { type: 'renameFile'; oldPath: string; newPath: string }
@@ -50,7 +51,7 @@ export type WebviewMessage =
 
 // Messages from extension to webview
 export type ExtensionMessage =
-  | { type: 'workspaceLoaded'; tree: FileNode[]; workspaceName: string }
+  | { type: 'workspaceLoaded'; tree: FileNode[]; workspaceName: string; edges: DependencyEdge[] }
   | { type: 'dependencyGraphLoaded'; graph: DependencyGraph }
   | { type: 'fileContent'; path: string; content: string }
   | { type: 'bobResponse'; content: Array<{ type: string; text: string }> }
