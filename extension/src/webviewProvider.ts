@@ -2,12 +2,16 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { FileSystemService } from './fileSystemService';
 import { BobService } from './bobService';
+import { DependencyService } from './dependencyService';
+import { UnifiedGraphService } from './unifiedGraphService';
 import { WebviewMessage, ExtensionMessage, BobMessage } from './types';
 
 export class RepomapWebviewProvider {
   private panel: vscode.WebviewPanel | undefined;
   private fileSystemService: FileSystemService;
   private bobService: BobService;
+  private dependencyService: DependencyService;
+  private unifiedGraphService: UnifiedGraphService;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -15,6 +19,8 @@ export class RepomapWebviewProvider {
   ) {
     this.fileSystemService = new FileSystemService();
     this.bobService = new BobService();
+    this.dependencyService = new DependencyService();
+    this.unifiedGraphService = new UnifiedGraphService();
   }
 
   public async show() {
@@ -89,6 +95,14 @@ export class RepomapWebviewProvider {
           await this.loadWorkspace();
           break;
 
+        case 'loadDependencyGraph':
+          await this.loadDependencyGraph(false);
+          break;
+
+        case 'refreshDependencyGraph':
+          await this.loadDependencyGraph(true);
+          break;
+
         case 'readFile':
           await this.readFile(message.path);
           break;
@@ -114,22 +128,45 @@ export class RepomapWebviewProvider {
   }
 
   private async loadWorkspace() {
-    console.log('🦍 Loading workspace...');
+    console.log('🦍 Loading unified workspace graph...');
     try {
-      const tree = await this.fileSystemService.buildTree();
+      const unifiedGraph = await this.unifiedGraphService.buildUnifiedGraph(false);
       const workspaceName = this.fileSystemService.getWorkspaceName();
-      console.log('🦍 Workspace loaded:', workspaceName, 'Files:', tree.length);
+      console.log('🦍 Unified graph loaded:', workspaceName, 'Files:', unifiedGraph.tree.length, 'Edges:', unifiedGraph.edges.length);
       
       this.sendMessage({
         type: 'workspaceLoaded',
-        tree,
-        workspaceName
+        tree: unifiedGraph.tree,
+        workspaceName,
+        edges: unifiedGraph.edges
       });
     } catch (error: any) {
       console.error('🦍 Error loading workspace:', error);
       this.sendMessage({
         type: 'error',
         message: `Failed to load workspace: ${error.message}`
+      });
+    }
+  }
+
+  private async loadDependencyGraph(forceRefresh: boolean = false) {
+    console.log(`🦍 ${forceRefresh ? 'Refreshing' : 'Reloading'} unified graph...`);
+    try {
+      const unifiedGraph = await this.unifiedGraphService.buildUnifiedGraph(forceRefresh);
+      const workspaceName = this.fileSystemService.getWorkspaceName();
+      console.log('🦍 Unified graph reloaded:', unifiedGraph.tree.length, 'files,', unifiedGraph.edges.length, 'edges');
+      
+      this.sendMessage({
+        type: 'workspaceLoaded',
+        tree: unifiedGraph.tree,
+        workspaceName,
+        edges: unifiedGraph.edges
+      });
+    } catch (error: any) {
+      console.error('🦍 Error loading unified graph:', error);
+      this.sendMessage({
+        type: 'error',
+        message: `Failed to load unified graph: ${error.message}`
       });
     }
   }
