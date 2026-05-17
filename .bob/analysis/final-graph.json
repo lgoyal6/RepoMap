@@ -1,0 +1,499 @@
+{
+  "nodes": [
+    {
+      "id": ".bob",
+      "name": ".bob",
+      "type": "folder",
+      "filePath": ".bob",
+      "children": [
+        {
+          "id": ".bob/analysis",
+          "name": "analysis",
+          "type": "folder",
+          "filePath": ".bob/analysis",
+          "children": [
+            {
+              "id": ".bob/analysis/file-imports.json",
+              "name": "file-imports.json",
+              "type": "file",
+              "filePath": ".bob/analysis/file-imports.json"
+            },
+            {
+              "id": ".bob/analysis/final-graph.json",
+              "name": "final-graph.json",
+              "type": "file",
+              "filePath": ".bob/analysis/final-graph.json"
+            },
+            {
+              "id": ".bob/analysis/function-usage.json",
+              "name": "function-usage.json",
+              "type": "file",
+              "filePath": ".bob/analysis/function-usage.json"
+            },
+            {
+              "id": ".bob/analysis/functions.json",
+              "name": "functions.json",
+              "type": "file",
+              "filePath": ".bob/analysis/functions.json"
+            }
+          ]
+        },
+        {
+          "id": ".bob/notes",
+          "name": "notes",
+          "type": "folder",
+          "filePath": ".bob/notes",
+          "children": [
+            {
+              "id": ".bob/notes/pending-notes.txt",
+              "name": "pending-notes.txt",
+              "type": "file",
+              "filePath": ".bob/notes/pending-notes.txt"
+            }
+          ]
+        },
+        {
+          "id": ".bob/dependency-graph.json",
+          "name": "dependency-graph.json",
+          "type": "file",
+          "filePath": ".bob/dependency-graph.json"
+        }
+      ]
+    },
+    {
+      "id": "extension",
+      "name": "extension",
+      "type": "folder",
+      "filePath": "extension",
+      "children": [
+        {
+          "id": "extension/.vscode",
+          "name": ".vscode",
+          "type": "folder",
+          "filePath": "extension/.vscode",
+          "children": [
+            {
+              "id": "extension/.vscode/launch.json",
+              "name": "launch.json",
+              "type": "file",
+              "filePath": "extension/.vscode/launch.json"
+            },
+            {
+              "id": "extension/.vscode/tasks.json",
+              "name": "tasks.json",
+              "type": "file",
+              "filePath": "extension/.vscode/tasks.json"
+            }
+          ]
+        },
+        {
+          "id": "extension/src",
+          "name": "src",
+          "type": "folder",
+          "filePath": "extension/src",
+          "children": [
+            {
+              "id": "extension/src/dependency",
+              "name": "dependency",
+              "type": "folder",
+              "filePath": "extension/src/dependency",
+              "children": [
+                {
+                  "id": "extension/src/dependency/bobAnalysisService.ts",
+                  "name": "bobAnalysisService.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/bobAnalysisService.ts"
+                },
+                {
+                  "id": "extension/src/dependency/codeParser.ts",
+                  "name": "codeParser.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/codeParser.ts"
+                },
+                {
+                  "id": "extension/src/dependency/graphBuilder.ts",
+                  "name": "graphBuilder.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/graphBuilder.ts"
+                },
+                {
+                  "id": "extension/src/dependency/graphCombinerService.ts",
+                  "name": "graphCombinerService.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/graphCombinerService.ts"
+                },
+                {
+                  "id": "extension/src/dependency/pathResolver.ts",
+                  "name": "pathResolver.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/pathResolver.ts"
+                }
+              ]
+            },
+            {
+              "id": "extension/src/webview",
+              "name": "webview",
+              "type": "folder",
+              "filePath": "extension/src/webview",
+              "children": [
+                {
+                  "id": "extension/src/webview/htmlGenerator.ts",
+                  "name": "htmlGenerator.ts",
+                  "type": "file",
+                  "filePath": "extension/src/webview/htmlGenerator.ts"
+                },
+                {
+                  "id": "extension/src/webview/messageHandlers.ts",
+                  "name": "messageHandlers.ts",
+                  "type": "file",
+                  "filePath": "extension/src/webview/messageHandlers.ts"
+                }
+              ]
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts",
+              "name": "bobRefactoringService.ts",
+              "type": "file",
+              "filePath": "extension/src/bobRefactoringService.ts"
+            },
+            {
+              "id": "extension/src/bobService.ts",
+              "name": "bobService.ts",
+              "type": "file",
+              "filePath": "extension/src/bobService.ts"
+            },
+            {
+              "id": "extension/src/dependencyService.ts",
+              "name": "dependencyService.ts",
+              "type": "file",
+              "filePath": "extension/src/dependencyService.ts"
+            },
+            {
+              "id": "extension/src/extension.ts",
+              "name": "extension.ts",
+              "type": "file",
+              "filePath": "extension/src/extension.ts"
+            },
+            {
+              "id": "extension/src/fileSystemService.ts",
+              "name": "fileSystemService.ts",
+              "type": "file",
+              "filePath": "extension/src/fileSystemService.ts"
+            },
+            {
+              "id": "extension/src/refactoringService.ts",
+              "name": "refactoringService.ts",
+              "type": "file",
+              "filePath": "extension/src/refactoringService.ts"
+            },
+            {
+              "id": "extension/src/types.ts",
+              "name": "types.ts",
+              "type": "file",
+              "filePath": "extension/src/types.ts"
+            },
+            {
+              "id": "extension/src/unifiedGraphService.ts",
+              "name": "unifiedGraphService.ts",
+              "type": "file",
+              "filePath": "extension/src/unifiedGraphService.ts"
+            },
+            {
+              "id": "extension/src/webviewProvider.ts",
+              "name": "webviewProvider.ts",
+              "type": "file",
+              "filePath": "extension/src/webviewProvider.ts"
+            }
+          ]
+        },
+        {
+          "id": "extension/webview-dist",
+          "name": "webview-dist",
+          "type": "folder",
+          "filePath": "extension/webview-dist",
+          "children": [
+            {
+              "id": "extension/webview-dist/assets",
+              "name": "assets",
+              "type": "folder",
+              "filePath": "extension/webview-dist/assets",
+              "children": [
+                {
+                  "id": "extension/webview-dist/assets/index.css",
+                  "name": "index.css",
+                  "type": "file",
+                  "filePath": "extension/webview-dist/assets/index.css"
+                },
+                {
+                  "id": "extension/webview-dist/assets/index.js",
+                  "name": "index.js",
+                  "type": "file",
+                  "filePath": "extension/webview-dist/assets/index.js"
+                }
+              ]
+            },
+            {
+              "id": "extension/webview-dist/index.html",
+              "name": "index.html",
+              "type": "file",
+              "filePath": "extension/webview-dist/index.html"
+            }
+          ]
+        },
+        {
+          "id": "extension/package-lock.json",
+          "name": "package-lock.json",
+          "type": "file",
+          "filePath": "extension/package-lock.json"
+        },
+        {
+          "id": "extension/package.json",
+          "name": "package.json",
+          "type": "file",
+          "filePath": "extension/package.json"
+        },
+        {
+          "id": "extension/README.md",
+          "name": "README.md",
+          "type": "file",
+          "filePath": "extension/README.md"
+        },
+        {
+          "id": "extension/tsconfig.json",
+          "name": "tsconfig.json",
+          "type": "file",
+          "filePath": "extension/tsconfig.json"
+        }
+      ]
+    },
+    {
+      "id": "test-files",
+      "name": "test-files",
+      "type": "folder",
+      "filePath": "test-files",
+      "children": [
+        {
+          "id": "test-files/base.css",
+          "name": "base.css",
+          "type": "file",
+          "filePath": "test-files/base.css"
+        },
+        {
+          "id": "test-files/colors.css",
+          "name": "colors.css",
+          "type": "file",
+          "filePath": "test-files/colors.css"
+        },
+        {
+          "id": "test-files/index.html",
+          "name": "index.html",
+          "type": "file",
+          "filePath": "test-files/index.html"
+        },
+        {
+          "id": "test-files/main.js",
+          "name": "main.js",
+          "type": "file",
+          "filePath": "test-files/main.js"
+        },
+        {
+          "id": "test-files/styles.css",
+          "name": "styles.css",
+          "type": "file",
+          "filePath": "test-files/styles.css"
+        },
+        {
+          "id": "test-files/test-integration.js",
+          "name": "test-integration.js",
+          "type": "file",
+          "filePath": "test-files/test-integration.js"
+        },
+        {
+          "id": "test-files/test-parser.js",
+          "name": "test-parser.js",
+          "type": "file",
+          "filePath": "test-files/test-parser.js"
+        }
+      ]
+    },
+    {
+      "id": "webview",
+      "name": "webview",
+      "type": "folder",
+      "filePath": "webview",
+      "children": [
+        {
+          "id": "webview/src",
+          "name": "src",
+          "type": "folder",
+          "filePath": "webview/src",
+          "children": [
+            {
+              "id": "webview/src/components",
+              "name": "components",
+              "type": "folder",
+              "filePath": "webview/src/components",
+              "children": [
+                {
+                  "id": "webview/src/components/ChatPanel.tsx",
+                  "name": "ChatPanel.tsx",
+                  "type": "file",
+                  "filePath": "webview/src/components/ChatPanel.tsx"
+                },
+                {
+                  "id": "webview/src/components/FileTree.tsx",
+                  "name": "FileTree.tsx",
+                  "type": "file",
+                  "filePath": "webview/src/components/FileTree.tsx"
+                }
+              ]
+            },
+            {
+              "id": "webview/src/types",
+              "name": "types",
+              "type": "folder",
+              "filePath": "webview/src/types",
+              "children": [
+                {
+                  "id": "webview/src/types/index.ts",
+                  "name": "index.ts",
+                  "type": "file",
+                  "filePath": "webview/src/types/index.ts"
+                }
+              ]
+            },
+            {
+              "id": "webview/src/utils",
+              "name": "utils",
+              "type": "folder",
+              "filePath": "webview/src/utils",
+              "children": [
+                {
+                  "id": "webview/src/utils/graphLayout.ts",
+                  "name": "graphLayout.ts",
+                  "type": "file",
+                  "filePath": "webview/src/utils/graphLayout.ts"
+                }
+              ]
+            },
+            {
+              "id": "webview/src/App.tsx",
+              "name": "App.tsx",
+              "type": "file",
+              "filePath": "webview/src/App.tsx"
+            },
+            {
+              "id": "webview/src/index.css",
+              "name": "index.css",
+              "type": "file",
+              "filePath": "webview/src/index.css"
+            },
+            {
+              "id": "webview/src/main.tsx",
+              "name": "main.tsx",
+              "type": "file",
+              "filePath": "webview/src/main.tsx"
+            },
+            {
+              "id": "webview/src/vscode.d.ts",
+              "name": "vscode.d.ts",
+              "type": "file",
+              "filePath": "webview/src/vscode.d.ts"
+            }
+          ]
+        },
+        {
+          "id": "webview/index.html",
+          "name": "index.html",
+          "type": "file",
+          "filePath": "webview/index.html"
+        },
+        {
+          "id": "webview/package-lock.json",
+          "name": "package-lock.json",
+          "type": "file",
+          "filePath": "webview/package-lock.json"
+        },
+        {
+          "id": "webview/package.json",
+          "name": "package.json",
+          "type": "file",
+          "filePath": "webview/package.json"
+        },
+        {
+          "id": "webview/tsconfig.json",
+          "name": "tsconfig.json",
+          "type": "file",
+          "filePath": "webview/tsconfig.json"
+        },
+        {
+          "id": "webview/tsconfig.node.json",
+          "name": "tsconfig.node.json",
+          "type": "file",
+          "filePath": "webview/tsconfig.node.json"
+        },
+        {
+          "id": "webview/vite.config.ts",
+          "name": "vite.config.ts",
+          "type": "file",
+          "filePath": "webview/vite.config.ts"
+        }
+      ]
+    },
+    {
+      "id": "DEBUGGING_GUIDE_TEST.md",
+      "name": "DEBUGGING_GUIDE_TEST.md",
+      "type": "file",
+      "filePath": "DEBUGGING_GUIDE_TEST.md"
+    },
+    {
+      "id": "DEBUGGING_GUIDE.md",
+      "name": "DEBUGGING_GUIDE.md",
+      "type": "file",
+      "filePath": "DEBUGGING_GUIDE.md"
+    },
+    {
+      "id": "DEPENDENCY_IMPROVEMENTS.md",
+      "name": "DEPENDENCY_IMPROVEMENTS.md",
+      "type": "file",
+      "filePath": "DEPENDENCY_IMPROVEMENTS.md"
+    },
+    {
+      "id": "Makefile",
+      "name": "Makefile",
+      "type": "file",
+      "filePath": "Makefile"
+    },
+    {
+      "id": "PHASED_ANALYSIS_GUIDE.md",
+      "name": "PHASED_ANALYSIS_GUIDE.md",
+      "type": "file",
+      "filePath": "PHASED_ANALYSIS_GUIDE.md"
+    },
+    {
+      "id": "README.md",
+      "name": "README.md",
+      "type": "file",
+      "filePath": "README.md"
+    },
+    {
+      "id": "REFACTORING_GUIDE.md",
+      "name": "REFACTORING_GUIDE.md",
+      "type": "file",
+      "filePath": "REFACTORING_GUIDE.md"
+    },
+    {
+      "id": "REFACTORING_SUMMARY.md",
+      "name": "REFACTORING_SUMMARY.md",
+      "type": "file",
+      "filePath": "REFACTORING_SUMMARY.md"
+    },
+    {
+      "id": "setup-extension.sh",
+      "name": "setup-extension.sh",
+      "type": "file",
+      "filePath": "setup-extension.sh"
+    }
+  ],
+  "edges": []
+}
