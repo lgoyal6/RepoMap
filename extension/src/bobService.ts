@@ -62,7 +62,7 @@ export class BobService {
 
   async checkBobAvailable(): Promise<boolean> {
     try {
-      await execAsync('which bob', { timeout: 5000 });
+      await execAsync('bob --v', { timeout: 15000 });
       return true;
     } catch {
       return false;

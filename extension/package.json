@@ -35,7 +35,7 @@
     "vscode:prepublish": "npm run compile && npm run copy:webview",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "copy:webview": "mkdir -p webview-dist && cp -r ../webview/dist/* webview-dist/",
+    "copy:webview": "shx mkdir -p webview-dist && shx cp -r ../webview/dist/* ./webview-dist/", 
     "build:all": "npm run compile && cd ../webview && npm run build && cd ../extension && npm run copy:webview",
     "package": "npm run build:all && vsce package"
   },
@@ -43,7 +43,8 @@
     "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^2.22.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "shx": "^0.3.4"
   },
   "dependencies": {}
 }
