@@ -41,11 +41,33 @@ const EXT_COLORS: Record<string, string> = {
   '.json': '#6b7280', '.yaml': '#6b7280', '.yml': '#6b7280', '.java': '#f44336',
   '.kt': '#7c4dff', '.cs': '#68217a', '.rb': '#cc342d', '.php': '#777bb4',
   '.swift': '#fa7343', '.cpp': '#00599c', '.c': '#a8b9cc', '.h': '#a8b9cc',
+  '.css': '#264de4', '.scss': '#cd6799', '.html': '#e34c26', '.vue': '#42b883',
+  '.sql': '#e38c00', '.sh': '#89e051', '.bash': '#89e051',
+};
+
+const EXT_LABELS: Record<string, string> = {
+  '.ts': 'TS', '.tsx': 'TSX', '.js': 'JS', '.jsx': 'JSX',
+  '.py': 'PY', '.go': 'GO', '.rs': 'RS', '.md': 'MD',
+  '.json': 'JSON', '.yaml': 'YAML', '.yml': 'YML', '.java': 'JAVA',
+  '.kt': 'KT', '.cs': 'C#', '.rb': 'RB', '.php': 'PHP',
+  '.swift': 'SW', '.cpp': 'C++', '.c': 'C', '.h': 'H',
+  '.css': 'CSS', '.scss': 'SCSS', '.html': 'HTML', '.vue': 'VUE',
+  '.sql': 'SQL', '.sh': 'SH', '.bash': 'BASH',
 };
 
 function getColor(name: string): string {
   const ext = '.' + name.split('.').pop();
   return EXT_COLORS[ext] || '#6b7280';
+}
+
+function getExtLabel(name: string): string | null {
+  const ext = '.' + name.split('.').pop();
+  return EXT_LABELS[ext] || null;
+}
+
+// Darken a hex color to use as a subtle background tint
+function tintBg(hex: string, opacity: number = 0.12): string {
+  return hex + Math.round(opacity * 255).toString(16).padStart(2, '0');
 }
 
 // ===== FILE TREE SIDEBAR =====
@@ -87,6 +109,91 @@ function TreeNode({ node, depth, selectedFile, onSelect }: {
       style={{ padding: '4px 8px', paddingLeft: 20 + depth * 16, cursor: 'pointer', fontSize: 12, color: getColor(node.name), background: isSelected ? 'rgba(99,102,241,0.15)' : 'transparent', borderLeft: isSelected ? '2px solid #6366f1' : '2px solid transparent' }}>
       {node.name}
     </div>
+  );
+}
+
+// ===== GRAPH NODE COMPONENT =====
+function GraphNode({ x, y, width, height, name, nodeType, color, fillColor, isSelected, isHovered, isDimmed, opacity: opacityProp, strokeColor, onClick, onContextMenu, onMouseEnter, onMouseLeave, showExpandArrow, isExpanded, badge, subtitle, animate }: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  name: string;
+  nodeType: 'directory' | 'file' | 'function' | 'folder';
+  color: string;
+  fillColor: string;
+  isSelected?: boolean;
+  isHovered?: boolean;
+  isDimmed?: boolean;
+  opacity?: number;
+  strokeColor?: string;
+  onClick?: (e: React.MouseEvent) => void;
+  onContextMenu?: (e: React.MouseEvent) => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  showExpandArrow?: boolean;
+  isExpanded?: boolean;
+  badge?: string | null;
+  subtitle?: string | null;
+  animate?: boolean;
+}) {
+  const finalOpacity = isDimmed ? 0.2 : (opacityProp ?? 1);
+  const finalStroke = isSelected ? '#818cf8' : isHovered ? '#6366f1' : (strokeColor || '#1f2937');
+  const finalStrokeWidth = isSelected || isHovered ? 2 : 1;
+  const maxChars = nodeType === 'folder' ? 20 : nodeType === 'file' ? 14 : 12;
+  const truncated = name.length > maxChars ? name.slice(0, maxChars - 2) + '..' : name;
+  const fontSize = nodeType === 'function' ? 9 : nodeType === 'folder' ? 11 : 10;
+  const isFile = nodeType === 'file';
+  const rx = nodeType === 'function' ? 4 : 8;
+
+  // Color accent bar on left for files
+  const accentWidth = 3;
+
+  return (
+    <g onClick={onClick} onContextMenu={onContextMenu}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+      style={{ cursor: 'pointer' }}
+      opacity={finalOpacity}>
+      {/* Main rect */}
+      <rect x={x - width/2} y={y - height/2} width={width} height={height} rx={rx}
+        fill={fillColor}
+        stroke={finalStroke}
+        strokeWidth={finalStrokeWidth}
+        style={animate ? { animation: 'pulse 2s infinite' } : {}} />
+      {/* Color accent bar for files */}
+      {isFile && (
+        <rect x={x - width/2} y={y - height/2 + rx} width={accentWidth} height={height - rx * 2}
+          fill={color} rx={1} />
+      )}
+      {/* Language badge for files */}
+      {isFile && badge && (
+        <>
+          <rect x={x + width/2 - 24} y={y - height/2 + 4} width={20} height={12} rx={3}
+            fill={tintBg(color, 0.25)} />
+          <text x={x + width/2 - 14} y={y - height/2 + 13} textAnchor="middle"
+            fontSize={7} fill={color} fontFamily="JetBrains Mono" fontWeight={600}>
+            {badge}
+          </text>
+        </>
+      )}
+      {/* Label */}
+      <text x={x} y={y + (subtitle ? -1 : 4)} textAnchor="middle"
+        fontSize={fontSize} fill={color} fontFamily="JetBrains Mono" fontWeight={isFile ? 500 : 400}>
+        {truncated}
+      </text>
+      {/* Subtitle (line number for functions) */}
+      {subtitle && (
+        <text x={x} y={y + 12} textAnchor="middle" fontSize={7} fill="#6b7280">
+          {subtitle}
+        </text>
+      )}
+      {/* Expand arrow */}
+      {showExpandArrow && (
+        <text x={x + width/2 - 10} y={y + 4} fontSize={8} fill="#818cf8">
+          {isExpanded ? '▼' : '▶'}
+        </text>
+      )}
+    </g>
   );
 }
 
@@ -135,7 +242,7 @@ function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFil
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.target === svgRef.current || (e.target as SVGElement).tagName === 'line') {
+    if (e.target === svgRef.current || (e.target as SVGElement).tagName === 'line' || (e.target as SVGElement).tagName === 'path') {
       setDragging(true);
       dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
     }
@@ -153,29 +260,49 @@ function GraphView({ tree, selectedFile, onSelectNode, explanations, modifiedFil
       <svg ref={svgRef} width="100%" height="100%"
         onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
         style={{ cursor: dragging ? 'grabbing' : 'grab' }}>
+        <defs>
+          <marker id="arrow-tree" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2d3748" strokeWidth={1} />
+          </marker>
+        </defs>
         <g transform={`translate(${pan.x},${pan.y}) scale(${zoom})`}>
-          {edges.map((e, i) => <line key={i} x1={e.fromX} y1={e.fromY + 20} x2={e.toX} y2={e.toY - 20} stroke="#1f2937" strokeWidth={1} />)}
+          {edges.map((e, i) => {
+            const fromH = 20;
+            const toH = 16;
+            const x1 = e.fromX;
+            const y1 = e.fromY + fromH;
+            const x2 = e.toX;
+            const y2 = e.toY - toH;
+            const midY = (y1 + y2) / 2;
+            return (
+              <path key={i}
+                d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
+                stroke="#2d3748" strokeWidth={1.5} fill="none"
+                markerEnd="url(#arrow-tree)" />
+            );
+          })}
           {nodes.map(n => {
             const isDir = n.type === 'directory';
             const isSelected = selectedFile === n.path;
-            const hasExplanation = explanations[n.path];
+            const hasExplanation = !!explanations[n.path];
             const isModified = modifiedFiles.has(n.path);
             const w = isDir ? 140 : 120;
             const h = isDir ? 40 : 32;
-            const color = isDir ? '#312e81' : getColor(n.name);
+            const color = isDir ? '#818cf8' : getColor(n.name);
 
             return (
-              <g key={n.id} onClick={() => onSelectNode(n)} onContextMenu={(e) => onContextMenu(e, n)}
-                style={{ cursor: 'pointer' }}>
-                <rect x={n.x - w/2} y={n.y - h/2} width={w} height={h} rx={8}
-                  fill={isDir ? '#1e1b4b' : '#111827'}
-                  stroke={isSelected ? '#6366f1' : isModified ? '#10b981' : hasExplanation ? '#6366f180' : '#1f2937'}
-                  strokeWidth={isSelected ? 2 : 1}
-                  style={hasExplanation && !isSelected ? { animation: 'pulse 2s infinite' } : {}} />
-                <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize={10} fill={isDir ? '#818cf8' : color} fontFamily="JetBrains Mono">
-                  {n.name.length > 16 ? n.name.slice(0, 14) + '..' : n.name}
-                </text>
-              </g>
+              <GraphNode key={n.id}
+                x={n.x} y={n.y} width={w} height={h}
+                name={n.name} nodeType={isDir ? 'directory' : 'file'}
+                color={color}
+                fillColor={isDir ? '#1e1b4b' : tintBg(color, 0.08)}
+                isSelected={isSelected}
+                strokeColor={isModified ? '#10b981' : hasExplanation ? '#6366f180' : '#1f2937'}
+                onClick={() => onSelectNode(n)}
+                onContextMenu={(e) => onContextMenu(e, n)}
+                badge={!isDir ? getExtLabel(n.name) : null}
+                animate={hasExplanation && !isSelected}
+              />
             );
           })}
         </g>
@@ -300,33 +427,55 @@ function DependencyGraphView({ graph, onNodeClick }: {
 
   const connectedNodes = hoveredNode ? getConnectedNodes(hoveredNode) : new Set<string>();
 
-  // Render edges with curves
+  // Get node dimensions for arrow endpoint calculation
+  const getNodeSize = (nodeId: string): { w: number; h: number } => {
+    const node = graph.nodes.find(n => n.id === nodeId);
+    if (!node) return { w: 100, h: 30 };
+    if (node.type === 'folder') return { w: 180, h: 50 };
+    if (node.type === 'file') return { w: 130, h: 38 };
+    return { w: 100, h: 24 };
+  };
+
+  // Render edges with curves — arrows always visible
   const renderEdge = (edge: DependencyEdge, i: number) => {
     const fromPos = positions.get(edge.from);
     const toPos = positions.get(edge.to);
     if (!fromPos || !toPos) return null;
 
     const isDimmed = hoveredNode && !connectedNodes.has(edge.from) && !connectedNodes.has(edge.to);
+    const isHighlighted = hoveredNode && (connectedNodes.has(edge.from) && connectedNodes.has(edge.to));
     const isImport = edge.type === 'imports';
-    const color = isImport ? '#4b5563' : '#6366f1';
-    const opacity = isDimmed ? 0.1 : (isImport ? 0.3 : 0.6);
+    const color = isImport ? '#4b5563' : '#818cf8';
+    const opacity = isDimmed ? 0.05 : isHighlighted ? 0.9 : (isImport ? 0.4 : 0.6);
 
-    // Curved path
+    // Calculate edge endpoints at node borders instead of centers
+    const fromSize = getNodeSize(edge.from);
+    const toSize = getNodeSize(edge.to);
     const dx = toPos.x - fromPos.x;
     const dy = toPos.y - fromPos.y;
-    const curve = Math.min(Math.abs(dx) * 0.3, 50);
-    const path = `M ${fromPos.x} ${fromPos.y} Q ${fromPos.x + dx/2} ${fromPos.y - curve}, ${toPos.x} ${toPos.y}`;
+    const angle = Math.atan2(dy, dx);
+
+    // Offset from center to border
+    const fromX = fromPos.x + Math.cos(angle) * (fromSize.w / 2);
+    const fromY = fromPos.y + Math.sin(angle) * (fromSize.h / 2);
+    const toX = toPos.x - Math.cos(angle) * (toSize.w / 2 + 6);
+    const toY = toPos.y - Math.sin(angle) * (toSize.h / 2 + 6);
+
+    const midX = (fromX + toX) / 2;
+    const midY = (fromY + toY) / 2;
+    const curve = Math.min(Math.abs(dx) * 0.25, 40);
+    const path = `M ${fromX} ${fromY} Q ${midX} ${midY - curve}, ${toX} ${toY}`;
 
     return (
       <g key={i}>
-        <path d={path} stroke={color} strokeWidth={isImport ? 1 : 2} fill="none" 
-          strokeDasharray={isImport ? '4,4' : 'none'} opacity={opacity}
+        <path d={path} stroke={color} strokeWidth={isImport ? 1.5 : 2} fill="none"
+          strokeDasharray={isImport ? '6,4' : 'none'} opacity={opacity}
           markerEnd={`url(#arrow-${isImport ? 'import' : 'call'})`} />
       </g>
     );
   };
 
-  // Render node
+  // Render node using GraphNode component
   const renderNode = (node: DependencyNode) => {
     const pos = positions.get(node.id);
     if (!pos) return null;
@@ -336,30 +485,26 @@ function DependencyGraphView({ graph, onNodeClick }: {
     const isFunction = node.type === 'function';
     const isExpanded = expandedNodes.has(node.id);
     const isHovered = hoveredNode === node.id;
-    const isDimmed = hoveredNode && !connectedNodes.has(node.id);
+    const isDimmed = !!(hoveredNode && !connectedNodes.has(node.id));
 
     let width = 100;
-    let height = 30;
-    let color = '#6b7280';
+    let height = 24;
+    let color = '#818cf8';
+    let fillColor = '#0a0a1a';
 
     if (isFolder) {
-      width = 180;
-      height = 50;
-      color = '#312e81';
+      width = 180; height = 50; color = '#818cf8'; fillColor = '#1e1b4b';
     } else if (isFile) {
-      width = 120;
-      height = 35;
-      color = getColor(node.name);
-    } else if (isFunction) {
-      width = 100;
-      height = 22;
-      color = '#818cf8';
+      width = 130; height = 38; color = getColor(node.name); fillColor = tintBg(color, 0.08);
     }
 
-    const opacity = isDimmed ? 0.2 : 1;
-
     return (
-      <g key={node.id} 
+      <GraphNode key={node.id}
+        x={pos.x} y={pos.y} width={width} height={height}
+        name={node.name}
+        nodeType={isFolder ? 'folder' : isFile ? 'file' : 'function'}
+        color={color} fillColor={fillColor}
+        isHovered={isHovered} isDimmed={isDimmed}
         onClick={(e) => {
           e.stopPropagation();
           if (isFile && node.children && node.children.length > 0) {
@@ -370,32 +515,11 @@ function DependencyGraphView({ graph, onNodeClick }: {
         }}
         onMouseEnter={() => setHoveredNode(node.id)}
         onMouseLeave={() => setHoveredNode(null)}
-        style={{ cursor: 'pointer' }}>
-        <rect x={pos.x - width/2} y={pos.y - height/2} width={width} height={height} rx={6}
-          fill={isFolder ? '#1e1b4b' : isFile ? '#111827' : '#0a0a1a'}
-          stroke={isHovered ? '#6366f1' : color}
-          strokeWidth={isHovered ? 2 : 1}
-          opacity={opacity} />
-        <text x={pos.x} y={pos.y + 4} textAnchor="middle" 
-          fontSize={isFunction ? 9 : 11} 
-          fill={color} 
-          fontFamily="JetBrains Mono"
-          opacity={opacity}>
-          {node.name.length > (isFolder ? 20 : isFile ? 14 : 12) 
-            ? node.name.slice(0, (isFolder ? 18 : isFile ? 12 : 10)) + '..' 
-            : node.name}
-        </text>
-        {isFile && node.children && node.children.length > 0 && (
-          <text x={pos.x + width/2 - 8} y={pos.y + 4} fontSize={8} fill="#818cf8" opacity={opacity}>
-            {isExpanded ? '▼' : '▶'}
-          </text>
-        )}
-        {isFunction && node.line && (
-          <text x={pos.x} y={pos.y + 14} textAnchor="middle" fontSize={7} fill="#6b7280" opacity={opacity}>
-            L{node.line}
-          </text>
-        )}
-      </g>
+        showExpandArrow={isFile && !!(node.children && node.children.length > 0)}
+        isExpanded={isExpanded}
+        badge={isFile ? getExtLabel(node.name) : null}
+        subtitle={isFunction && node.line ? `L${node.line}` : null}
+      />
     );
   };
 
@@ -404,24 +528,27 @@ function DependencyGraphView({ graph, onNodeClick }: {
       <p style={{ position: 'absolute', bottom: 12, right: 16, fontSize: 11, color: '#4b5563', zIndex: 10 }}>
         scroll to zoom · drag to pan · click file to expand functions · hover to highlight connections
       </p>
-      <div style={{ position: 'absolute', top: 12, left: 12, background: '#111827', border: '1px solid #1f2937', borderRadius: 8, padding: 12, fontSize: 11, color: '#9ca3af', zIndex: 10 }}>
-        <div style={{ marginBottom: 6 }}>
-          <span style={{ color: '#4b5563' }}>━━</span> imports (dashed)
+      <div style={{ position: 'absolute', top: 12, left: 12, background: '#111827ee', border: '1px solid #1f2937', borderRadius: 8, padding: 12, fontSize: 11, color: '#9ca3af', zIndex: 10 }}>
+        <div style={{ fontWeight: 600, color: '#e5e7eb', marginBottom: 8, fontSize: 10, textTransform: 'uppercase', letterSpacing: 1 }}>Legend</div>
+        <div style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="#4b5563" strokeWidth={1.5} strokeDasharray="4,3" /></svg>
+          <span>imports</span>
         </div>
-        <div>
-          <span style={{ color: '#6366f1' }}>━━</span> calls (solid)
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="#818cf8" strokeWidth={2} /><polygon points="18,1 24,4 18,7" fill="#818cf8" /></svg>
+          <span>calls</span>
         </div>
       </div>
       <svg ref={svgRef} width="100%" height="100%"
-        onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} 
+        onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
         style={{ cursor: dragging ? 'grabbing' : 'grab' }}>
         <defs>
-          <marker id="arrow-import" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L0,6 L6,3 z" fill="#4b5563" />
+          <marker id="arrow-import" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1,1 L9,4 L1,7" fill="none" stroke="#4b5563" strokeWidth={1.5} />
           </marker>
-          <marker id="arrow-call" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L0,6 L6,3 z" fill="#6366f1" />
+          <marker id="arrow-call" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1,1 L9,4 L1,7 Z" fill="#818cf8" />
           </marker>
         </defs>
         <g transform={`translate(${pan.x},${pan.y}) scale(${zoom})`}>
@@ -457,9 +584,10 @@ function DependencyGraphView({ graph, onNodeClick }: {
 }
 
 // ===== CHAT PANEL =====
-function ChatPanel({ selectedFile, onFileApplied }: {
+function ChatPanel({ selectedFile, onFileApplied, onClose }: {
   selectedFile: string | null;
   onFileApplied: (path: string) => void;
+  onClose?: () => void;
 }) {
   const [messages, setMessages] = useState<BobMessage[]>([]);
   const [input, setInput] = useState('');
@@ -534,6 +662,29 @@ function ChatPanel({ selectedFile, onFileApplied }: {
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* Chat header with file name and close button */}
+      <div style={{ display: 'flex', alignItems: 'center', padding: '10px 16px', borderBottom: '1px solid #1f2937', background: '#0d0d1a', flexShrink: 0 }}>
+        <div style={{ flex: 1 }}>
+          {selectedFile ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: getColor(selectedFile.split('/').pop() || ''), flexShrink: 0 }} />
+              <span style={{ fontSize: 12, color: '#e5e7eb', fontWeight: 500 }}>{selectedFile.split('/').pop()}</span>
+              <span style={{ fontSize: 10, color: '#6b7280' }}>{selectedFile}</span>
+            </div>
+          ) : (
+            <span style={{ fontSize: 12, color: '#6b7280' }}>No file selected</span>
+          )}
+        </div>
+        {onClose && (
+          <button onClick={onClose}
+            style={{ background: 'none', border: '1px solid #1f2937', borderRadius: 6, color: '#9ca3af', cursor: 'pointer', padding: '4px 8px', fontSize: 14, lineHeight: 1, fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            onMouseEnter={e => { (e.target as HTMLButtonElement).style.color = '#e5e7eb'; (e.target as HTMLButtonElement).style.borderColor = '#4b5563'; }}
+            onMouseLeave={e => { (e.target as HTMLButtonElement).style.color = '#9ca3af'; (e.target as HTMLButtonElement).style.borderColor = '#1f2937'; }}>
+            ✕
+          </button>
+        )}
+      </div>
+
       <div style={{ flex: 1, overflowY: 'auto', padding: 20 }}>
         {messages.map((m, i) => (
           <MessageBubble key={i} message={m} onApply={applyCode} />
@@ -851,22 +1002,22 @@ export default function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       {/* Navbar */}
-      <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 48, borderBottom: '1px solid #1f2937', background: '#0a0a1a', gap: 16, flexShrink: 0 }}>
-        <span style={{ fontWeight: 700, color: '#fff', fontSize: 14 }}>repomap</span>
-        <span style={{ color: '#6b7280', fontSize: 12 }}>{workspaceName}</span>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 44, borderBottom: '1px solid #1f2937', background: '#0d0d1a', gap: 12, flexShrink: 0 }}>
+        <span style={{ fontWeight: 700, color: '#818cf8', fontSize: 13, letterSpacing: 0.5 }}>BOB</span>
+        <span style={{ color: '#374151', fontSize: 13 }}>|</span>
+        <span style={{ color: '#6b7280', fontSize: 11 }}>{workspaceName}</span>
         <div style={{ flex: 1 }} />
-        <button onClick={() => setActiveTab('graph')}
-          style={{ padding: '6px 14px', background: activeTab === 'graph' ? '#312e81' : 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: activeTab === 'graph' ? '#818cf8' : '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
-          Graph
-        </button>
-        <button onClick={() => setActiveTab('dependencies')}
-          style={{ padding: '6px 14px', background: activeTab === 'dependencies' ? '#312e81' : 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: activeTab === 'dependencies' ? '#818cf8' : '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
-          Dependencies
-        </button>
-        <button onClick={() => setActiveTab('chat')}
-          style={{ padding: '6px 14px', background: activeTab === 'chat' ? '#312e81' : 'transparent', border: '1px solid #1f2937', borderRadius: 6, color: activeTab === 'chat' ? '#818cf8' : '#9ca3af', fontFamily: 'inherit', fontSize: 12, cursor: 'pointer' }}>
-          Chat with Bob
-        </button>
+        {(['graph', 'dependencies', 'chat'] as const).map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)}
+            style={{
+              padding: '5px 14px', border: 'none', borderRadius: 6, fontFamily: 'inherit', fontSize: 11, cursor: 'pointer', fontWeight: 500, letterSpacing: 0.3, transition: 'all 0.15s',
+              background: activeTab === tab ? '#312e81' : 'transparent',
+              color: activeTab === tab ? '#a5b4fc' : '#6b7280',
+              borderBottom: activeTab === tab ? '2px solid #818cf8' : '2px solid transparent',
+            }}>
+            {tab === 'graph' ? 'Graph' : tab === 'dependencies' ? 'Dependencies' : 'Chat with Bob'}
+          </button>
+        ))}
       </div>
 
       {/* Body */}
@@ -881,15 +1032,23 @@ export default function App() {
 
               {/* Explanation card */}
               {selectedFile && explanations[selectedFile] && (
-                <div style={{ position: 'absolute', bottom: 20, left: 20, background: '#111827', border: '1px solid #1f2937', borderRadius: 12, padding: 16, maxWidth: 360, zIndex: 10 }}>
-                  <p style={{ fontSize: 12, color: getColor(selectedFile.split('/').pop() || ''), marginBottom: 4, fontWeight: 600 }}>
-                    {selectedFile.split('/').pop()}
-                  </p>
-                  <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 8 }}>{selectedFile}</p>
-                  <p style={{ fontSize: 12, color: '#e5e7eb', lineHeight: 1.5 }}>{explanations[selectedFile]}</p>
+                <div style={{ position: 'absolute', bottom: 20, left: 20, background: '#111827ee', border: '1px solid #1f2937', borderRadius: 10, padding: 16, maxWidth: 360, zIndex: 10, backdropFilter: 'blur(8px)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: getColor(selectedFile.split('/').pop() || ''), flexShrink: 0 }} />
+                    <p style={{ fontSize: 12, color: '#e5e7eb', fontWeight: 600, margin: 0 }}>
+                      {selectedFile.split('/').pop()}
+                    </p>
+                    {getExtLabel(selectedFile.split('/').pop() || '') && (
+                      <span style={{ fontSize: 9, color: getColor(selectedFile.split('/').pop() || ''), background: tintBg(getColor(selectedFile.split('/').pop() || ''), 0.2), padding: '1px 5px', borderRadius: 3, fontWeight: 600 }}>
+                        {getExtLabel(selectedFile.split('/').pop() || '')}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ fontSize: 10, color: '#4b5563', marginBottom: 8 }}>{selectedFile}</p>
+                  <p style={{ fontSize: 12, color: '#d1d5db', lineHeight: 1.6 }}>{explanations[selectedFile]}</p>
                   <button onClick={() => { setActiveTab('chat'); }}
-                    style={{ marginTop: 10, padding: '6px 12px', background: '#312e81', border: 'none', borderRadius: 6, color: '#818cf8', fontSize: 11, fontFamily: 'inherit', cursor: 'pointer' }}>
-                    Talk with Bob about this file
+                    style={{ marginTop: 10, padding: '6px 14px', background: '#312e81', border: 'none', borderRadius: 6, color: '#a5b4fc', fontSize: 11, fontFamily: 'inherit', cursor: 'pointer', fontWeight: 500 }}>
+                    Talk with Bob →
                   </button>
                 </div>
               )}
@@ -903,7 +1062,7 @@ export default function App() {
           ) : activeTab === 'dependencies' ? (
             <DependencyGraphView graph={dependencyGraph} onNodeClick={handleDependencyNodeClick} />
           ) : (
-            <ChatPanel selectedFile={selectedFile} onFileApplied={handleFileApplied} />
+            <ChatPanel selectedFile={selectedFile} onFileApplied={handleFileApplied} onClose={() => setActiveTab('graph')} />
           )}
         </div>
       </div>
