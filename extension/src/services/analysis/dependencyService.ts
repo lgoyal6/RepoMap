@@ -48,6 +48,11 @@ export class DependencyService {
     this.cacheFilePath = path.join(this.workspaceRoot, '.bob', 'dependency-graph.json');
   }
 
+  private isPathWithinWorkspace(filePath: string): boolean {
+    const absolutePath = path.resolve(this.workspaceRoot, filePath);
+    return absolutePath.startsWith(this.workspaceRoot);
+  }
+
   async loadCachedGraph(): Promise<DependencyGraph | null> {
     try {
       if (fs.existsSync(this.cacheFilePath)) {
