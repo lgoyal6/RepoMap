@@ -1,0 +1,49 @@
+{
+  "name": "repomap-vscode",
+  "displayName": "Repomap - AI Codebase Visualizer",
+  "description": "AI-powered codebase visualization and editing tool powered by IBM Bob",
+  "version": "1.0.0",
+  "publisher": "primates",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "codebase",
+    "visualization",
+    "ai",
+    "ibm bob",
+    "graph"
+  ],
+  "activationEvents": [
+    "onCommand:repomap.openPanel"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "repomap.openPanel",
+        "title": "Open Repomap",
+        "category": "Repomap"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile && npm run copy:webview",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "copy:webview": "mkdir -p webview-dist && cp -r ../webview/dist/* webview-dist/",
+    "build:all": "npm run compile && cd ../webview && npm run build && cd ../extension && npm run copy:webview",
+    "package": "npm run build:all && vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {}
+}
