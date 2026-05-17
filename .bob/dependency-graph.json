@@ -1,0 +1,1467 @@
+{
+  "nodes": [
+    {
+      "id": ".bob",
+      "name": ".bob",
+      "type": "folder",
+      "filePath": ".bob",
+      "children": [
+        {
+          "id": ".bob/analysis",
+          "name": "analysis",
+          "type": "folder",
+          "filePath": ".bob/analysis",
+          "children": [
+            {
+              "id": ".bob/analysis/file-imports.json",
+              "name": "file-imports.json",
+              "type": "file",
+              "filePath": ".bob/analysis/file-imports.json"
+            },
+            {
+              "id": ".bob/analysis/final-graph.json",
+              "name": "final-graph.json",
+              "type": "file",
+              "filePath": ".bob/analysis/final-graph.json"
+            },
+            {
+              "id": ".bob/analysis/function-usage.json",
+              "name": "function-usage.json",
+              "type": "file",
+              "filePath": ".bob/analysis/function-usage.json"
+            },
+            {
+              "id": ".bob/analysis/functions.json",
+              "name": "functions.json",
+              "type": "file",
+              "filePath": ".bob/analysis/functions.json"
+            }
+          ]
+        },
+        {
+          "id": ".bob/dependency-graph.json",
+          "name": "dependency-graph.json",
+          "type": "file",
+          "filePath": ".bob/dependency-graph.json"
+        }
+      ]
+    },
+    {
+      "id": "extension",
+      "name": "extension",
+      "type": "folder",
+      "filePath": "extension",
+      "children": [
+        {
+          "id": "extension/.vscode",
+          "name": ".vscode",
+          "type": "folder",
+          "filePath": "extension/.vscode",
+          "children": [
+            {
+              "id": "extension/.vscode/launch.json",
+              "name": "launch.json",
+              "type": "file",
+              "filePath": "extension/.vscode/launch.json"
+            },
+            {
+              "id": "extension/.vscode/tasks.json",
+              "name": "tasks.json",
+              "type": "file",
+              "filePath": "extension/.vscode/tasks.json"
+            }
+          ]
+        },
+        {
+          "id": "extension/src",
+          "name": "src",
+          "type": "folder",
+          "filePath": "extension/src",
+          "children": [
+            {
+              "id": "extension/src/dependency",
+              "name": "dependency",
+              "type": "folder",
+              "filePath": "extension/src/dependency",
+              "children": [
+                {
+                  "id": "extension/src/dependency/bobAnalysisService.ts",
+                  "name": "bobAnalysisService.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/bobAnalysisService.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/dependency/bobAnalysisService.ts:BobAnalysisService",
+                      "name": "BobAnalysisService",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/bobAnalysisService.ts",
+                      "line": 32
+                    },
+                    {
+                      "id": "extension/src/dependency/bobAnalysisService.ts:ensureCacheDir",
+                      "name": "ensureCacheDir",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/bobAnalysisService.ts",
+                      "line": 42
+                    },
+                    {
+                      "id": "extension/src/dependency/bobAnalysisService.ts:saveToCache",
+                      "name": "saveToCache",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/bobAnalysisService.ts",
+                      "line": 48
+                    }
+                  ]
+                },
+                {
+                  "id": "extension/src/dependency/codeParser.ts",
+                  "name": "codeParser.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/codeParser.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/dependency/codeParser.ts:CodeParser",
+                      "name": "CodeParser",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/codeParser.ts",
+                      "line": 24
+                    },
+                    {
+                      "id": "extension/src/dependency/codeParser.ts:parseFile",
+                      "name": "parseFile",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/codeParser.ts",
+                      "line": 25
+                    },
+                    {
+                      "id": "extension/src/dependency/codeParser.ts:extractImports",
+                      "name": "extractImports",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/codeParser.ts",
+                      "line": 38
+                    },
+                    {
+                      "id": "extension/src/dependency/codeParser.ts:extractFunctions",
+                      "name": "extractFunctions",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/codeParser.ts",
+                      "line": 50
+                    },
+                    {
+                      "id": "extension/src/dependency/codeParser.ts:extractFunctionCalls",
+                      "name": "extractFunctionCalls",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/codeParser.ts",
+                      "line": 60
+                    }
+                  ]
+                },
+                {
+                  "id": "extension/src/dependency/graphBuilder.ts",
+                  "name": "graphBuilder.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/graphBuilder.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/dependency/graphBuilder.ts:GraphBuilder",
+                      "name": "GraphBuilder",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/graphBuilder.ts",
+                      "line": 8
+                    },
+                    {
+                      "id": "extension/src/dependency/graphBuilder.ts:buildGraph",
+                      "name": "buildGraph",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/graphBuilder.ts",
+                      "line": 16
+                    }
+                  ]
+                },
+                {
+                  "id": "extension/src/dependency/graphCombinerService.ts",
+                  "name": "graphCombinerService.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/graphCombinerService.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/dependency/graphCombinerService.ts:GraphCombinerService",
+                      "name": "GraphCombinerService",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/graphCombinerService.ts",
+                      "line": 13
+                    },
+                    {
+                      "id": "extension/src/dependency/graphCombinerService.ts:buildFinalGraph",
+                      "name": "buildFinalGraph",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/graphCombinerService.ts",
+                      "line": 25
+                    }
+                  ]
+                },
+                {
+                  "id": "extension/src/dependency/pathResolver.ts",
+                  "name": "pathResolver.ts",
+                  "type": "file",
+                  "filePath": "extension/src/dependency/pathResolver.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/dependency/pathResolver.ts:PathResolver",
+                      "name": "PathResolver",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/pathResolver.ts",
+                      "line": 4
+                    },
+                    {
+                      "id": "extension/src/dependency/pathResolver.ts:resolveImportPath",
+                      "name": "resolveImportPath",
+                      "type": "function",
+                      "filePath": "extension/src/dependency/pathResolver.ts",
+                      "line": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "extension/src/webview",
+              "name": "webview",
+              "type": "folder",
+              "filePath": "extension/src/webview",
+              "children": [
+                {
+                  "id": "extension/src/webview/htmlGenerator.ts",
+                  "name": "htmlGenerator.ts",
+                  "type": "file",
+                  "filePath": "extension/src/webview/htmlGenerator.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/webview/htmlGenerator.ts:HtmlGenerator",
+                      "name": "HtmlGenerator",
+                      "type": "function",
+                      "filePath": "extension/src/webview/htmlGenerator.ts",
+                      "line": 4
+                    },
+                    {
+                      "id": "extension/src/webview/htmlGenerator.ts:generateHtml",
+                      "name": "generateHtml",
+                      "type": "function",
+                      "filePath": "extension/src/webview/htmlGenerator.ts",
+                      "line": 10
+                    },
+                    {
+                      "id": "extension/src/webview/htmlGenerator.ts:getNonce",
+                      "name": "getNonce",
+                      "type": "function",
+                      "filePath": "extension/src/webview/htmlGenerator.ts",
+                      "line": 35
+                    }
+                  ]
+                },
+                {
+                  "id": "extension/src/webview/messageHandlers.ts",
+                  "name": "messageHandlers.ts",
+                  "type": "file",
+                  "filePath": "extension/src/webview/messageHandlers.ts",
+                  "children": [
+                    {
+                      "id": "extension/src/webview/messageHandlers.ts:MessageHandlers",
+                      "name": "MessageHandlers",
+                      "type": "function",
+                      "filePath": "extension/src/webview/messageHandlers.ts",
+                      "line": 6
+                    },
+                    {
+                      "id": "extension/src/webview/messageHandlers.ts:handleMessage",
+                      "name": "handleMessage",
+                      "type": "function",
+                      "filePath": "extension/src/webview/messageHandlers.ts",
+                      "line": 14
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "extension/src/bobRefactoringService.ts",
+              "name": "bobRefactoringService.ts",
+              "type": "file",
+              "filePath": "extension/src/bobRefactoringService.ts",
+              "children": [
+                {
+                  "id": "extension/src/bobRefactoringService.ts:BobRefactoringService",
+                  "name": "BobRefactoringService",
+                  "type": "function",
+                  "filePath": "extension/src/bobRefactoringService.ts",
+                  "line": 16
+                },
+                {
+                  "id": "extension/src/bobRefactoringService.ts:isDirectory",
+                  "name": "isDirectory",
+                  "type": "function",
+                  "filePath": "extension/src/bobRefactoringService.ts",
+                  "line": 28
+                },
+                {
+                  "id": "extension/src/bobRefactoringService.ts:getFilesInDirectory",
+                  "name": "getFilesInDirectory",
+                  "type": "function",
+                  "filePath": "extension/src/bobRefactoringService.ts",
+                  "line": 38
+                }
+              ]
+            },
+            {
+              "id": "extension/src/bobService.ts",
+              "name": "bobService.ts",
+              "type": "file",
+              "filePath": "extension/src/bobService.ts",
+              "children": [
+                {
+                  "id": "extension/src/bobService.ts:BobService",
+                  "name": "BobService",
+                  "type": "function",
+                  "filePath": "extension/src/bobService.ts",
+                  "line": 8
+                },
+                {
+                  "id": "extension/src/bobService.ts:askBob",
+                  "name": "askBob",
+                  "type": "function",
+                  "filePath": "extension/src/bobService.ts",
+                  "line": 9
+                }
+              ]
+            },
+            {
+              "id": "extension/src/dependencyService.ts",
+              "name": "dependencyService.ts",
+              "type": "file",
+              "filePath": "extension/src/dependencyService.ts",
+              "children": [
+                {
+                  "id": "extension/src/dependencyService.ts:DependencyService",
+                  "name": "DependencyService",
+                  "type": "function",
+                  "filePath": "extension/src/dependencyService.ts",
+                  "line": 14
+                },
+                {
+                  "id": "extension/src/dependencyService.ts:loadCachedGraph",
+                  "name": "loadCachedGraph",
+                  "type": "function",
+                  "filePath": "extension/src/dependencyService.ts",
+                  "line": 32
+                },
+                {
+                  "id": "extension/src/dependencyService.ts:saveCachedGraph",
+                  "name": "saveCachedGraph",
+                  "type": "function",
+                  "filePath": "extension/src/dependencyService.ts",
+                  "line": 43
+                }
+              ]
+            },
+            {
+              "id": "extension/src/extension.ts",
+              "name": "extension.ts",
+              "type": "file",
+              "filePath": "extension/src/extension.ts",
+              "children": [
+                {
+                  "id": "extension/src/extension.ts:activate",
+                  "name": "activate",
+                  "type": "function",
+                  "filePath": "extension/src/extension.ts",
+                  "line": 4
+                },
+                {
+                  "id": "extension/src/extension.ts:deactivate",
+                  "name": "deactivate",
+                  "type": "function",
+                  "filePath": "extension/src/extension.ts",
+                  "line": 18
+                }
+              ]
+            },
+            {
+              "id": "extension/src/fileSystemService.ts",
+              "name": "fileSystemService.ts",
+              "type": "file",
+              "filePath": "extension/src/fileSystemService.ts",
+              "children": [
+                {
+                  "id": "extension/src/fileSystemService.ts:FileSystemService",
+                  "name": "FileSystemService",
+                  "type": "function",
+                  "filePath": "extension/src/fileSystemService.ts",
+                  "line": 14
+                },
+                {
+                  "id": "extension/src/fileSystemService.ts:shouldInclude",
+                  "name": "shouldInclude",
+                  "type": "function",
+                  "filePath": "extension/src/fileSystemService.ts",
+                  "line": 22
+                },
+                {
+                  "id": "extension/src/fileSystemService.ts:buildTree",
+                  "name": "buildTree",
+                  "type": "function",
+                  "filePath": "extension/src/fileSystemService.ts",
+                  "line": 27
+                }
+              ]
+            },
+            {
+              "id": "extension/src/refactoringService.ts",
+              "name": "refactoringService.ts",
+              "type": "file",
+              "filePath": "extension/src/refactoringService.ts",
+              "children": [
+                {
+                  "id": "extension/src/refactoringService.ts:RefactoringService",
+                  "name": "RefactoringService",
+                  "type": "function",
+                  "filePath": "extension/src/refactoringService.ts",
+                  "line": 9
+                },
+                {
+                  "id": "extension/src/refactoringService.ts:findFileReferences",
+                  "name": "findFileReferences",
+                  "type": "function",
+                  "filePath": "extension/src/refactoringService.ts",
+                  "line": 18
+                }
+              ]
+            },
+            {
+              "id": "extension/src/types.ts",
+              "name": "types.ts",
+              "type": "file",
+              "filePath": "extension/src/types.ts"
+            },
+            {
+              "id": "extension/src/unifiedGraphService.ts",
+              "name": "unifiedGraphService.ts",
+              "type": "file",
+              "filePath": "extension/src/unifiedGraphService.ts",
+              "children": [
+                {
+                  "id": "extension/src/unifiedGraphService.ts:UnifiedGraphService",
+                  "name": "UnifiedGraphService",
+                  "type": "function",
+                  "filePath": "extension/src/unifiedGraphService.ts",
+                  "line": 12
+                },
+                {
+                  "id": "extension/src/unifiedGraphService.ts:buildUnifiedGraph",
+                  "name": "buildUnifiedGraph",
+                  "type": "function",
+                  "filePath": "extension/src/unifiedGraphService.ts",
+                  "line": 22
+                },
+                {
+                  "id": "extension/src/unifiedGraphService.ts:enrichTreeWithFunctions",
+                  "name": "enrichTreeWithFunctions",
+                  "type": "function",
+                  "filePath": "extension/src/unifiedGraphService.ts",
+                  "line": 35
+                }
+              ]
+            },
+            {
+              "id": "extension/src/webviewProvider.ts",
+              "name": "webviewProvider.ts",
+              "type": "file",
+              "filePath": "extension/src/webviewProvider.ts",
+              "children": [
+                {
+                  "id": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+                  "name": "RepomapWebviewProvider",
+                  "type": "function",
+                  "filePath": "extension/src/webviewProvider.ts",
+                  "line": 10
+                },
+                {
+                  "id": "extension/src/webviewProvider.ts:show",
+                  "name": "show",
+                  "type": "function",
+                  "filePath": "extension/src/webviewProvider.ts",
+                  "line": 25
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "extension/webview-dist",
+          "name": "webview-dist",
+          "type": "folder",
+          "filePath": "extension/webview-dist",
+          "children": [
+            {
+              "id": "extension/webview-dist/assets",
+              "name": "assets",
+              "type": "folder",
+              "filePath": "extension/webview-dist/assets",
+              "children": [
+                {
+                  "id": "extension/webview-dist/assets/index.css",
+                  "name": "index.css",
+                  "type": "file",
+                  "filePath": "extension/webview-dist/assets/index.css"
+                },
+                {
+                  "id": "extension/webview-dist/assets/index.js",
+                  "name": "index.js",
+                  "type": "file",
+                  "filePath": "extension/webview-dist/assets/index.js"
+                }
+              ]
+            },
+            {
+              "id": "extension/webview-dist/index.html",
+              "name": "index.html",
+              "type": "file",
+              "filePath": "extension/webview-dist/index.html"
+            }
+          ]
+        },
+        {
+          "id": "extension/package-lock.json",
+          "name": "package-lock.json",
+          "type": "file",
+          "filePath": "extension/package-lock.json"
+        },
+        {
+          "id": "extension/package.json",
+          "name": "package.json",
+          "type": "file",
+          "filePath": "extension/package.json"
+        },
+        {
+          "id": "extension/README.md",
+          "name": "README.md",
+          "type": "file",
+          "filePath": "extension/README.md"
+        },
+        {
+          "id": "extension/tsconfig.json",
+          "name": "tsconfig.json",
+          "type": "file",
+          "filePath": "extension/tsconfig.json"
+        }
+      ]
+    },
+    {
+      "id": "test-files",
+      "name": "test-files",
+      "type": "folder",
+      "filePath": "test-files",
+      "children": [
+        {
+          "id": "test-files/base.css",
+          "name": "base.css",
+          "type": "file",
+          "filePath": "test-files/base.css"
+        },
+        {
+          "id": "test-files/colors.css",
+          "name": "colors.css",
+          "type": "file",
+          "filePath": "test-files/colors.css"
+        },
+        {
+          "id": "test-files/index.html",
+          "name": "index.html",
+          "type": "file",
+          "filePath": "test-files/index.html"
+        },
+        {
+          "id": "test-files/main.js",
+          "name": "main.js",
+          "type": "file",
+          "filePath": "test-files/main.js",
+          "children": [
+            {
+              "id": "test-files/main.js:init",
+              "name": "init",
+              "type": "function",
+              "filePath": "test-files/main.js",
+              "line": 1
+            },
+            {
+              "id": "test-files/main.js:setupEventListeners",
+              "name": "setupEventListeners",
+              "type": "function",
+              "filePath": "test-files/main.js",
+              "line": 6
+            },
+            {
+              "id": "test-files/main.js:loadData",
+              "name": "loadData",
+              "type": "function",
+              "filePath": "test-files/main.js",
+              "line": 11
+            },
+            {
+              "id": "test-files/main.js:processData",
+              "name": "processData",
+              "type": "function",
+              "filePath": "test-files/main.js",
+              "line": 16
+            },
+            {
+              "id": "test-files/main.js:handleClick",
+              "name": "handleClick",
+              "type": "function",
+              "filePath": "test-files/main.js",
+              "line": 20
+            }
+          ]
+        },
+        {
+          "id": "test-files/styles.css",
+          "name": "styles.css",
+          "type": "file",
+          "filePath": "test-files/styles.css"
+        },
+        {
+          "id": "test-files/test-integration.js",
+          "name": "test-integration.js",
+          "type": "file",
+          "filePath": "test-files/test-integration.js",
+          "children": [
+            {
+              "id": "test-files/test-integration.js:testIntegration",
+              "name": "testIntegration",
+              "type": "function",
+              "filePath": "test-files/test-integration.js",
+              "line": 4
+            }
+          ]
+        },
+        {
+          "id": "test-files/test-parser.js",
+          "name": "test-parser.js",
+          "type": "file",
+          "filePath": "test-files/test-parser.js",
+          "children": [
+            {
+              "id": "test-files/test-parser.js:testParser",
+              "name": "testParser",
+              "type": "function",
+              "filePath": "test-files/test-parser.js",
+              "line": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "webview",
+      "name": "webview",
+      "type": "folder",
+      "filePath": "webview",
+      "children": [
+        {
+          "id": "webview/src",
+          "name": "src",
+          "type": "folder",
+          "filePath": "webview/src",
+          "children": [
+            {
+              "id": "webview/src/components",
+              "name": "components",
+              "type": "folder",
+              "filePath": "webview/src/components",
+              "children": [
+                {
+                  "id": "webview/src/components/ChatPanel.tsx",
+                  "name": "ChatPanel.tsx",
+                  "type": "file",
+                  "filePath": "webview/src/components/ChatPanel.tsx",
+                  "children": [
+                    {
+                      "id": "webview/src/components/ChatPanel.tsx:ChatPanel",
+                      "name": "ChatPanel",
+                      "type": "function",
+                      "filePath": "webview/src/components/ChatPanel.tsx",
+                      "line": 12
+                    }
+                  ]
+                },
+                {
+                  "id": "webview/src/components/FileTree.tsx",
+                  "name": "FileTree.tsx",
+                  "type": "file",
+                  "filePath": "webview/src/components/FileTree.tsx",
+                  "children": [
+                    {
+                      "id": "webview/src/components/FileTree.tsx:FileTree",
+                      "name": "FileTree",
+                      "type": "function",
+                      "filePath": "webview/src/components/FileTree.tsx",
+                      "line": 11
+                    },
+                    {
+                      "id": "webview/src/components/FileTree.tsx:TreeNode",
+                      "name": "TreeNode",
+                      "type": "function",
+                      "filePath": "webview/src/components/FileTree.tsx",
+                      "line": 33
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "webview/src/types",
+              "name": "types",
+              "type": "folder",
+              "filePath": "webview/src/types",
+              "children": [
+                {
+                  "id": "webview/src/types/index.ts",
+                  "name": "index.ts",
+                  "type": "file",
+                  "filePath": "webview/src/types/index.ts"
+                }
+              ]
+            },
+            {
+              "id": "webview/src/utils",
+              "name": "utils",
+              "type": "folder",
+              "filePath": "webview/src/utils",
+              "children": [
+                {
+                  "id": "webview/src/utils/graphLayout.ts",
+                  "name": "graphLayout.ts",
+                  "type": "file",
+                  "filePath": "webview/src/utils/graphLayout.ts",
+                  "children": [
+                    {
+                      "id": "webview/src/utils/graphLayout.ts:normalizeGraphPath",
+                      "name": "normalizeGraphPath",
+                      "type": "function",
+                      "filePath": "webview/src/utils/graphLayout.ts",
+                      "line": 32
+                    },
+                    {
+                      "id": "webview/src/utils/graphLayout.ts:isPathHidden",
+                      "name": "isPathHidden",
+                      "type": "function",
+                      "filePath": "webview/src/utils/graphLayout.ts",
+                      "line": 36
+                    },
+                    {
+                      "id": "webview/src/utils/graphLayout.ts:filterTreeByDisabledPaths",
+                      "name": "filterTreeByDisabledPaths",
+                      "type": "function",
+                      "filePath": "webview/src/utils/graphLayout.ts",
+                      "line": 40
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "webview/src/App.tsx",
+              "name": "App.tsx",
+              "type": "file",
+              "filePath": "webview/src/App.tsx",
+              "children": [
+                {
+                  "id": "webview/src/App.tsx:App",
+                  "name": "App",
+                  "type": "function",
+                  "filePath": "webview/src/App.tsx",
+                  "line": 23
+                },
+                {
+                  "id": "webview/src/App.tsx:getColor",
+                  "name": "getColor",
+                  "type": "function",
+                  "filePath": "webview/src/App.tsx",
+                  "line": 30
+                },
+                {
+                  "id": "webview/src/App.tsx:FileTree",
+                  "name": "FileTree",
+                  "type": "function",
+                  "filePath": "webview/src/App.tsx",
+                  "line": 38
+                }
+              ]
+            },
+            {
+              "id": "webview/src/index.css",
+              "name": "index.css",
+              "type": "file",
+              "filePath": "webview/src/index.css"
+            },
+            {
+              "id": "webview/src/main.tsx",
+              "name": "main.tsx",
+              "type": "file",
+              "filePath": "webview/src/main.tsx"
+            },
+            {
+              "id": "webview/src/vscode.d.ts",
+              "name": "vscode.d.ts",
+              "type": "file",
+              "filePath": "webview/src/vscode.d.ts",
+              "children": [
+                {
+                  "id": "webview/src/vscode.d.ts:acquireVsCodeApi",
+                  "name": "acquireVsCodeApi",
+                  "type": "function",
+                  "filePath": "webview/src/vscode.d.ts",
+                  "line": 9
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "webview/index.html",
+          "name": "index.html",
+          "type": "file",
+          "filePath": "webview/index.html"
+        },
+        {
+          "id": "webview/package-lock.json",
+          "name": "package-lock.json",
+          "type": "file",
+          "filePath": "webview/package-lock.json"
+        },
+        {
+          "id": "webview/package.json",
+          "name": "package.json",
+          "type": "file",
+          "filePath": "webview/package.json"
+        },
+        {
+          "id": "webview/tsconfig.json",
+          "name": "tsconfig.json",
+          "type": "file",
+          "filePath": "webview/tsconfig.json"
+        },
+        {
+          "id": "webview/tsconfig.node.json",
+          "name": "tsconfig.node.json",
+          "type": "file",
+          "filePath": "webview/tsconfig.node.json"
+        },
+        {
+          "id": "webview/vite.config.ts",
+          "name": "vite.config.ts",
+          "type": "file",
+          "filePath": "webview/vite.config.ts",
+          "children": [
+            {
+              "id": "webview/vite.config.ts:defineConfig",
+              "name": "defineConfig",
+              "type": "function",
+              "filePath": "webview/vite.config.ts",
+              "line": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DEBUGGING_GUIDE_TEST.md",
+      "name": "DEBUGGING_GUIDE_TEST.md",
+      "type": "file",
+      "filePath": "DEBUGGING_GUIDE_TEST.md"
+    },
+    {
+      "id": "DEBUGGING_GUIDE.md",
+      "name": "DEBUGGING_GUIDE.md",
+      "type": "file",
+      "filePath": "DEBUGGING_GUIDE.md"
+    },
+    {
+      "id": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md",
+      "name": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md",
+      "type": "file",
+      "filePath": "DEPENDENCY_ANALYSIS_IMPROVEMENTS_PLAN.md"
+    },
+    {
+      "id": "DEPENDENCY_IMPROVEMENTS.md",
+      "name": "DEPENDENCY_IMPROVEMENTS.md",
+      "type": "file",
+      "filePath": "DEPENDENCY_IMPROVEMENTS.md"
+    },
+    {
+      "id": "FUNCTION_EXTRACTION_FIX.md",
+      "name": "FUNCTION_EXTRACTION_FIX.md",
+      "type": "file",
+      "filePath": "FUNCTION_EXTRACTION_FIX.md"
+    },
+    {
+      "id": "FUNCTION_NODES_IMPLEMENTATION.md",
+      "name": "FUNCTION_NODES_IMPLEMENTATION.md",
+      "type": "file",
+      "filePath": "FUNCTION_NODES_IMPLEMENTATION.md"
+    },
+    {
+      "id": "IMPLEMENTATION_SUMMARY.md",
+      "name": "IMPLEMENTATION_SUMMARY.md",
+      "type": "file",
+      "filePath": "IMPLEMENTATION_SUMMARY.md"
+    },
+    {
+      "id": "Makefile",
+      "name": "Makefile",
+      "type": "file",
+      "filePath": "Makefile"
+    },
+    {
+      "id": "PHASED_ANALYSIS_GUIDE.md",
+      "name": "PHASED_ANALYSIS_GUIDE.md",
+      "type": "file",
+      "filePath": "PHASED_ANALYSIS_GUIDE.md"
+    },
+    {
+      "id": "README.md",
+      "name": "README.md",
+      "type": "file",
+      "filePath": "README.md"
+    },
+    {
+      "id": "REFACTORING_GUIDE.md",
+      "name": "REFACTORING_GUIDE.md",
+      "type": "file",
+      "filePath": "REFACTORING_GUIDE.md"
+    },
+    {
+      "id": "REFACTORING_SUMMARY.md",
+      "name": "REFACTORING_SUMMARY.md",
+      "type": "file",
+      "filePath": "REFACTORING_SUMMARY.md"
+    },
+    {
+      "id": "setup-extension.sh",
+      "name": "setup-extension.sh",
+      "type": "file",
+      "filePath": "setup-extension.sh"
+    }
+  ],
+  "edges": [
+    {
+      "from": "test-files/test-parser.js",
+      "to": "extension/dist/dependency/codeParser.js",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/styles.css",
+      "to": "test-files/base.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/styles.css",
+      "to": "test-files/colors.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/index.html",
+      "to": "test-files/styles.css",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/index.html",
+      "to": "test-files/main.js",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/test-integration.js",
+      "to": "extension/dist/dependency/graphBuilder.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobRefactoringService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/bobService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/bobAnalysisService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/dependency/bobAnalysisService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/codeParser.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/dependency/pathResolver.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "webview/src/main.tsx",
+      "to": "webview/src/App.tsx",
+      "type": "imports"
+    },
+    {
+      "from": "webview/src/main.tsx",
+      "to": "webview/src/index.css",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/extension.ts",
+      "to": "extension/src/webviewProvider.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/graphBuilder.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/bobAnalysisService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/dependency/graphCombinerService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/dependencyService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/dependencyService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/unifiedGraphService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/webview/messageHandlers.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/webview/htmlGenerator.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts",
+      "to": "extension/src/dependencyService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/fileSystemService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/bobService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/unifiedGraphService.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/src/webview/messageHandlers.ts",
+      "to": "extension/src/types.ts",
+      "type": "imports"
+    },
+    {
+      "from": "extension/webview-dist/index.html",
+      "to": "extension/webview-dist/assets/index.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/webview-dist/index.html",
+      "to": "extension/webview-dist/assets/index.css",
+      "type": "imports"
+    },
+    {
+      "from": "webview/dist/index.html",
+      "to": "webview/dist/assets/index.js",
+      "type": "imports"
+    },
+    {
+      "from": "webview/dist/index.html",
+      "to": "webview/dist/assets/index.css",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/extension.js",
+      "to": "extension/dist/webviewProvider.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/graphBuilder.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/bobAnalysisService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependencyService.js",
+      "to": "extension/dist/dependency/graphCombinerService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/dependencyService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/unifiedGraphService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/messageHandlers.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/webviewProvider.js",
+      "to": "extension/dist/webview/htmlGenerator.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/unifiedGraphService.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/unifiedGraphService.js",
+      "to": "extension/dist/dependencyService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/bobRefactoringService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/codeParser.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphBuilder.js",
+      "to": "extension/dist/dependency/pathResolver.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/graphCombinerService.js",
+      "to": "extension/dist/fileSystemService.js",
+      "type": "imports"
+    },
+    {
+      "from": "extension/dist/dependency/bobAnalysisService.js",
+      "to": "extension/dist/bobService.js",
+      "type": "imports"
+    },
+    {
+      "from": "test-files/main.js:<global>",
+      "to": "test-files/main.js:init",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/main.js:init",
+      "to": "test-files/main.js:setupEventListeners",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/main.js:init",
+      "to": "test-files/main.js:loadData",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/main.js:loadData",
+      "to": "test-files/main.js:processData",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/main.js:setupEventListeners",
+      "to": "test-files/main.js:handleClick",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/test-parser.js:<global>",
+      "to": "test-files/test-parser.js:testParser",
+      "type": "calls"
+    },
+    {
+      "from": "webview/vite.config.ts:<global>",
+      "to": "vite:defineConfig",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts:GraphCombinerService.constructor",
+      "to": "extension/src/fileSystemService.ts:FileSystemService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:RepomapWebviewProvider.constructor",
+      "to": "extension/src/fileSystemService.ts:FileSystemService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts:UnifiedGraphService.constructor",
+      "to": "extension/src/fileSystemService.ts:FileSystemService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/fileSystemService.ts:buildTree",
+      "to": "extension/src/fileSystemService.ts:shouldInclude",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/fileSystemService.ts:buildTree",
+      "to": "extension/src/fileSystemService.ts:buildTree",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/graphCombinerService.ts:buildFinalGraph",
+      "to": "extension/src/fileSystemService.ts:buildTree",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts:buildUnifiedGraph",
+      "to": "extension/src/fileSystemService.ts:buildTree",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/bobRefactoringService.ts:getFilesInDirectory",
+      "to": "extension/src/bobRefactoringService.ts:isDirectory",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/bobRefactoringService.ts:BobRefactoringService.constructor",
+      "to": "extension/src/bobService.ts:BobService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/bobAnalysisService.ts:BobAnalysisService.constructor",
+      "to": "extension/src/bobService.ts:BobService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependencyService.ts:DependencyService.constructor",
+      "to": "extension/src/bobService.ts:BobService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:RepomapWebviewProvider.constructor",
+      "to": "extension/src/bobService.ts:BobService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/extension.ts:activate",
+      "to": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/extension.ts:activate",
+      "to": "extension/src/webviewProvider.ts:show",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:constructor",
+      "to": "extension/src/unifiedGraphService.ts:UnifiedGraphService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts:buildUnifiedGraph",
+      "to": "extension/src/unifiedGraphService.ts:enrichTreeWithFunctions",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts:constructor",
+      "to": "extension/src/dependency/pathResolver.ts:PathResolver",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependencyService.ts:constructor",
+      "to": "extension/src/dependency/bobAnalysisService.ts:BobAnalysisService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/bobAnalysisService.ts:constructor",
+      "to": "extension/src/dependency/bobAnalysisService.ts:ensureCacheDir",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependencyService.ts:constructor",
+      "to": "extension/src/dependency/graphCombinerService.ts:GraphCombinerService",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/test-integration.js:testIntegration",
+      "to": "extension/src/dependency/graphBuilder.ts:GraphBuilder",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependencyService.ts:constructor",
+      "to": "extension/src/dependency/graphBuilder.ts:GraphBuilder",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/test-integration.js:testIntegration",
+      "to": "extension/src/dependency/graphBuilder.ts:buildGraph",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/test-parser.js:testParser",
+      "to": "extension/src/dependency/codeParser.ts:CodeParser",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/graphBuilder.ts:constructor",
+      "to": "extension/src/dependency/codeParser.ts:CodeParser",
+      "type": "calls"
+    },
+    {
+      "from": "test-files/test-parser.js:testParser",
+      "to": "extension/src/dependency/codeParser.ts:parseFile",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/codeParser.ts:parseFile",
+      "to": "extension/src/dependency/codeParser.ts:extractImports",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/codeParser.ts:parseFile",
+      "to": "extension/src/dependency/codeParser.ts:extractFunctions",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/dependency/codeParser.ts:parseFile",
+      "to": "extension/src/dependency/codeParser.ts:extractFunctionCalls",
+      "type": "calls"
+    },
+    {
+      "from": "webview/src/App.tsx:App",
+      "to": "webview/src/components/FileTree.tsx:FileTree",
+      "type": "calls"
+    },
+    {
+      "from": "webview/src/components/FileTree.tsx:FileTree",
+      "to": "webview/src/components/FileTree.tsx:TreeNode",
+      "type": "calls"
+    },
+    {
+      "from": "webview/src/components/FileTree.tsx:TreeNode",
+      "to": "webview/src/components/FileTree.tsx:TreeNode",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/unifiedGraphService.ts:UnifiedGraphService",
+      "to": "extension/src/dependencyService.ts:DependencyService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+      "to": "extension/src/dependencyService.ts:DependencyService",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+      "to": "extension/src/webview/messageHandlers.ts:MessageHandlers",
+      "type": "calls"
+    },
+    {
+      "from": "extension/src/webviewProvider.ts:RepomapWebviewProvider",
+      "to": "extension/src/webview/htmlGenerator.ts:HtmlGenerator",
+      "type": "calls"
+    }
+  ]
+}

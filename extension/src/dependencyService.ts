@@ -1,434 +1,394 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-
-export interface DependencyNode {
-  id: string;
-  name: string;
-  type: 'folder' | 'file' | 'function';
-  filePath: string;
-  line?: number;
-  children?: DependencyNode[];
-}
-
-export interface DependencyEdge {
-  from: string;
-  to: string;
-  type: 'imports' | 'calls';
-}
+import { BobService } from './bobService';
+import { GraphBuilder } from './dependency/graphBuilder';
+import { BobAnalysisService } from './dependency/bobAnalysisService';
+import { GraphCombinerService } from './dependency/graphCombinerService';
+import { DependencyNode, DependencyEdge } from './types';
 
 export interface DependencyGraph {
   nodes: DependencyNode[];
   edges: DependencyEdge[];
 }
 
-interface FunctionDef {
-  name: string;
-  line: number;
-  exported: boolean;
-}
-
-interface FileImport {
-  importedFile: string;
-  importedSymbols: string[];
-}
-
 export class DependencyService {
   private workspaceRoot: string;
-  private cache: Map<string, { imports: FileImport[]; functions: FunctionDef[] }> = new Map();
+  private bobService: BobService;
+  private graphBuilder: GraphBuilder;
+  private bobAnalysisService: BobAnalysisService;
+  private graphCombinerService: GraphCombinerService;
+  private cacheFilePath: string;
+  private selectedFoldersCache: string;
 
   constructor() {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
+    this.bobService = new BobService();
+    this.graphBuilder = new GraphBuilder(this.workspaceRoot);
+    this.bobAnalysisService = new BobAnalysisService(this.workspaceRoot);
+    this.graphCombinerService = new GraphCombinerService(this.workspaceRoot);
+    this.cacheFilePath = path.join(this.workspaceRoot, '.bob', 'dependency-graph.json');
+    this.selectedFoldersCache = path.join(this.workspaceRoot, '.bob', 'selected-folders.json');
   }
 
-  async buildDependencyGraph(): Promise<DependencyGraph> {
-    const nodes: DependencyNode[] = [];
-    const edges: DependencyEdge[] = [];
-    const fileMap = new Map<string, DependencyNode>();
+  async loadCachedGraph(): Promise<DependencyGraph | null> {
+    try {
+      if (fs.existsSync(this.cacheFilePath)) {
+        const data = await fs.promises.readFile(this.cacheFilePath, 'utf-8');
+        return JSON.parse(data);
+      }
+    } catch (error) {
+      console.error('Failed to load cached dependency graph:', error);
+    }
+    return null;
+  }
 
-    // Get all supported files
-    const files = await this.getAllSupportedFiles();
-    
-    // Limit to 200 files for performance
-    const limitedFiles = files.slice(0, 200);
+  async saveCachedGraph(graph: DependencyGraph): Promise<void> {
+    try {
+      const dir = path.dirname(this.cacheFilePath);
+      if (!fs.existsSync(dir)) {
+        await fs.promises.mkdir(dir, { recursive: true });
+      }
+      await fs.promises.writeFile(this.cacheFilePath, JSON.stringify(graph, null, 2), 'utf-8');
+    } catch (error) {
+      console.error('Failed to save cached dependency graph:', error);
+    }
+  }
 
-    // Parse each file
-    for (const filePath of limitedFiles) {
-      const fileData = await this.parseFile(filePath);
-      if (!fileData) continue;
+  async loadSelectedFolders(): Promise<string[] | null> {
+    try {
+      if (fs.existsSync(this.selectedFoldersCache)) {
+        const data = await fs.promises.readFile(this.selectedFoldersCache, 'utf-8');
+        const parsed = JSON.parse(data);
+        return parsed.selectedFolders || null;
+      }
+    } catch (error) {
+      console.error('Failed to load selected folders cache:', error);
+    }
+    return null;
+  }
 
-      const relativePath = path.relative(this.workspaceRoot, filePath);
-      const fileName = path.basename(filePath);
-      
-      // Create file node
-      const fileNode: DependencyNode = {
-        id: relativePath,
-        name: fileName,
-        type: 'file',
-        filePath: relativePath,
-        children: []
+  async saveSelectedFolders(folders: string[]): Promise<void> {
+    try {
+      const dir = path.dirname(this.selectedFoldersCache);
+      if (!fs.existsSync(dir)) {
+        await fs.promises.mkdir(dir, { recursive: true });
+      }
+      const data = {
+        selectedFolders: folders,
+        timestamp: new Date().toISOString()
       };
-
-      // Add function nodes as children
-      for (const func of fileData.functions) {
-        const funcNode: DependencyNode = {
-          id: `${relativePath}:${func.name}`,
-          name: func.name,
-          type: 'function',
-          filePath: relativePath,
-          line: func.line
-        };
-        fileNode.children!.push(funcNode);
-      }
-
-      nodes.push(fileNode);
-      fileMap.set(relativePath, fileNode);
-
-      // Create import edges
-      for (const imp of fileData.imports) {
-        const resolvedPath = this.resolveImportPath(filePath, imp.importedFile);
-        if (resolvedPath) {
-          const targetRelPath = path.relative(this.workspaceRoot, resolvedPath);
-          edges.push({
-            from: relativePath,
-            to: targetRelPath,
-            type: 'imports'
-          });
-        }
-      }
+      await fs.promises.writeFile(this.selectedFoldersCache, JSON.stringify(data, null, 2), 'utf-8');
+      console.log(`Saved selected folders to cache: ${folders.join(', ')}`);
+    } catch (error) {
+      console.error('Failed to save selected folders cache:', error);
     }
-
-    // Build function call edges
-    for (const filePath of limitedFiles) {
-      const fileData = this.cache.get(filePath);
-      if (!fileData) continue;
-
-      const relativePath = path.relative(this.workspaceRoot, filePath);
-      const content = await this.readFileContent(filePath);
-
-      // For each imported symbol, find where it's called
-      for (const imp of fileData.imports) {
-        const resolvedPath = this.resolveImportPath(filePath, imp.importedFile);
-        if (!resolvedPath) continue;
-
-        const targetRelPath = path.relative(this.workspaceRoot, resolvedPath);
-        const targetData = this.cache.get(resolvedPath);
-        if (!targetData) continue;
-
-        // Check which imported symbols are actually called
-        for (const symbol of imp.importedSymbols) {
-          const targetFunc = targetData.functions.find(f => f.name === symbol && f.exported);
-          if (!targetFunc) continue;
-
-          // Simple regex to find function calls
-          const callRegex = new RegExp(`\\b${symbol}\\s*\\(`, 'g');
-          if (callRegex.test(content)) {
-            edges.push({
-              from: relativePath,
-              to: `${targetRelPath}:${symbol}`,
-              type: 'calls'
-            });
-          }
-        }
-      }
-    }
-
-    // Group files by folder
-    const folderMap = new Map<string, DependencyNode>();
-    for (const node of nodes) {
-      const dir = path.dirname(node.filePath);
-      if (dir && dir !== '.') {
-        if (!folderMap.has(dir)) {
-          folderMap.set(dir, {
-            id: dir,
-            name: path.basename(dir),
-            type: 'folder',
-            filePath: dir,
-            children: []
-          });
-        }
-        folderMap.get(dir)!.children!.push(node);
-      }
-    }
-
-    // Add folder nodes
-    const allNodes = [...Array.from(folderMap.values()), ...nodes.filter(n => !path.dirname(n.filePath) || path.dirname(n.filePath) === '.')];
-
-    return { nodes: allNodes, edges };
   }
 
-  private async getAllSupportedFiles(): Promise<string[]> {
-    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs'];
-    const files: string[] = [];
+  async promptForFolderSelection(): Promise<string[] | null> {
+    try {
+      // Get all directories in workspace
+      const allDirs = await this.getAllDirectories();
+      
+      if (allDirs.length === 0) {
+        vscode.window.showInformationMessage('No folders found in workspace. Analyzing all files.');
+        return null;
+      }
 
-    const pattern = `**/*{${extensions.join(',')}}`;
+      // Create quick pick items
+      const items: vscode.QuickPickItem[] = allDirs.map(dir => ({
+        label: dir,
+        picked: false
+      }));
+
+      // Add "Select All" option at the top
+      items.unshift({
+        label: '$(folder) Select All Folders',
+        picked: false
+      });
+
+      const selected = await vscode.window.showQuickPick(items, {
+        canPickMany: true,
+        placeHolder: 'Select folders to analyze (or Select All)',
+        title: 'Dependency Analysis - Folder Selection'
+      });
+
+      if (!selected || selected.length === 0) {
+        // User cancelled or selected nothing - analyze all
+        vscode.window.showInformationMessage('No folders selected. Analyzing all files.');
+        return null;
+      }
+
+      // Check if "Select All" was chosen
+      const selectAllChosen = selected.some(item => item.label.includes('Select All'));
+      if (selectAllChosen) {
+        console.log('User selected all folders');
+        return null; // null means analyze all
+      }
+
+      const selectedFolders = selected.map(item => item.label);
+      console.log(`User selected folders: ${selectedFolders.join(', ')}`);
+      return selectedFolders;
+    } catch (error) {
+      console.error('Error in folder selection:', error);
+      return null;
+    }
+  }
+
+  private async getAllDirectories(): Promise<string[]> {
+    const dirs = new Set<string>();
+    const pattern = '**/*';
     const uris = await vscode.workspace.findFiles(pattern, '**/node_modules/**');
 
     for (const uri of uris) {
-      files.push(uri.fsPath);
+      const relativePath = path.relative(this.workspaceRoot, uri.fsPath);
+      const dirPath = path.dirname(relativePath);
+      
+      if (dirPath && dirPath !== '.') {
+        // Add all parent directories
+        const parts = dirPath.split(path.sep);
+        for (let i = 1; i <= parts.length; i++) {
+          const dir = parts.slice(0, i).join('/');
+          dirs.add(dir);
+        }
+      }
+    }
+
+    return Array.from(dirs).sort();
+  }
+
+  async buildDependencyGraph(forceRefresh: boolean = false): Promise<DependencyGraph> {
+    // Try to load from cache first
+    if (!forceRefresh) {
+      const cached = await this.loadCachedGraph();
+      if (cached) {
+        console.log('Loaded dependency graph from cache');
+        return cached;
+      }
+    }
+
+    // Check if we have selected folders cached
+    let selectedFolders = await this.loadSelectedFolders();
+    
+    // If no cached selection or force refresh, prompt user
+    if (!selectedFolders || forceRefresh) {
+      selectedFolders = await this.promptForFolderSelection();
+      if (selectedFolders && selectedFolders.length > 0) {
+        await this.saveSelectedFolders(selectedFolders);
+      }
+    }
+
+    console.log(`Building dependency graph for folders: ${selectedFolders?.join(', ') || 'ALL'}`);
+    const graph = await this.buildDependencyGraphPhased(forceRefresh, selectedFolders);
+    await this.saveCachedGraph(graph);
+    return graph;
+  }
+
+  /**
+   * New phased approach: Extract functions, imports, and usage separately
+   */
+  private async buildDependencyGraphPhased(forceRefresh: boolean = false, selectedFolders?: string[] | null): Promise<DependencyGraph> {
+    console.log('[DependencyService] ========================================');
+    console.log('[DependencyService] Starting phased dependency graph build...');
+    console.log(`[DependencyService] Force refresh: ${forceRefresh}`);
+    console.log(`[DependencyService] Selected folders: ${selectedFolders?.join(', ') || 'ALL'}`);
+    
+    try {
+      // Get all supported files
+      console.log('[DependencyService] Step 0: Gathering files...');
+      const files = await this.getAllSupportedFiles(selectedFolders);
+      console.log(`[DependencyService] ✓ Found ${files.length} supported files`);
+      
+      const limitedFiles = files.slice(0, 100); // Limit for performance
+      console.log(`[DependencyService] ✓ Limited to ${limitedFiles.length} files for analysis`);
+
+      console.log('[DependencyService] ========================================');
+      console.log(`[DependencyService] Phase 1: Extracting function definitions from ${limitedFiles.length} files...`);
+      const functions = await this.bobAnalysisService.extractFunctionDefinitions(limitedFiles, forceRefresh);
+      console.log(`[DependencyService] ✓ Phase 1 complete: Found ${functions.length} functions`);
+
+      console.log('[DependencyService] ========================================');
+      console.log(`[DependencyService] Phase 2: Extracting file imports...`);
+      const fileImports = await this.bobAnalysisService.extractFileImports(limitedFiles, forceRefresh);
+      console.log(`[DependencyService] ✓ Phase 2 complete: Found ${fileImports.length} file import relationships`);
+
+      console.log('[DependencyService] ========================================');
+      console.log(`[DependencyService] Phase 3: Extracting function usage...`);
+      const functionUsage = await this.bobAnalysisService.extractFunctionUsage(functions, limitedFiles, forceRefresh);
+      console.log(`[DependencyService] ✓ Phase 3 complete: Found ${functionUsage.length} function usage patterns`);
+
+      console.log('[DependencyService] ========================================');
+      console.log(`[DependencyService] Phase 4: Combining into final graph...`);
+      const finalGraph = await this.graphCombinerService.buildFinalGraph(functions, fileImports, functionUsage);
+      console.log(`[DependencyService] ✓ Phase 4 complete: ${finalGraph.nodes.length} nodes, ${finalGraph.edges.length} edges`);
+      console.log('[DependencyService] ========================================');
+
+      return finalGraph;
+    } catch (error) {
+      console.error('[DependencyService] ❌ Phased analysis failed:', error);
+      console.error('[DependencyService] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+      console.log('[DependencyService] Falling back to regex-based analysis...');
+      return this.buildDependencyGraphWithRegex();
+    }
+  }
+
+  private async buildDependencyGraphWithBob(): Promise<DependencyGraph> {
+    // Get all supported files
+    const files = await this.getAllSupportedFiles();
+    const limitedFiles = files.slice(0, 30); // Reduced from 50 to 30 for better performance
+
+    // Read file contents
+    const fileContents: { path: string; content: string }[] = [];
+    for (const filePath of limitedFiles) {
+      try {
+        const content = await fs.promises.readFile(filePath, 'utf-8');
+        const relativePath = path.relative(this.workspaceRoot, filePath).replace(/\\/g, '/');
+        fileContents.push({ path: relativePath, content });
+      } catch (error) {
+        console.error(`Failed to read ${filePath}:`, error);
+      }
+    }
+
+    // Build a simpler, more focused prompt for Bob
+    const fileList = fileContents.map(f => {
+      const lines = f.content.split('\n').slice(0, 30); // First 30 lines only
+      return `${f.path}:\n${lines.join('\n')}`;
+    }).join('\n\n---\n\n');
+    
+    const prompt = `Create a dependency graph JSON for these ${fileContents.length} files (including HTML, CSS, and code files).
+
+Required JSON format:
+{
+  "nodes": [
+    {
+      "id": "file.ts",
+      "name": "file.ts",
+      "type": "file",
+      "filePath": "file.ts",
+      "children": [
+        {"id": "file.ts:functionName", "name": "functionName", "type": "function", "filePath": "file.ts", "line": 10}
+      ]
+    }
+  ],
+  "edges": [
+    {"from": "file1.ts", "to": "file2.ts", "type": "imports"},
+    {"from": "file.ts:funcA", "to": "file.ts:funcB", "type": "calls"}
+  ]
+}
+
+Rules:
+1. Create one node per file with type "file"
+2. For code files (JS/TS/Python/etc), extract functions/classes and add them as children with type "function"
+3. For HTML files, extract CSS (<link>) and JS (<script src>) imports
+4. For CSS files, extract @import statements
+5. Add "imports" edges between files that import each other
+6. Add "calls" edges between functions that call each other (format: "file:function")
+7. Function IDs should be "filePath:functionName"
+8. Return ONLY the JSON object, nothing else
+
+Files:
+${fileList}`;
+
+    try {
+      // Use extended timeout for dependency analysis (5 minutes)
+      const response = await this.bobService.askBob({
+        system: 'You are a code analysis expert. Return only valid JSON.',
+        messages: [{ role: 'user', content: prompt }]
+      }, 300000); // 5 minutes timeout
+
+      const text = response.content[0]?.text || '{}';
+      
+      console.log('Bob response length:', text.length);
+      console.log('Bob response preview:', text.substring(0, 200));
+      
+      // Handle empty or very short responses
+      if (text.length < 10) {
+        console.error('Bob returned empty or very short response:', text);
+        throw new Error('Bob returned empty response. The prompt may be too complex or Bob may be unavailable.');
+      }
+      
+      // Try multiple JSON extraction strategies
+      let jsonText = '';
+      
+      // Strategy 1: Look for JSON code blocks (with proper closing)
+      const codeBlockMatch = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+      if (codeBlockMatch && codeBlockMatch[1]) {
+        jsonText = codeBlockMatch[1];
+        console.log('Found JSON in code block');
+      } else {
+        // Strategy 2: Look for raw JSON (greedy match to get the largest JSON object)
+        const jsonMatch = text.match(/(\{[\s\S]*\})/);
+        if (jsonMatch && jsonMatch[1]) {
+          jsonText = jsonMatch[1];
+          console.log('Found raw JSON');
+        } else {
+          console.error('Full Bob response:', text);
+          throw new Error('No JSON found in Bob response. Bob may have returned incomplete or plain text.');
+        }
+      }
+      
+      // Validate we actually got JSON content
+      if (!jsonText || jsonText.length < 10) {
+        console.error('Extracted JSON is too short:', jsonText);
+        throw new Error('Extracted JSON is empty or incomplete');
+      }
+
+      let graph: DependencyGraph;
+      try {
+        graph = JSON.parse(jsonText);
+      } catch (parseError: any) {
+        console.error('JSON parse error:', parseError.message);
+        console.error('Attempted to parse:', jsonText.substring(0, 500));
+        throw new Error(`Failed to parse JSON from Bob: ${parseError.message}`);
+      }
+      
+      // Validate structure
+      if (!graph.nodes || !graph.edges) {
+        console.error('Invalid graph structure:', graph);
+        throw new Error('Invalid graph structure from Bob - missing nodes or edges');
+      }
+
+      console.log(`Successfully parsed graph: ${graph.nodes.length} nodes, ${graph.edges.length} edges`);
+      return graph;
+    } catch (error) {
+      console.error('Bob analysis failed, falling back to regex:', error);
+      return this.buildDependencyGraphWithRegex();
+    }
+  }
+
+  private async buildDependencyGraphWithRegex(): Promise<DependencyGraph> {
+    const files = await this.getAllSupportedFiles();
+    const limitedFiles = files.slice(0, 200);
+    
+    return this.graphBuilder.buildGraph(limitedFiles);
+  }
+
+  private async getAllSupportedFiles(selectedFolders?: string[] | null): Promise<string[]> {
+    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs', '.html', '.htm', '.css'];
+    const files: string[] = [];
+
+    if (selectedFolders && selectedFolders.length > 0) {
+      // Build patterns for selected folders
+      for (const folder of selectedFolders) {
+        const pattern = `${folder}/**/*{${extensions.join(',')}}`;
+        const uris = await vscode.workspace.findFiles(pattern, '**/node_modules/**');
+        for (const uri of uris) {
+          files.push(uri.fsPath);
+        }
+      }
+    } else {
+      // Original behavior - scan all files
+      const pattern = `**/*{${extensions.join(',')}}`;
+      const uris = await vscode.workspace.findFiles(pattern, '**/node_modules/**');
+      for (const uri of uris) {
+        files.push(uri.fsPath);
+      }
     }
 
     return files;
   }
 
-  private async parseFile(filePath: string): Promise<{ imports: FileImport[]; functions: FunctionDef[] } | null> {
-    if (this.cache.has(filePath)) {
-      return this.cache.get(filePath)!;
-    }
-
-    try {
-      const content = await this.readFileContent(filePath);
-      const ext = path.extname(filePath);
-
-      const imports = this.extractImports(content, ext);
-      const functions = this.extractFunctions(content, ext);
-
-      const result = { imports, functions };
-      this.cache.set(filePath, result);
-      return result;
-    } catch (error) {
-      console.error(`Error parsing ${filePath}:`, error);
-      return null;
-    }
-  }
-
-  private async readFileContent(filePath: string): Promise<string> {
-    return fs.promises.readFile(filePath, 'utf-8');
-  }
-
-  private extractImports(content: string, ext: string): FileImport[] {
-    const imports: FileImport[] = [];
-
-    if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
-      // ES6 imports: import { x, y } from './file'
-      const es6Regex = /import\s+(?:{([^}]+)}|(\w+))\s+from\s+['"]([^'"]+)['"]/g;
-      let match;
-      while ((match = es6Regex.exec(content)) !== null) {
-        const symbols = match[1] ? match[1].split(',').map(s => s.trim()) : [match[2]];
-        imports.push({
-          importedFile: match[3],
-          importedSymbols: symbols
-        });
-      }
-
-      // require: const x = require('./file')
-      const requireRegex = /(?:const|let|var)\s+(?:{([^}]+)}|(\w+))\s*=\s*require\s*\(['"]([^'"]+)['"]\)/g;
-      while ((match = requireRegex.exec(content)) !== null) {
-        const symbols = match[1] ? match[1].split(',').map(s => s.trim()) : [match[2]];
-        imports.push({
-          importedFile: match[3],
-          importedSymbols: symbols
-        });
-      }
-
-      // Dynamic imports: import('./file')
-      const dynamicRegex = /import\s*\(['"]([^'"]+)['"]\)/g;
-      while ((match = dynamicRegex.exec(content)) !== null) {
-        imports.push({
-          importedFile: match[1],
-          importedSymbols: []
-        });
-      }
-    } else if (ext === '.py') {
-      // Python: from module import x, y
-      const fromRegex = /from\s+([\w.]+)\s+import\s+([^;\n]+)/g;
-      let match;
-      while ((match = fromRegex.exec(content)) !== null) {
-        const symbols = match[2].split(',').map(s => s.trim());
-        imports.push({
-          importedFile: match[1].replace(/\./g, '/'),
-          importedSymbols: symbols
-        });
-      }
-
-      // Python: import module
-      const importRegex = /^import\s+([\w.]+)/gm;
-      while ((match = importRegex.exec(content)) !== null) {
-        imports.push({
-          importedFile: match[1].replace(/\./g, '/'),
-          importedSymbols: []
-        });
-      }
-    } else if (ext === '.go') {
-      // Go: import "package"
-      const goRegex = /import\s+(?:\(([^)]+)\)|"([^"]+)")/g;
-      let match;
-      while ((match = goRegex.exec(content)) !== null) {
-        if (match[1]) {
-          const packages = match[1].split('\n').map(p => p.trim().replace(/"/g, '')).filter(p => p);
-          packages.forEach(pkg => imports.push({ importedFile: pkg, importedSymbols: [] }));
-        } else {
-          imports.push({ importedFile: match[2], importedSymbols: [] });
-        }
-      }
-    } else if (ext === '.java') {
-      // Java: import package.Class;
-      const javaRegex = /import\s+([\w.]+);/g;
-      let match;
-      while ((match = javaRegex.exec(content)) !== null) {
-        imports.push({
-          importedFile: match[1].replace(/\./g, '/'),
-          importedSymbols: []
-        });
-      }
-    }
-
-    return imports;
-  }
-
-  private extractFunctions(content: string, ext: string): FunctionDef[] {
-    const functions: FunctionDef[] = [];
-    const lines = content.split('\n');
-
-    if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
-      // Function declarations: function name(
-      const funcRegex = /(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(/g;
-      let match;
-      while ((match = funcRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-        });
-      }
-
-      // Arrow functions: const name = (
-      const arrowRegex = /(?:export\s+)?const\s+(\w+)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>/g;
-      while ((match = arrowRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-        });
-      }
-
-      // Class methods: methodName(
-      const methodRegex = /(?:public|private|protected)?\s*(?:async\s+)?(\w+)\s*\([^)]*\)\s*{/g;
-      while ((match = methodRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: false
-        });
-      }
-
-      // Classes: class Name
-      const classRegex = /(?:export\s+)?class\s+(\w+)/g;
-      while ((match = classRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: /export/.test(content.substring(Math.max(0, match.index - 20), match.index))
-        });
-      }
-    } else if (ext === '.py') {
-      // Python: def name(
-      const defRegex = /def\s+(\w+)\s*\(/g;
-      let match;
-      while ((match = defRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: true // Python doesn't have explicit exports
-        });
-      }
-
-      // Python: class Name:
-      const classRegex = /class\s+(\w+)\s*:/g;
-      while ((match = classRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: true
-        });
-      }
-    } else if (ext === '.go') {
-      // Go: func name(
-      const funcRegex = /func\s+(?:\(\w+\s+\*?\w+\)\s+)?(\w+)\s*\(/g;
-      let match;
-      while ((match = funcRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        const isExported = /^[A-Z]/.test(match[1]); // Go exports start with capital
-        functions.push({
-          name: match[1],
-          line,
-          exported: isExported
-        });
-      }
-    } else if (ext === '.java') {
-      // Java: public/private/protected ... name(
-      const methodRegex = /(?:public|private|protected)\s+(?:static\s+)?(?:\w+\s+)?(\w+)\s*\(/g;
-      let match;
-      while ((match = methodRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: /public/.test(content.substring(Math.max(0, match.index - 50), match.index))
-        });
-      }
-
-      // Java: class Name
-      const classRegex = /(?:public\s+)?class\s+(\w+)/g;
-      while ((match = classRegex.exec(content)) !== null) {
-        const line = content.substring(0, match.index).split('\n').length;
-        functions.push({
-          name: match[1],
-          line,
-          exported: /public/.test(content.substring(Math.max(0, match.index - 20), match.index))
-        });
-      }
-    }
-
-    return functions;
-  }
-
-  private resolveImportPath(fromFile: string, importPath: string): string | null {
-    // Handle relative imports
-    if (importPath.startsWith('.')) {
-      const dir = path.dirname(fromFile);
-      let resolved = path.resolve(dir, importPath);
-
-      // Try with common extensions
-      const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs'];
-      for (const ext of extensions) {
-        if (fs.existsSync(resolved + ext)) {
-          return resolved + ext;
-        }
-      }
-
-      // Try as directory with index file
-      for (const ext of extensions) {
-        const indexPath = path.join(resolved, `index${ext}`);
-        if (fs.existsSync(indexPath)) {
-          return indexPath;
-        }
-      }
-
-      // Try as-is
-      if (fs.existsSync(resolved)) {
-        return resolved;
-      }
-    }
-
-    // For absolute imports, try to resolve from workspace root
-    const absolutePath = path.join(this.workspaceRoot, importPath);
-    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs'];
-    for (const ext of extensions) {
-      if (fs.existsSync(absolutePath + ext)) {
-        return absolutePath + ext;
-      }
-    }
-
-    return null;
-  }
 }
 
 // Made with Bob
