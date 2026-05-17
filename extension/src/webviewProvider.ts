@@ -2,12 +2,14 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { FileSystemService } from './fileSystemService';
 import { BobService } from './bobService';
+import { DependencyService } from './dependencyService';
 import { WebviewMessage, ExtensionMessage, BobMessage } from './types';
 
 export class RepomapWebviewProvider {
   private panel: vscode.WebviewPanel | undefined;
   private fileSystemService: FileSystemService;
   private bobService: BobService;
+  private dependencyService: DependencyService;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -15,6 +17,7 @@ export class RepomapWebviewProvider {
   ) {
     this.fileSystemService = new FileSystemService();
     this.bobService = new BobService();
+    this.dependencyService = new DependencyService();
   }
 
   public async show() {
@@ -89,6 +92,10 @@ export class RepomapWebviewProvider {
           await this.loadWorkspace();
           break;
 
+        case 'loadDependencyGraph':
+          await this.loadDependencyGraph();
+          break;
+
         case 'readFile':
           await this.readFile(message.path);
           break;
@@ -130,6 +137,25 @@ export class RepomapWebviewProvider {
       this.sendMessage({
         type: 'error',
         message: `Failed to load workspace: ${error.message}`
+      });
+    }
+  }
+
+  private async loadDependencyGraph() {
+    console.log('🦍 Loading dependency graph...');
+    try {
+      const graph = await this.dependencyService.buildDependencyGraph();
+      console.log('🦍 Dependency graph loaded:', graph.nodes.length, 'nodes,', graph.edges.length, 'edges');
+      
+      this.sendMessage({
+        type: 'dependencyGraphLoaded',
+        graph
+      });
+    } catch (error: any) {
+      console.error('🦍 Error loading dependency graph:', error);
+      this.sendMessage({
+        type: 'error',
+        message: `Failed to load dependency graph: ${error.message}`
       });
     }
   }

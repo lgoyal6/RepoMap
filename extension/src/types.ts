@@ -19,9 +19,30 @@ export interface BobResponse {
   content: Array<{ type: string; text: string }>;
 }
 
+export interface DependencyNode {
+  id: string;
+  name: string;
+  type: 'folder' | 'file' | 'function';
+  filePath: string;
+  line?: number;
+  children?: DependencyNode[];
+}
+
+export interface DependencyEdge {
+  from: string;
+  to: string;
+  type: 'imports' | 'calls';
+}
+
+export interface DependencyGraph {
+  nodes: DependencyNode[];
+  edges: DependencyEdge[];
+}
+
 // Messages from webview to extension
 export type WebviewMessage =
   | { type: 'loadWorkspace' }
+  | { type: 'loadDependencyGraph' }
   | { type: 'readFile'; path: string }
   | { type: 'writeFile'; path: string; content: string }
   | { type: 'renameFile'; oldPath: string; newPath: string }
@@ -30,6 +51,7 @@ export type WebviewMessage =
 // Messages from extension to webview
 export type ExtensionMessage =
   | { type: 'workspaceLoaded'; tree: FileNode[]; workspaceName: string }
+  | { type: 'dependencyGraphLoaded'; graph: DependencyGraph }
   | { type: 'fileContent'; path: string; content: string }
   | { type: 'bobResponse'; content: Array<{ type: string; text: string }> }
   | { type: 'fileWritten'; path: string; success: boolean }
