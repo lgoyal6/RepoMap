@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
-import { FileSystemService } from '../fileSystemService';
-import { BobService } from '../bobService';
-import { UnifiedGraphService } from '../unifiedGraphService';
-import { WebviewMessage, ExtensionMessage, BobMessage } from '../types';
+import { BobService, FileSystemService, UnifiedGraphService } from '../services';
+import { BobMessage, ExtensionMessage, WebviewMessage } from '../models';
 
 export class MessageHandlers {
   constructor(

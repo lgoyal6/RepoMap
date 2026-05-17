@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { FileNode, DependencyEdge } from './types';
-import { FileSystemService } from './fileSystemService';
+import { FileNode, DependencyEdge } from '../../models';
+import { FileSystemService } from '../core';
 import { DependencyService, DependencyGraph } from './dependencyService';
 
 export interface UnifiedGraph {
@@ -21,12 +21,12 @@ export class UnifiedGraphService {
     this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
   }
 
-  async buildUnifiedGraph(forceRefresh: boolean = false): Promise<UnifiedGraph> {
+  async buildUnifiedGraph(forceRefresh: boolean = false, selectedFolders?: string[]): Promise<UnifiedGraph> {
     // Build file tree
     const tree = await this.fileSystemService.buildTree();
     
-    // Build dependency graph
-    const dependencyGraph = await this.dependencyService.buildDependencyGraph(forceRefresh);
+    // Build dependency graph with optional folder filter
+    const dependencyGraph = await this.dependencyService.buildDependencyGraph(forceRefresh, selectedFolders);
     
     // The tree already has all the files we need
     // We just need to add the dependency edges

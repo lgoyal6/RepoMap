@@ -808,6 +808,8 @@ export default function App() {
   const [renameNode, setRenameNode] = useState<FileNode | null>(null);
   const [dependencyEdges, setDependencyEdges] = useState<DependencyEdge[]>([]);
   const [disabledGraphPaths, setDisabledGraphPaths] = useState<Set<string>>(new Set());
+  const [folderSelectionModal, setFolderSelectionModal] = useState<{ folders: string[]; selectedFolders: Set<string> } | null>(null);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
 
   // Listen for messages from extension
   useEffect(() => {
@@ -821,6 +823,15 @@ export default function App() {
           setTree(message.tree);
           setWorkspaceName(message.workspaceName);
           setDependencyEdges(message.edges || []);
+          break;
+        case 'requestFolderSelection':
+          // Show folder selection modal
+          setFolderSelectionModal({
+            folders: message.folders,
+            selectedFolders: new Set(message.folders) // All selected by default
+          });
+          // Reset expanded folders when modal opens
+          setExpandedFolders(new Set());
           break;
         case 'fileContent':
           if (message.path === selectedFile && !explanations[message.path]) {
@@ -1009,6 +1020,153 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Folder Selection Modal */}
+      {folderSelectionModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div style={{ background: '#111827', border: '1px solid #1f2937', borderRadius: 12, padding: 24, maxWidth: 600, width: '90%', maxHeight: '80vh', overflow: 'auto' }}>
+            <h2 style={{ color: '#fff', fontSize: 18, marginBottom: 8 }}>Select Folders for Dependency Analysis</h2>
+            <p style={{ color: '#9ca3af', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+              Choose which folders (including subfolders) to include in the dependency graph analysis. This helps focus on relevant parts of your codebase.
+            </p>
+            
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+                <button
+                  onClick={() => setFolderSelectionModal(prev => prev ? { ...prev, selectedFolders: new Set(prev.folders) } : null)}
+                  style={{ padding: '8px 16px', background: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#9ca3af', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+                  Select All
+                </button>
+                <button
+                  onClick={() => setFolderSelectionModal(prev => prev ? { ...prev, selectedFolders: new Set() } : null)}
+                  style={{ padding: '8px 16px', background: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#9ca3af', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+                  Deselect All
+                </button>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: '50vh', overflowY: 'auto', padding: 4 }}>
+                {(() => {
+                  // Build a hierarchical structure from flat folder list
+                  const folderTree: Record<string, string[]> = {};
+                  const topLevel: string[] = [];
+                  
+                  folderSelectionModal.folders.forEach(folder => {
+                    const parts = folder.split('/');
+                    if (parts.length === 1) {
+                      topLevel.push(folder);
+                    } else {
+                      const parent = parts.slice(0, -1).join('/');
+                      if (!folderTree[parent]) folderTree[parent] = [];
+                      folderTree[parent].push(folder);
+                    }
+                  });
+
+                  const renderFolder = (folder: string, depth: number = 0): React.ReactNode => {
+                    const hasChildren = folderTree[folder] && folderTree[folder].length > 0;
+                    const isExpanded = expandedFolders.has(folder);
+                    const folderName = folder.split('/').pop() || folder;
+                    const isChecked = folderSelectionModal.selectedFolders.has(folder);
+
+                    return (
+                      <div key={folder}>
+                        <label
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            padding: '6px 8px',
+                            paddingLeft: `${8 + depth * 20}px`,
+                            background: isChecked ? '#1a1a2e' : '#0a0a1a',
+                            border: '1px solid #1f2937',
+                            borderRadius: 4,
+                            cursor: 'pointer',
+                            marginBottom: 2
+                          }}>
+                          {hasChildren && (
+                            <span
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setExpandedFolders(prev => {
+                                  const next = new Set(prev);
+                                  if (next.has(folder)) {
+                                    next.delete(folder);
+                                  } else {
+                                    next.add(folder);
+                                  }
+                                  return next;
+                                });
+                              }}
+                              style={{
+                                cursor: 'pointer',
+                                color: '#9ca3af',
+                                fontSize: 10,
+                                width: 12,
+                                display: 'inline-block',
+                                userSelect: 'none'
+                              }}>
+                              {isExpanded ? '▼' : '▶'}
+                            </span>
+                          )}
+                          {!hasChildren && <span style={{ width: 12, display: 'inline-block' }}></span>}
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {
+                              setFolderSelectionModal(prev => {
+                                if (!prev) return null;
+                                const newSelected = new Set(prev.selectedFolders);
+                                if (newSelected.has(folder)) {
+                                  newSelected.delete(folder);
+                                } else {
+                                  newSelected.add(folder);
+                                }
+                                return { ...prev, selectedFolders: newSelected };
+                              });
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          />
+                          <span style={{ color: '#e5e7eb', fontSize: 12, fontFamily: 'monospace' }}>
+                            📁 {folderName}
+                          </span>
+                        </label>
+                        {hasChildren && isExpanded && (
+                          <div>
+                            {folderTree[folder].map(child => renderFolder(child, depth + 1))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  };
+
+                  return topLevel.map(folder => renderFolder(folder, 0));
+                })()}
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setFolderSelectionModal(null)}
+                style={{ padding: '8px 16px', background: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#9ca3af', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (folderSelectionModal) {
+                    vscode.postMessage({
+                      type: 'selectFoldersForAnalysis',
+                      folders: Array.from(folderSelectionModal.selectedFolders)
+                    });
+                    setFolderSelectionModal(null);
+                  }
+                }}
+                style={{ padding: '8px 16px', background: '#312e81', border: '1px solid #4338ca', borderRadius: 6, color: '#818cf8', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>
+                Analyze Selected Folders ({folderSelectionModal.selectedFolders.size})
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Context Menu */}
       {contextMenu && (

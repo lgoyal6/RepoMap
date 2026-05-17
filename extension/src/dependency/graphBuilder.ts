@@ -2,7 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { CodeParser, ParsedFile } from './codeParser';
 import { PathResolver } from './pathResolver';
-import { DependencyNode, DependencyEdge } from '../types';
+import { DependencyNode } from '../models';
+import { DependencyEdge } from '../services';
+// import { DependencyNode, DependencyEdge } from '../types';
 
 export class GraphBuilder {
   private cache: Map<string, ParsedFile> = new Map();

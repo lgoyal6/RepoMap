@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { RepomapWebviewProvider } from './webviewProvider';
+import { RepomapWebviewProvider } from './providers';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Repomap extension is now active');

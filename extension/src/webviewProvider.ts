@@ -1,11 +1,8 @@
 import * as vscode from 'vscode';
-import { FileSystemService } from './fileSystemService';
-import { BobService } from './bobService';
-import { DependencyService } from './dependencyService';
-import { UnifiedGraphService } from './unifiedGraphService';
 import { MessageHandlers } from './webview/messageHandlers';
 import { HtmlGenerator } from './webview/htmlGenerator';
-import { WebviewMessage, ExtensionMessage } from './types';
+import { ExtensionMessage, WebviewMessage } from './models';
+import { BobService, DependencyService, FileSystemService, UnifiedGraphService } from './services';
 
 export class RepomapWebviewProvider {
   private panel: vscode.WebviewPanel | undefined;

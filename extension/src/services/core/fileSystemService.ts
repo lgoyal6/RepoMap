@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { FileNode } from './types';
+import { FileNode } from '../../models';
 
 const IGNORED = new Set(['node_modules', '.git', 'dist', 'build', '__pycache__', '.venv', 'venv', '.next', 'coverage', '.DS_Store', 'out']);
 
@@ -110,6 +110,59 @@ export class FileSystemService {
 
   getWorkspaceRoot(): vscode.Uri | undefined {
     return this.workspaceRoot;
+  }
+
+  async getTopLevelFolders(): Promise<string[]> {
+    if (!this.workspaceRoot) {
+      throw new Error('No workspace folder open');
+    }
+
+    try {
+      const entries = await vscode.workspace.fs.readDirectory(this.workspaceRoot);
+      const folders: string[] = [];
+
+      for (const [name, type] of entries) {
+        if (type === vscode.FileType.Directory && !IGNORED.has(name)) {
+          folders.push(name);
+        }
+      }
+
+      return folders.sort();
+    } catch (error) {
+      console.error('Error getting top-level folders:', error);
+      throw error;
+    }
+  }
+
+  async getAllFoldersRecursive(dirUri?: vscode.Uri, relativePath: string = ''): Promise<string[]> {
+    const uri = dirUri || this.workspaceRoot;
+    if (!uri) {
+      throw new Error('No workspace folder open');
+    }
+
+    try {
+      const entries = await vscode.workspace.fs.readDirectory(uri);
+      const folders: string[] = [];
+
+      for (const [name, type] of entries) {
+        if (IGNORED.has(name)) continue;
+
+        if (type === vscode.FileType.Directory) {
+          const fullUri = vscode.Uri.joinPath(uri, name);
+          const relPath = relativePath ? `${relativePath}/${name}` : name;
+          folders.push(relPath);
+          
+          // Recursively get subfolders
+          const subfolders = await this.getAllFoldersRecursive(fullUri, relPath);
+          folders.push(...subfolders);
+        }
+      }
+
+      return folders;
+    } catch (error) {
+      console.error('Error getting folders recursively:', error);
+      throw error;
+    }
   }
 }
 

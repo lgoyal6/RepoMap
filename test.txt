@@ -1,0 +1,766 @@
+Analyze these code files and create a dependency graph. Return ONLY valid JSON in this exact format:
+{
+  "nodes": [
+    {"id": "path/to/file.ts", "name": "file.ts", "type": "file", "filePath": "path/to/file.ts", "children": [
+      {"id": "path/to/file.ts:functionName", "name": "functionName", "type": "function", "filePath": "path/to/file.ts", "line": 10}
+    ]}
+  ],
+  "edges": [
+    {"from": "path/to/file1.ts", "to": "path/to/file2.ts", "type": "imports"},
+    {"from": "path/to/file1.ts", "to": "path/to/file2.ts:functionName", "type": "calls"}
+  ]
+}
+
+Rules:
+- Each file is a node with type "file"
+- Functions/classes are child nodes with type "function"
+- "imports" edges show file imports
+- "calls" edges show function calls
+- Use relative paths as IDs
+- Return ONLY the JSON, no explanation
+
+Files to analyze:
+File: webview/src/vscode.d.ts
+```
+// Type definitions for VS Code webview API
+export interface VsCodeApi {
+  postMessage(message: any): void;
+  getState(): any;
+  setState(state: any): void;
+}
+
+declare global {
+  function acquireVsCodeApi(): VsCodeApi;
+}
+
+export {};
+
+// Made with Bob
+
+```
+
+File: webview/src/main.tsx
+```
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// Made with Bob
+
+```
+
+File: webview/src/App.tsx
+```
+  import React, { useState, useRef, useEffect, useCallback } from 'react';
+
+// VS Code API
+const vscode = acquireVsCodeApi();
+
+interface FileNode {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  children?: FileNode[];
+}
+
+interface BobMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface DependencyEdge {
+  from: string;
+  to: string;
+  type: 'imports' | 'calls';
+}
+
+const EXT_COLORS: Record<string, string> = {
+  '.ts': '#3b82f6', '.tsx': '#06b6d4', '.js': '#f59e0b', '.jsx': '#f97316',
+  '.py': '#10b981', '.go': '#00acd7', '.rs': '#f97316', '.md': '#8b5cf6',
+  '.json': '#6b7280', '.yaml': '#6b7280', '.yml': '#6b7280', '.java': '#f44336',
+  '.kt': '#7c4dff', '.cs': '#68217a', '.rb': '#cc342d', '.php': '#777bb4',
+  '.swift': '#fa7343', '.cpp': '#00599c', '.c': '#a8b9cc', '.h': '#a8b9cc',
+};
+
+function getColor(name: string): string {
+  const ext = '.' + name.split('.').pop();
+  return EXT_COLORS[ext] || '#6b7280';
+}
+
+// ===== FILE TREE SIDEBAR =====
+function FileTree({ tree, selectedFile, disabledPaths, onSelect, onToggleDisabled }: {
+  tree: FileNode[];
+  selectedFile: string | null;
+  disabledPaths: Set<string>;
+  onSelect: (node: FileNode) => void;
+  onToggleDisabled: (node: FileNode) => void;
+}) {
+  return (
+    <div style={{ width: 280, borderRight: '1px solid #1f2937', overflowY: 'auto', padding: '12px 0', flexShrink: 0, height: '100%', background: '#090914' }}>
+      <div style={{ padding: '0 12px 10px', borderBottom: '1px solid #111827', marginBottom: 8 }}>
+        <p style={{ fontSize: 11, color: '#e5e7eb', fontWeight: 700, marginBottom: 4 }}>Graph visibility</p>
+        <p style={{ fontSize: 10, color: '#6b7280', lineHeight: 1.4 }}>Uncheck files or folders to hide them from the graph.</p>
+      </div>
+      {tree.map(node => (
+        <TreeNode
+          key={node.path}
+          node={node}
+          depth={0}
+          selectedFile={selectedFile}
+          disabledPaths={disabledPaths}
+          onSelect={onSelect}
+          
+```
+
+File: extension/src/services/index.ts
+```
+// Re-export all services from their respective folders
+export * from './bob';
+export * from './analysis';
+export * from './core';
+
+// Made with Bob
+
+```
+
+File: extension/src/models/index.ts
+```
+// Re-export all types for easier imports
+export * from './types';
+
+// Made with Bob
+
+```
+
+File: extension/src/models/types.ts
+```
+export interface FileNode {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  children?: FileNode[];
+}
+
+export interface BobMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface BobRequest {
+  system: string;
+  messages: BobMessage[];
+}
+
+export interface BobResponse {
+  content: Array<{ type: string; text: string }>;
+}
+
+export interface DependencyNode {
+  id: string;
+  name: string;
+  type: 'folder' | 'file' | 'function';
+  filePath: string;
+  line?: number;
+  children?: DependencyNode[];
+}
+
+export interface DependencyEdge {
+  from: string;
+  to: string;
+  type: 'imports' | 'calls';
+}
+
+export interface DependencyGraph {
+  nodes: DependencyNode[];
+  edges: DependencyEdge[];
+}
+
+// Messages from webview to extension
+export type WebviewMessage =
+  | { type: 'loadWorkspace' }
+  | { type: 'loadDependencyGraph' }
+  | { type: 'refreshDependencyGraph' }
+  | { type: 'readFile'; path: string }
+  | { type: 'writeFile'; path: string; content: string }
+  | { type: 'renameFile'; oldPath: string; newPath: string }
+  | { type: 'askBob'; system: string; messages: BobMessage[] };
+
+// Messages from extension to webview
+export type ExtensionMessage =
+  | { type: 'workspaceLoaded'; tree: FileNode[]; workspaceName: string; edges: DependencyEdge[] }
+  | { type: 'dependencyGraphLoaded'; graph: DependencyGraph }
+  | { type: 'fileContent'; path: string; content: string }
+  | { type: 'bobResponse'; content: Array<{ type: string; text: string }> }
+  | { type: 'fileWritten'; path: string; success: boolean }
+  | { type: 'fileRenamed'; oldPath: string; newPath: string; success: boolean }
+  | { type: 'error'; message: string };
+
+// Made with Bob
+
+```
+
+File: extension/src/services/bob/index.ts
+```
+// Re-export Bob-related services
+export { BobService } from './bobService';
+export { BobRefactoringService } from './bobRefactoringService';
+
+// Made with Bob
+
+```
+
+File: extension/src/services/bob/bobRefactoringService.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
+import { BobService } from './bobService';
+
+interface RefactoringResult {
+  success: boolean;
+  filesUpdated: string[];
+  errors: string[];
+}
+
+interface FileMapping {
+  oldPath: string;
+  newPath: string;
+}
+
+export class BobRefactoringService {
+  private workspaceRoot: string;
+  private bobService: BobService;
+
+  constructor() {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
+    this.bobService = new BobService();
+  }
+
+  /**
+   * Check if a path is a directory
+   */
+  private async isDirectory(filePath: string): Promise<boolean> {
+    try {
+      const stat = await fs.promises.stat(filePath);
+      return stat.isDirectory();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get all files in a directory recursively
+   */
+  private async getFilesInDirectory(dirPath: string): Promise<string[]> {
+    const files: string[] = [];
+    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs', '.vue', '.svelte'];
+    
+    async function scan(currentPath: string) {
+      const entries = await fs.promises.readdir(currentPath, { withFileTypes: true });
+      
+      for (const entry of entries) {
+        const fullPath = path.join(currentPath, entry.name);
+        
+        if (entry.isDirectory()) {
+          // Skip node_modules and other common ignore patterns
+          if (!['node_modules', '.git', 'dist', 'build', '__pycache__'].includes(entry.name)) {
+            await scan(fullPath);
+          }
+        } else if (entry.isFile()) {
+          const ext = path.extname(entry.name);
+          if (extensions.includes(ext)) {
+            files.push(fullPath);
+          }
+        }
+      }
+    }
+    
+    await scan(dirPath);
+    return files;
+  }
+
+  /**
+   * Use Bob to refactor file or folder rename - find and update all references
+   */
+  async refactorRename(oldPath: string, newPa
+```
+
+File: extension/src/services/bob/bobService.ts
+```
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import * as os from 'os';
+import { BobRequest, BobResponse } from '../../models';
+import * as vscode from 'vscode';
+
+const execAsync = promisify(exec);
+
+export class BobService {
+  async askBob(request: BobRequest): Promise<BobResponse> {
+    try {
+      // Build a single prompt from system + messages
+      let prompt = '';
+      if (request.system) {
+        prompt += request.system + '\n\n';
+      }
+
+      for (const msg of request.messages) {
+        if (msg.role === 'user') {
+          prompt += `User: ${msg.content}\n`;
+        } else if (msg.role === 'assistant') {
+          prompt += `Assistant: ${msg.content}\n`;
+        }
+      }
+
+      // Write prompt to a temp file for safety
+      const tmpDir = os.tmpdir();
+      const tmpFile = path.join(tmpDir, `repomap-prompt-${Date.now()}.txt`);
+      await fs.writeFile(tmpFile, prompt, 'utf-8');
+
+      try {
+        // Execute Bob CLI
+        const { stdout } = await execAsync(
+          `cat "${tmpFile}" | bob -o json --chat-mode ask --hide-intermediary-output`,
+          {
+            timeout: 60000,
+            maxBuffer: 1024 * 1024 * 5,
+            cwd: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath // Add this line
+          }
+        );
+
+
+        // Clean up temp file
+        await fs.unlink(tmpFile).catch(() => { });
+
+        // Bob outputs the response text first, then JSON stats
+        // Extract the text before the JSON block
+        const jsonStart = stdout.indexOf('\n{');
+        const textResponse = jsonStart !== -1 ? stdout.slice(0, jsonStart).trim() : stdout.trim();
+
+        return {
+          content: [{ type: 'text', text: textResponse }]
+        };
+      } catch (execError: any) {
+        // Clean up temp file on error
+        await fs.unlink(tmpFile).catch(() => { });
+        throw new Error(`Bob CLI error: ${execError.message}`);
+      }
+    } catch (erro
+```
+
+File: extension/src/services/analysis/index.ts
+```
+// Re-export analysis services
+export { DependencyService } from './dependencyService';
+export { UnifiedGraphService } from './unifiedGraphService';
+export type { DependencyNode, DependencyEdge, DependencyGraph } from './dependencyService';
+export type { UnifiedGraph } from './unifiedGraphService';
+
+// Made with Bob
+
+```
+
+File: extension/src/services/analysis/dependencyService.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
+import { BobService } from '../bob';
+import ignore from 'ignore';
+
+export interface DependencyNode {
+  id: string;
+  name: string;
+  type: 'folder' | 'file' | 'function';
+  filePath: string;
+  line?: number;
+  children?: DependencyNode[];
+}
+
+export interface DependencyEdge {
+  from: string;
+  to: string;
+  type: 'imports' | 'calls';
+}
+
+export interface DependencyGraph {
+  nodes: DependencyNode[];
+  edges: DependencyEdge[];
+}
+
+interface FunctionDef {
+  name: string;
+  line: number;
+  exported: boolean;
+}
+
+interface FileImport {
+  importedFile: string;
+  importedSymbols: string[];
+}
+
+export class DependencyService {
+  private workspaceRoot: string;
+  private cache: Map<string, { imports: FileImport[]; functions: FunctionDef[] }> = new Map();
+  private bobService: BobService;
+  private cacheFilePath: string;
+
+  constructor() {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
+    this.bobService = new BobService();
+    this.cacheFilePath = path.join(this.workspaceRoot, '.bob', 'dependency-graph.json');
+  }
+
+  private isPathWithinWorkspace(filePath: string): boolean {
+    const absolutePath = path.resolve(this.workspaceRoot, filePath);
+    return absolutePath.startsWith(this.workspaceRoot);
+  }
+
+  async loadCachedGraph(): Promise<DependencyGraph | null> {
+    try {
+      if (fs.existsSync(this.cacheFilePath)) {
+        const data = await fs.promises.readFile(this.cacheFilePath, 'utf-8');
+        return JSON.parse(data);
+      }
+    } catch (error) {
+      console.error('Failed to load cached dependency graph:', error);
+    }
+    return null;
+  }
+
+  async saveCachedGraph(graph: DependencyGraph): Promise<void> {
+    try {
+      const dir = path.dirname(this.cacheFilePath);
+      if (!fs.existsSync(dir)) {
+        await fs.promises.mkdir(dir, { recursive: true });
+      }
+      await fs.promises.writeFile(
+```
+
+File: extension/src/services/analysis/unifiedGraphService.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import { FileNode, DependencyEdge } from '../../models';
+import { FileSystemService } from '../core';
+import { DependencyService, DependencyGraph } from './dependencyService';
+
+export interface UnifiedGraph {
+  tree: FileNode[];
+  edges: DependencyEdge[];
+}
+
+export class UnifiedGraphService {
+  private fileSystemService: FileSystemService;
+  private dependencyService: DependencyService;
+  private workspaceRoot: string;
+
+  constructor() {
+    this.fileSystemService = new FileSystemService();
+    this.dependencyService = new DependencyService();
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
+  }
+
+  async buildUnifiedGraph(forceRefresh: boolean = false): Promise<UnifiedGraph> {
+    // Build file tree
+    const tree = await this.fileSystemService.buildTree();
+    
+    // Build dependency graph
+    const dependencyGraph = await this.dependencyService.buildDependencyGraph(forceRefresh);
+    
+    // The tree already has all the files we need
+    // We just need to add the dependency edges
+    // The edges reference file paths that should match the tree paths
+    
+    return {
+      tree,
+      edges: dependencyGraph.edges
+    };
+  }
+}
+
+// Made with Bob
+```
+
+File: extension/src/extension.ts
+```
+import * as vscode from 'vscode';
+import { RepomapWebviewProvider } from './providers';
+
+export function activate(context: vscode.ExtensionContext) {
+  console.log('Repomap extension is now active');
+
+  // Register the command to open Repomap panel
+  const openPanelCommand = vscode.commands.registerCommand('repomap.openPanel', async () => {
+    // Check if a workspace is open
+    if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
+      vscode.window.showErrorMessage('Please open a workspace folder to use Repomap');
+      return;
+    }
+
+    const provider = new RepomapWebviewProvider(context.extensionUri, context);
+    await provider.show();
+  });
+
+  context.subscriptions.push(openPanelCommand);
+}
+
+export function deactivate() {
+  console.log('Repomap extension is now deactivated');
+}
+
+// Made with Bob
+
+```
+
+File: extension/src/services/core/index.ts
+```
+// Re-export core services
+export { FileSystemService } from './fileSystemService';
+export { RefactoringService } from './refactoringService';
+
+// Made with Bob
+
+```
+
+File: extension/src/services/core/fileSystemService.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import { FileNode } from '../../models';
+
+const IGNORED = new Set(['node_modules', '.git', 'dist', 'build', '__pycache__', '.venv', 'venv', '.next', 'coverage', '.DS_Store', 'out']);
+
+const ALLOWED_EXT = new Set([
+  '.js', '.ts', '.jsx', '.tsx', '.py', '.go', '.rs', '.java', '.kt', '.cs',
+  '.rb', '.php', '.swift', '.cpp', '.c', '.h', '.md', '.json', '.yaml', '.yml',
+  '.toml', '.sql', '.graphql', '.sh', '.bash', '.proto', '.env.example', '.txt',
+  '.html', '.css', '.scss', '.sass', '.less', '.vue', '.svelte'
+]);
+
+const ALLOWED_NAMES = new Set(['Makefile', 'Dockerfile', 'Jenkinsfile', 'Vagrantfile']);
+
+export class FileSystemService {
+  private workspaceRoot: vscode.Uri | undefined;
+
+  constructor() {
+    this.workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri;
+  }
+
+  private shouldInclude(name: string): boolean {
+    if (ALLOWED_NAMES.has(name)) return true;
+    const ext = path.extname(name);
+    return ALLOWED_EXT.has(ext);
+  }
+
+  async buildTree(dirUri?: vscode.Uri, relativePath: string = ''): Promise<FileNode[]> {
+    const uri = dirUri || this.workspaceRoot;
+    if (!uri) {
+      throw new Error('No workspace folder open');
+    }
+
+    try {
+      const entries = await vscode.workspace.fs.readDirectory(uri);
+      const result: FileNode[] = [];
+
+      for (const [name, type] of entries) {
+        if (IGNORED.has(name)) continue;
+
+        const fullUri = vscode.Uri.joinPath(uri, name);
+        const relPath = relativePath ? `${relativePath}/${name}` : name;
+
+        if (type === vscode.FileType.Directory) {
+          const children = await this.buildTree(fullUri, relPath);
+          if (children.length > 0) {
+            result.push({
+              name,
+              path: relPath,
+              type: 'directory',
+              children
+            });
+          }
+        } else if (type === vscode.FileType.File && this.shouldInclude(name)) {
+          result.push({
+            name,
+     
+```
+
+File: extension/src/services/core/refactoringService.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
+
+interface FileReference {
+  filePath: string;
+  line: number;
+  column: number;
+  importPath: string;
+}
+
+export class RefactoringService {
+  private workspaceRoot: string;
+
+  constructor() {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    this.workspaceRoot = workspaceFolders?.[0]?.uri.fsPath || '';
+  }
+
+  /**
+   * Find all files that import or reference the given file
+   */
+  async findFileReferences(targetFilePath: string): Promise<FileReference[]> {
+    const references: FileReference[] = [];
+    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.go', '.java', '.rs'];
+    
+    // Get all supported files
+    const pattern = `**/*{${extensions.join(',')}}`;
+    const uris = await vscode.workspace.findFiles(pattern, '**/node_modules/**');
+
+    const targetRelPath = path.relative(this.workspaceRoot, targetFilePath);
+    const targetBaseName = path.basename(targetFilePath, path.extname(targetFilePath));
+
+    for (const uri of uris) {
+      const filePath = uri.fsPath;
+      if (filePath === targetFilePath) continue; // Skip the file itself
+
+      try {
+        const content = await fs.promises.readFile(filePath, 'utf-8');
+        const lines = content.split('\n');
+        const ext = path.extname(filePath);
+
+        // Find import statements that reference the target file
+        lines.forEach((line, lineIndex) => {
+          const refs = this.findImportsInLine(line, filePath, targetFilePath, targetBaseName, ext);
+          refs.forEach(ref => {
+            references.push({
+              filePath,
+              line: lineIndex + 1,
+              column: ref.column,
+              importPath: ref.importPath
+            });
+          });
+        });
+      } catch (error) {
+        console.error(`Error reading file ${filePath}:`, error);
+      }
+    }
+
+    return references;
+  }
+
+  /**
+   * Find import statements in a line that reference the target file
+
+```
+
+File: extension/src/providers/index.ts
+```
+// Re-export all providers
+export { RepomapWebviewProvider } from './webviewProvider';
+
+// Made with Bob
+
+```
+
+File: extension/src/providers/webviewProvider.ts
+```
+import * as vscode from 'vscode';
+import * as path from 'path';
+import { FileSystemService } from '../services/core';
+import { BobService, BobRefactoringService } from '../services/bob';
+import { DependencyService, UnifiedGraphService } from '../services/analysis';
+import { WebviewMessage, ExtensionMessage, BobMessage } from '../models';
+
+export class RepomapWebviewProvider {
+  private panel: vscode.WebviewPanel | undefined;
+  private fileSystemService: FileSystemService;
+  private bobService: BobService;
+  private dependencyService: DependencyService;
+  private unifiedGraphService: UnifiedGraphService;
+  private bobRefactoringService: BobRefactoringService;
+
+  constructor(
+    private readonly extensionUri: vscode.Uri,
+    private readonly context: vscode.ExtensionContext
+  ) {
+    this.fileSystemService = new FileSystemService();
+    this.bobService = new BobService();
+    this.dependencyService = new DependencyService();
+    this.unifiedGraphService = new UnifiedGraphService();
+    this.bobRefactoringService = new BobRefactoringService();
+  }
+
+  public async show() {
+    console.log('🦍 RepomapWebviewProvider.show() called');
+    
+    // Check if Bob is available
+    const bobAvailable = await this.bobService.checkBobAvailable();
+    console.log('🦍 Bob available:', bobAvailable);
+    
+    if (!bobAvailable) {
+      const result = await vscode.window.showWarningMessage(
+        'IBM Bob CLI is not installed or not in PATH. Repomap requires Bob for AI features.',
+        'Continue Anyway',
+        'Cancel'
+      );
+      if (result !== 'Continue Anyway') {
+        return;
+      }
+    }
+
+    if (this.panel) {
+      console.log('🦍 Panel already exists, revealing');
+      this.panel.reveal(vscode.ViewColumn.One);
+      return;
+    }
+
+    console.log('🦍 Creating new webview panel');
+    this.panel = vscode.window.createWebviewPanel(
+      'repomap',
+      'Repomap',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: tr
+```
+
+File: webview/vite.config.ts
+```
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+
+  base: './',
+
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+        inlineDynamicImports: true,
+
+        entryFileNames: 'assets/index.js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]'
+      }
+    }
+  }
+});
+```
