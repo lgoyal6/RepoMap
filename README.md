@@ -26,8 +26,8 @@ Repomap is an AI-powered codebase visualization and editing tool designed to hel
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/repomap-vscode.git
-   cd repomap-vscode
+   git clone https://github.com/lgoyal6/RepoMap.git
+   cd RepoMap
    ```
 
 2. Install dependencies:
