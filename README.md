@@ -20,10 +20,13 @@ from directory structure down to individual exported functions.
 **This is regex extraction, not a parser, and it is worth being clear about what that
 costs.** A `calls` edge means the imported symbol's name appears followed by an open
 paren, so a mention in a comment or a string counts. Import parsing is implemented for
-TypeScript, JavaScript and Python; `.go`, `.java` and `.rs` files are discovered and
-placed as nodes, but their imports are not read, so those nodes are sparser than they
-should be. The walk stops at 200 files to keep the panel responsive, which truncates
-large repos rather than sampling them.
+TypeScript, JavaScript, Python, Go and Java, but Go and Java imports are package paths
+and `resolveImportPath` only resolves against files in the workspace, so those edges
+almost never land. Rust files are discovered and placed as nodes with no import or
+function extraction at all. Either way those nodes come out sparser than they look.
+
+The walk stops at 200 files to keep the panel responsive, which truncates large repos
+rather than sampling them.
 
 Good enough to orient yourself in an unfamiliar repo in a few seconds. Not good enough
 to answer "is this function dead".
