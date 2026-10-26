@@ -1,0 +1,581 @@
+[
+  {
+    "functionName": "init",
+    "definedIn": "test-files/main.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/main.js",
+        "calledBy": [
+          "<global>"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "setupEventListeners",
+    "definedIn": "test-files/main.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/main.js",
+        "calledBy": [
+          "init"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "loadData",
+    "definedIn": "test-files/main.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/main.js",
+        "calledBy": [
+          "init"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "processData",
+    "definedIn": "test-files/main.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/main.js",
+        "calledBy": [
+          "loadData"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "handleClick",
+    "definedIn": "test-files/main.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/main.js",
+        "calledBy": [
+          "setupEventListeners"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "testParser",
+    "definedIn": "test-files/test-parser.js",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/test-parser.js",
+        "calledBy": [
+          "<global>"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "testIntegration",
+    "definedIn": "test-files/test-integration.js",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "defineConfig",
+    "definedIn": "vite",
+    "usedInFiles": [
+      {
+        "filePath": "webview/vite.config.ts",
+        "calledBy": [
+          "<global>"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "FileSystemService",
+    "definedIn": "extension/src/fileSystemService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/graphCombinerService.ts",
+        "calledBy": [
+          "GraphCombinerService.constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "RepomapWebviewProvider.constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/unifiedGraphService.ts",
+        "calledBy": [
+          "UnifiedGraphService.constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "shouldInclude",
+    "definedIn": "extension/src/fileSystemService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/fileSystemService.ts",
+        "calledBy": [
+          "buildTree"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "buildTree",
+    "definedIn": "extension/src/fileSystemService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/fileSystemService.ts",
+        "calledBy": [
+          "buildTree"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependency/graphCombinerService.ts",
+        "calledBy": [
+          "buildFinalGraph"
+        ]
+      },
+      {
+        "filePath": "extension/src/unifiedGraphService.ts",
+        "calledBy": [
+          "buildUnifiedGraph"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "BobRefactoringService",
+    "definedIn": "extension/src/bobRefactoringService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "isDirectory",
+    "definedIn": "extension/src/bobRefactoringService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/bobRefactoringService.ts",
+        "calledBy": [
+          "getFilesInDirectory"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "getFilesInDirectory",
+    "definedIn": "extension/src/bobRefactoringService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "BobService",
+    "definedIn": "extension/src/bobService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/bobRefactoringService.ts",
+        "calledBy": [
+          "BobRefactoringService.constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependency/bobAnalysisService.ts",
+        "calledBy": [
+          "BobAnalysisService.constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependencyService.ts",
+        "calledBy": [
+          "DependencyService.constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "RepomapWebviewProvider.constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "askBob",
+    "definedIn": "extension/src/bobService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "RefactoringService",
+    "definedIn": "extension/src/refactoringService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "findFileReferences",
+    "definedIn": "extension/src/refactoringService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "RepomapWebviewProvider",
+    "definedIn": "extension/src/webviewProvider.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/extension.ts",
+        "calledBy": [
+          "activate"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "show",
+    "definedIn": "extension/src/webviewProvider.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/extension.ts",
+        "calledBy": [
+          "activate"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "UnifiedGraphService",
+    "definedIn": "extension/src/unifiedGraphService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependencyService.ts",
+        "calledBy": []
+      }
+    ]
+  },
+  {
+    "functionName": "buildUnifiedGraph",
+    "definedIn": "extension/src/unifiedGraphService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "enrichTreeWithFunctions",
+    "definedIn": "extension/src/unifiedGraphService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/unifiedGraphService.ts",
+        "calledBy": [
+          "buildUnifiedGraph"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "PathResolver",
+    "definedIn": "extension/src/dependency/pathResolver.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/graphBuilder.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "resolveImportPath",
+    "definedIn": "extension/src/dependency/pathResolver.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "BobAnalysisService",
+    "definedIn": "extension/src/dependency/bobAnalysisService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependencyService.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "ensureCacheDir",
+    "definedIn": "extension/src/dependency/bobAnalysisService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/bobAnalysisService.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "saveToCache",
+    "definedIn": "extension/src/dependency/bobAnalysisService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "GraphCombinerService",
+    "definedIn": "extension/src/dependency/graphCombinerService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependencyService.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "buildFinalGraph",
+    "definedIn": "extension/src/dependency/graphCombinerService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "GraphBuilder",
+    "definedIn": "extension/src/dependency/graphBuilder.ts",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/test-integration.js",
+        "calledBy": [
+          "testIntegration"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependencyService.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "buildGraph",
+    "definedIn": "extension/src/dependency/graphBuilder.ts",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/test-integration.js",
+        "calledBy": [
+          "testIntegration"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "CodeParser",
+    "definedIn": "extension/src/dependency/codeParser.ts",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/test-parser.js",
+        "calledBy": [
+          "testParser"
+        ]
+      },
+      {
+        "filePath": "extension/src/dependency/graphBuilder.ts",
+        "calledBy": [
+          "constructor"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "parseFile",
+    "definedIn": "extension/src/dependency/codeParser.ts",
+    "usedInFiles": [
+      {
+        "filePath": "test-files/test-parser.js",
+        "calledBy": [
+          "testParser"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "extractImports",
+    "definedIn": "extension/src/dependency/codeParser.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/codeParser.ts",
+        "calledBy": [
+          "parseFile"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "extractFunctions",
+    "definedIn": "extension/src/dependency/codeParser.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/codeParser.ts",
+        "calledBy": [
+          "parseFile"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "extractFunctionCalls",
+    "definedIn": "extension/src/dependency/codeParser.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/dependency/codeParser.ts",
+        "calledBy": [
+          "parseFile"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "acquireVsCodeApi",
+    "definedIn": "webview/src/vscode.d.ts",
+    "usedInFiles": [
+      {
+        "filePath": "webview/src/App.tsx",
+        "calledBy": []
+      }
+    ]
+  },
+  {
+    "functionName": "normalizeGraphPath",
+    "definedIn": "webview/src/utils/graphLayout.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "isPathHidden",
+    "definedIn": "webview/src/utils/graphLayout.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "filterTreeByDisabledPaths",
+    "definedIn": "webview/src/utils/graphLayout.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "ChatPanel",
+    "definedIn": "webview/src/components/ChatPanel.tsx",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "FileTree",
+    "definedIn": "webview/src/components/FileTree.tsx",
+    "usedInFiles": [
+      {
+        "filePath": "webview/src/App.tsx",
+        "calledBy": [
+          "App"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "TreeNode",
+    "definedIn": "webview/src/components/FileTree.tsx",
+    "usedInFiles": [
+      {
+        "filePath": "webview/src/components/FileTree.tsx",
+        "calledBy": [
+          "FileTree",
+          "TreeNode"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "App",
+    "definedIn": "webview/src/App.tsx",
+    "usedInFiles": [
+      {
+        "filePath": "webview/src/main.tsx",
+        "calledBy": []
+      }
+    ]
+  },
+  {
+    "functionName": "getColor",
+    "definedIn": "webview/src/App.tsx",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "activate",
+    "definedIn": "extension/src/extension.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "deactivate",
+    "definedIn": "extension/src/extension.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "DependencyService",
+    "definedIn": "extension/src/dependencyService.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/unifiedGraphService.ts",
+        "calledBy": [
+          "UnifiedGraphService"
+        ]
+      },
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "RepomapWebviewProvider"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "loadCachedGraph",
+    "definedIn": "extension/src/dependencyService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "saveCachedGraph",
+    "definedIn": "extension/src/dependencyService.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "MessageHandlers",
+    "definedIn": "extension/src/webview/messageHandlers.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "RepomapWebviewProvider"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "handleMessage",
+    "definedIn": "extension/src/webview/messageHandlers.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "HtmlGenerator",
+    "definedIn": "extension/src/webview/htmlGenerator.ts",
+    "usedInFiles": [
+      {
+        "filePath": "extension/src/webviewProvider.ts",
+        "calledBy": [
+          "RepomapWebviewProvider"
+        ]
+      }
+    ]
+  },
+  {
+    "functionName": "generateHtml",
+    "definedIn": "extension/src/webview/htmlGenerator.ts",
+    "usedInFiles": []
+  },
+  {
+    "functionName": "getNonce",
+    "definedIn": "extension/src/webview/htmlGenerator.ts",
+    "usedInFiles": []
+  }
+]
